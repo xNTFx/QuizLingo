@@ -1,6 +1,9 @@
 dataResources
 dataResources/
 
+dist-electron
+dist-electron/
+
 # Logs
 logs
 *.log

@@ -1,18 +1,18 @@
-import '@sweetalert2/theme-dark/dark.css';
-import { Editor } from '@tiptap/core';
-import { useCallback, useState } from 'react';
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
-import { useNavigate, useParams } from 'react-router-dom';
+import "@sweetalert2/theme-dark/dark.css";
+import { Editor } from "@tiptap/core";
+import { useCallback, useState } from "react";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { useGetDecksQuery } from '../API/Redux/reduxQueryFetch';
-import DeckSelection from '../components/AddVocabularyComponents/DeckSelection';
-import EditorButtonList from '../components/AddVocabularyComponents/TipTap/EditorButtonList';
-import EditorTipTap from '../components/AddVocabularyComponents/TipTap/EditorTipTap';
-import useInsertOrUpdateVocabulary from '../hooks/useInsertOrUpdateVocabulary';
+import { useGetDecksQuery } from "../API/Redux/reduxQueryFetch";
+import DeckSelection from "../components/AddVocabularyComponents/DeckSelection";
+import EditorButtonList from "../components/AddVocabularyComponents/TipTap/EditorButtonList";
+import EditorTipTap from "../components/AddVocabularyComponents/TipTap/EditorTipTap";
+import useInsertOrUpdateVocabulary from "../hooks/useInsertOrUpdateVocabulary";
 import {
   AddVocabularyScreenProps,
   EditorInputValuesType,
-} from '../types/TypeScriptTypes';
+} from "../types/TypeScriptTypes";
 
 export default function AddVocabularyScreen({
   selectedDeck = null,
@@ -27,14 +27,14 @@ export default function AddVocabularyScreen({
   const navigate = useNavigate();
 
   const [inputNames] = useState([
-    'Front word',
-    'Back word',
-    'Audio',
-    'Front word description',
-    'Back word description',
+    "Front word",
+    "Back word",
+    "Audio",
+    "Front word description",
+    "Back word description",
   ]);
 
-  const [currentDeckName, setCurrentDeckName] = useState('');
+  const [currentDeckName, setCurrentDeckName] = useState("");
   const [editorsList, setEditorsList] = useState<Editor[]>([]);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const [hiddenInputs, setHiddenInputs] = useState<number[]>([]);
@@ -44,15 +44,15 @@ export default function AddVocabularyScreen({
     selectedDeck,
     currentDeckName,
     deckList,
-    setEditorsList,
+    setEditorsList
   );
 
   const editorInputValues: EditorInputValuesType = {
-    0: selectedDeck?.front_word_html?.toString() ?? '',
-    1: selectedDeck?.back_word_html?.toString() ?? '',
-    2: selectedDeck?.audio_name?.toString() ?? '',
-    3: selectedDeck?.front_desc_html?.toString() ?? '',
-    4: selectedDeck?.back_desc_html?.toString() ?? '',
+    0: selectedDeck?.front_word_html?.toString() ?? "",
+    1: selectedDeck?.back_word_html?.toString() ?? "",
+    2: selectedDeck?.audio_name?.toString() ?? "",
+    3: selectedDeck?.front_desc_html?.toString() ?? "",
+    4: selectedDeck?.back_desc_html?.toString() ?? "",
   };
 
   function hiddenInputsFunction(inputId: number) {
@@ -61,7 +61,7 @@ export default function AddVocabularyScreen({
       setHiddenInputs((inputs) =>
         inputs.filter((input) => {
           return input !== inputId;
-        }),
+        })
       );
     } else {
       setHiddenInputs([...hiddenInputs, inputId]);
@@ -77,7 +77,7 @@ export default function AddVocabularyScreen({
       if (editorsList.length >= 5) return; // This prevents adding more than 5 editors to the list
       setEditorsList((prev) => [...prev, editor]);
     },
-    [editorsList],
+    [editorsList]
   );
 
   function NoDeckScreen() {
@@ -88,7 +88,7 @@ export default function AddVocabularyScreen({
             You cannot add a vocabulary when there is no deck
           </h1>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
           >
             Go back to decks
@@ -112,7 +112,7 @@ export default function AddVocabularyScreen({
   return (
     <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F]">
       <div className="mt-10 w-8/12 bg-black">
-        {!selectedDeck && id === '0' ? (
+        {!selectedDeck && id === "0" ? (
           <DeckSelection
             deckList={deckList}
             currentDeckName={currentDeckName}
@@ -137,11 +137,11 @@ export default function AddVocabularyScreen({
                     className="mb-1 flex flex-row items-center gap-1"
                     style={{
                       cursor:
-                        index === 0 || index === 1 ? 'default' : 'pointer',
+                        index === 0 || index === 1 ? "default" : "pointer",
                     }}
                   >
                     {index === 0 || index === 1 ? null : IsInputHidden(
-                        index,
+                        index
                       ) ? (
                       <FaAngleUp />
                     ) : (
@@ -152,8 +152,8 @@ export default function AddVocabularyScreen({
                   <div
                     style={{
                       display: hiddenInputs?.some((input) => input === index)
-                        ? 'none'
-                        : 'initial',
+                        ? "none"
+                        : "initial",
                     }}
                     className="flex flex-row"
                   >
@@ -175,7 +175,7 @@ export default function AddVocabularyScreen({
           className="m-4 rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
           onClick={handleVocabularyButton}
         >
-          {selectedDeck ? 'Update vocabulary' : 'Post vocabulary'}
+          {selectedDeck ? "Update vocabulary" : "Post vocabulary"}
         </button>
       </div>
     </main>
