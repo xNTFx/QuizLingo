@@ -1,0 +1,61 @@
+# Electron build and output directories
+dataResources
+dataResources/
+dist-electron/
+dist/
+dist
+release/
+build/
+out/
+app/dist/
+packaged/
+*.asar
+
+# Temporary build files
+.cache/
+*.tmp
+temp/
+dist-ssr
+
+# Electron-specific configurations
+electron-builder.json5
+forge.config.js
+webpack.config.js
+.webpack/
+
+# Environment and configuration files
+*.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules
+
+# Archives
+*.zip
+*.tar.gz
+
+# Locks
+yarn.lock
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
