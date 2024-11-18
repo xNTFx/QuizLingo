@@ -3,15 +3,15 @@ import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndIma
 import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
 
-interface BackFlashCardProps {
+interface BackTranslationCardProps {
   vocabulary: GetVocabularyToReviewType;
   handleNextVocabulary: () => void;
 }
 
-export default function BackFlashCard({
+export default function BackTranslationCard({
   vocabulary,
   handleNextVocabulary,
-}: BackFlashCardProps) {
+}: BackTranslationCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(vocabulary.front_word_html);
   const sanitizedFrontDescHtml = DOMPurify.sanitize(
     vocabulary.front_desc_html ?? ""

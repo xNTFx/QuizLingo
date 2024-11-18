@@ -4,7 +4,7 @@ import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
 import { Dispatch } from "react";
 
-interface FrontFlashCardProps {
+interface FrontTranslationCardProps {
   vocabulary: GetVocabularyToReviewType;
   inputValue: string;
   setInputValue: Dispatch<React.SetStateAction<string>>;
@@ -12,13 +12,13 @@ interface FrontFlashCardProps {
   handleShowAnswer: (vocabulary: string) => void;
 }
 
-export default function FrontFlashCard({
+export default function FrontTranslationCard({
   vocabulary,
   inputValue,
   setInputValue,
   isInputErrorMessage,
   handleShowAnswer,
-}: FrontFlashCardProps) {
+}: FrontTranslationCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(
     vocabulary.front_word_html ?? ""
   );

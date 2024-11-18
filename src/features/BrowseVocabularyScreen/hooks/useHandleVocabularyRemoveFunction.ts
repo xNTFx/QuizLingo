@@ -1,5 +1,5 @@
 import useHandleVocabularyRemove from "../../../hooks/useHandleVocabularyRemove";
-import { UpdateDeckType, VocabularyType } from "../../../types/APITypes";
+import { VocabularyType } from "../../../types/APITypes";
 import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 export default function useHandleVocabularyRemoveFunction() {

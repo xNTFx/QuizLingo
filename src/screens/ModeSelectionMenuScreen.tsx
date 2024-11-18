@@ -20,25 +20,31 @@ export default function ModeSelectionMenu() {
     text: string[],
     color: string,
     path: string
-  ) => (
-    <div className="flex flex-col items-center justify-center gap-1">
-      <button
-        onClick={count !== "0" ? () => navigate(`${path}/${mode}`) : undefined}
-        className={`${
-          count === "0"
-            ? "cursor-default brightness-[20%]"
-            : `hover:bg-${color}-500`
-        } flex w-28 flex-col items-center justify-center rounded-md bg-${color}-700 p-2`}
-      >
-        {text.map((line: string) => (
-          <span key={line}>{line}</span>
-        ))}
-      </button>
-      <p className="font-extrabold">
-        {count !== "0" ? count : `No new ${text[1].toLowerCase()}`}
-      </p>
-    </div>
-  );
+  ) => {
+    const bgColorClass = color === "blue" ? "bg-blue-700" : "bg-green-700";
+    const hoverColorClass =
+      color === "blue" ? "hover:bg-blue-500" : "hover:bg-green-500";
+
+    return (
+      <div className="flex flex-col items-center justify-center gap-1">
+        <button
+          onClick={
+            count !== "0" ? () => navigate(`${path}/${mode}`) : undefined
+          }
+          className={`${
+            count === "0" ? "cursor-default brightness-[20%]" : hoverColorClass
+          } flex w-28 flex-col items-center justify-center rounded-md ${bgColorClass} p-2`}
+        >
+          {text.map((line: string) => (
+            <span key={line}>{line}</span>
+          ))}
+        </button>
+        <p className="font-extrabold">
+          {count !== "0" ? count : `No new ${text[1].toLowerCase()}`}
+        </p>
+      </div>
+    );
+  };
 
   return (
     <main className="flex h-[calc(100vh-3rem)] items-center justify-center bg-[#1F1F1F] text-white">

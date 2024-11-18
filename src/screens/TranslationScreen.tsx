@@ -1,18 +1,14 @@
-import DOMPurify from "dompurify";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { useGetVocabularyToReviewQuery } from "../API/Redux/reduxQueryFetch";
-import AudioButton from "../components/AudioButton";
 import useSuperMemo2Implementation from "../hooks/useSuperMemo2Implementation";
 import { GetVocabularyToReviewType } from "../types/APITypes";
-import { extractSingleAudioAndImageSrc } from "../utils/extractAudioAndImageSrc";
-import backFlashCard from "../features/TranslationScreen/components/BackFlashCard";
-import BackFlashCard from "../features/TranslationScreen/components/BackFlashCard";
-import FrontFlashCard from "../features/TranslationScreen/components/FrontFlashCard";
+import BackTranslationCard from "../features/TranslationScreen/components/BackTranslationCard";
+import FrontTranslationCard from "../features/TranslationScreen/components/FrontTranslationCard";
 import DefaultEndScreen from "../features/TranslationScreen/components/DefaultEndScreen";
 import NoVocabularyScreen from "../features/TranslationScreen/components/NoVocabularyScreen";
-import HandleShowAnswerMessage from "../features/TranslationScreen/components/handleShowAnswerMessage";
+import HandleShowAnswerMessage from "../features/TranslationScreen/components/HandleShowAnswerMessage";
 
 export default function TranslationScreen() {
   const { id, type } = useParams();
@@ -70,7 +66,7 @@ export default function TranslationScreen() {
           vocabulary.ease_factor,
           vocabulary.repetition,
           vocabulary.repetition,
-          0
+          3
         );
       }
 
@@ -133,7 +129,7 @@ export default function TranslationScreen() {
           >
             <div className="absolute inset-0 [backface-visibility:hidden]">
               {isFrontPage ? (
-                <FrontFlashCard
+                <FrontTranslationCard
                   vocabulary={vocabulary}
                   inputValue={inputValue}
                   setInputValue={setInputValue}
@@ -144,7 +140,7 @@ export default function TranslationScreen() {
             </div>
             <div className="absolute inset-0 rounded-xl [transform:rotateY(180deg)] [backface-visibility:hidden]">
               {!isFrontPage ? (
-                <BackFlashCard
+                <BackTranslationCard
                   vocabulary={vocabulary}
                   handleNextVocabulary={handleNextVocabulary}
                 />
