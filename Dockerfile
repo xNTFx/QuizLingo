@@ -51,3 +51,6 @@ EXPOSE 5173
 
 # Use a command to start the Electron app in development mode
 CMD ["sh", "-c", "service dbus start && xvfb-run -a npm run dev"]
+
+## Image: docker build -t electron-app .
+## Container: docker run -d -p 5173:5173 --name electron-container --privileged electron-app
