@@ -204,7 +204,7 @@ export default function EdiitorButtonList({
       </ThemeProvider>
 
       <div
-        className={`relative flex cursor-pointer rounded`}
+        className="relative flex cursor-pointer rounded"
         ref={txColorMenuRef}
       >
         <EditorButton
@@ -217,7 +217,7 @@ export default function EdiitorButtonList({
 
         {isTxColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div className="bg-white">
+            <div className="p-2 rounded shadow-lg text-black">
               <SketchPicker
                 color={toggleStyleValue.textColor}
                 onChangeComplete={(color) => {
@@ -230,22 +230,19 @@ export default function EdiitorButtonList({
               />
               <button
                 onClick={() => {
-                  tipTapEditorCommand("setColor", "#fffff");
-                  setToggleStyleValue((prev) => ({
-                    ...prev,
-                    textColor: "#fffff",
-                  }));
+                  setIsTxColorPickerOpen(false);
                 }}
-                className="w-full bg-white hover:bg-gray-300 text-black bottom-[1rem] p-1 mt-[-2px]"
+                className="w-full bg-white hover:bg-gray-300 text-black p-1 mt-[-2px]"
               >
-                Reset Color
+                Ok
               </button>
             </div>
           </div>
         ) : null}
       </div>
+
       <div
-        className={`relative flex cursor-pointer rounded`}
+        className="relative flex cursor-pointer rounded"
         ref={bgColorMenuRef}
       >
         <EditorButton
@@ -259,28 +256,26 @@ export default function EdiitorButtonList({
 
         {isBgColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <SketchPicker
-              color={toggleStyleValue.backgroundColor}
-              onChangeComplete={(color) => {
-                tipTapEditorCommand("setHighlight", { color: color.hex });
-                setToggleStyleValue((prev) => ({
-                  ...prev,
-                  backgroundColor: color.hex,
-                }));
-              }}
-            />
-            <button
-              onClick={() => {
-                tipTapEditorCommand("setHighlight", { color: "#000000" });
-                setToggleStyleValue((prev) => ({
-                  ...prev,
-                  backgroundColor: "#000000",
-                }));
-              }}
-              className="w-full bg-white hover:bg-gray-300 text-black bottom-[1rem] p-1 mt-[-2px]"
-            >
-              Reset Color
-            </button>
+            <div className="p-2 rounded shadow-lg text-black">
+              <SketchPicker
+                color={toggleStyleValue.backgroundColor}
+                onChangeComplete={(color) => {
+                  tipTapEditorCommand("setHighlight", { color: color.hex });
+                  setToggleStyleValue((prev) => ({
+                    ...prev,
+                    backgroundColor: color.hex,
+                  }));
+                }}
+              />
+              <button
+                onClick={() => {
+                  setIsBgColorPickerOpen(false);
+                }}
+                className="w-full bg-white hover:bg-gray-300 text-black p-1 mt-[-2px]"
+              >
+                Ok
+              </button>
+            </div>
           </div>
         ) : null}
       </div>
