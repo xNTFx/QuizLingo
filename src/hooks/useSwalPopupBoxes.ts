@@ -7,18 +7,21 @@ import {
   useUpdateDeckMutation,
 } from "../API/Redux/reduxQueryFetch";
 import useHandleDeckRemove from "./useHandleDeckRemove";
+import useHandleVocabularyRemoveFunction from "../features/BrowseVocabularyScreen/hooks/useHandleVocabularyRemoveFunction";
+import { VocabularyType } from "../types/APITypes";
 
 export default function useSwalPopupBoxes() {
   const [createDeck] = useCreateDeckMutation();
   const [updateDeck] = useUpdateDeckMutation();
   const handleDeckRemove = useHandleDeckRemove();
+  const handleVocabularyRemoveFunction = useHandleVocabularyRemoveFunction();
 
   function createDeckFunction() {
     Swal.fire({
       title: "Write a deck name",
       input: "text",
       showCancelButton: true,
-      confirmButtonText: "Submit",
+      confirmButtonText: "Create",
       showLoaderOnConfirm: true,
       preConfirm: async (input: string) => {
         try {
@@ -36,7 +39,7 @@ export default function useSwalPopupBoxes() {
       input: "text",
       inputValue: deckName,
       showCancelButton: true,
-      confirmButtonText: "Submit",
+      confirmButtonText: "Update",
       showLoaderOnConfirm: true,
       preConfirm: (input: string) => {
         if (input.trim() !== deckName) {
@@ -51,11 +54,31 @@ export default function useSwalPopupBoxes() {
       title: "Are you sure you want to delete the deck?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Submit",
+      confirmButtonText: "Delete",
       showLoaderOnConfirm: true,
       preConfirm: (response: boolean) => {
         if (response) {
           handleDeckRemove(Number(deckId));
+        }
+      },
+    });
+  }
+
+  function removeVocabulary(
+    rowId: number,
+    data: VocabularyType[],
+    setSelectedDeck: React.Dispatch<React.SetStateAction<VocabularyType | null>>
+  ) {
+    Swal.fire({
+      title: "Are you sure you want to delete the vocabulary?",
+      icon: "question",
+      inputAttributes: { autocapitalize: "off" },
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      showLoaderOnConfirm: true,
+      preConfirm: (response: boolean) => {
+        if (response) {
+          handleVocabularyRemoveFunction(rowId, data, setSelectedDeck);
         }
       },
     });
@@ -76,5 +99,6 @@ export default function useSwalPopupBoxes() {
     updateDeckFunction,
     createDeckFunction,
     errorAlert,
+    removeVocabulary,
   };
 }

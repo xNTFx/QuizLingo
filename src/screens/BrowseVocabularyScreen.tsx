@@ -1,20 +1,13 @@
-import { TextField, ThemeProvider, createTheme } from "@mui/material";
-import { debounce } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import DataGrid from "react-data-grid";
-import "react-data-grid/lib/styles.css";
-import { MdDeleteForever } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import Split from "react-split";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import Swal from "sweetalert2/dist/sweetalert2.min.js";
-
 import { useGetVocabularyQuery } from "../API/Redux/reduxQueryFetch";
-import useHandleVocabularyRemove from "../hooks/useHandleVocabularyRemove";
 import { VocabularyType } from "../types/APITypes";
 import { extractSingleAudioAndImageSrc } from "../utils/extractAudioAndImageSrc";
 import AddVocabularyScreen from "./AddVocabularyScreen";
+import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
+import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
+import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 
 export default function BrowseVocabularyScreen() {
   const { id } = useParams();
@@ -24,11 +17,6 @@ export default function BrowseVocabularyScreen() {
   const itemHeight = 35;
   const initialLimit = Math.ceil(window.innerHeight / itemHeight) + 1;
   const [limit, setLimit] = useState(initialLimit);
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
 
   const { data, error, isLoading } = useGetVocabularyQuery({
     deckId: Number(id),
@@ -39,16 +27,16 @@ export default function BrowseVocabularyScreen() {
 
   const [selectedDeck, setSelectedDeck] = useState<VocabularyType | null>(null);
 
-  const handleVocabularyRemove = useHandleVocabularyRemove();
-
   // Ref for tracking whether there is more data to load
   const hasMore = useRef(true);
 
+  const { removeVocabulary } = useSwalPopupBoxes();
+
   useEffect(() => {
-    const handleResize = debounce(() => {
+    const handleResize = () => {
       const updatedLimit = Math.ceil(window.innerHeight / itemHeight) + 1;
       setLimit(updatedLimit);
-    }, 100);
+    };
 
     window.addEventListener("resize", handleResize);
 
@@ -102,63 +90,11 @@ export default function BrowseVocabularyScreen() {
     }, 500);
   }
 
-  function findVocabularyById(vocabularyId: number) {
-    const vocabulary = data?.find((voc) => voc.vocabulary_id === vocabularyId);
-    return vocabulary ? vocabulary : null;
-  }
-
-  function handleVocabularyRemoveFunction(rowId: number) {
-    handleVocabularyRemove(findVocabularyById(rowId));
-    if (data && data.length > 1) {
-      const prevVocabularyIndex = data.findIndex(
-        (voc) => voc.vocabulary_id === rowId
-      );
-      const currentVocabularyIndex =
-        prevVocabularyIndex + 1 > data.length - 1
-          ? prevVocabularyIndex - 1
-          : prevVocabularyIndex + 1;
-      const audioSrc =
-        extractSingleAudioAndImageSrc(
-          data[currentVocabularyIndex].audio_name
-        ) || null;
-      setSelectedDeck({
-        ...data[currentVocabularyIndex],
-        audio_name: audioSrc,
-      });
-    }
-  }
-
   if (!data) return;
   if (error) {
     console.error(error);
   }
   if (isLoading) return <div>Loading...</div>;
-
-  const columns = [
-    {
-      key: "remove_vocabulary_key",
-      name: "",
-      width: "0%",
-    },
-    {
-      key: "front_word",
-      name: "Front word",
-      resizable: true,
-      width: "40%",
-    },
-    { key: "back_word", name: "Back word", resizable: true, width: "40%" },
-    { key: "deck_name", name: "Deck name", resizable: true },
-  ];
-
-  const rows = data.map((vocabulary) => ({
-    id: vocabulary.vocabulary_id,
-    remove_vocabulary_key: (
-      <MdDeleteForever className="h-[60%] w-full cursor-pointer text-red-600 transition-transform hover:rotate-45" />
-    ),
-    front_word: vocabulary.front_word,
-    back_word: vocabulary.back_word,
-    deck_name: vocabulary.deck_name,
-  }));
 
   return (
     <main>
@@ -176,54 +112,18 @@ export default function BrowseVocabularyScreen() {
         <section className="mt-12 h-[calc(100vh-3rem)]">
           <div className="flex flex-col items-center justify-center">
             <div className="flex w-11/12 flex-col items-center justify-center gap-4 rounded-lg bg-[#2C2C2C] p-4">
-              <div className="w-[90%]">
-                {data.length > 0 ? (
-                  <ThemeProvider theme={darkTheme}>
-                    <TextField
-                      label="Search"
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleSearchInputChange(event);
-                      }}
-                      value={inputSearchValue}
-                      className="w-[100%] rounded-lg bg-black"
-                      inputProps={{
-                        style: { color: "white" },
-                      }}
-                    />
-                  </ThemeProvider>
-                ) : null}
-              </div>
-              <DataGrid
-                style={{
-                  width: "100%",
-                  height: "75vh",
-                  maxHeight: "75vh",
-                }}
-                onScroll={handleScroll}
-                onCellClick={(e) => {
-                  handleChangeVocabulary(e.row.id);
-                  if (e.column.key === "remove_vocabulary_key") {
-                    Swal.fire({
-                      title: "Are you sure you want to delete the vocabulary?",
-                      icon: "question",
-                      inputAttributes: { autocapitalize: "off" },
-                      showCancelButton: true,
-                      confirmButtonText: "Delete",
-                      showLoaderOnConfirm: true,
-                      preConfirm: (response: boolean) => {
-                        if (response) {
-                          handleVocabularyRemoveFunction(e.row.id);
-                        }
-                      },
-                    });
-                  }
-                }}
-                columns={columns}
-                rows={rows}
+              <VocabularySearchBar
+                inputSearchValue={inputSearchValue}
+                handleSearchInputChange={handleSearchInputChange}
               />
-              {isLoading && <div>Loading more...</div>}
+              <VocabularyDataGrid
+                data={data}
+                handleScroll={handleScroll}
+                handleChangeVocabulary={handleChangeVocabulary}
+                removeVocabulary={removeVocabulary}
+                setSelectedDeck={setSelectedDeck}
+                isLoading={isLoading}
+              />
             </div>
           </div>
         </section>
