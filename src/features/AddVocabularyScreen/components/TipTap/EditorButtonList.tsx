@@ -217,18 +217,27 @@ export default function EdiitorButtonList({
 
         {isTxColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div>
+            <div className="bg-white">
               <SketchPicker
-                color={toggleStyleValue.backgroundColor}
+                color={toggleStyleValue.textColor}
                 onChangeComplete={(color) => {
-                  tipTapEditorCommand("setHighlight", { color: color.hex });
+                  tipTapEditorCommand("setColor", color.hex);
                   setToggleStyleValue((prev) => ({
                     ...prev,
-                    backgroundColor: color.hex,
+                    textColor: color.hex,
                   }));
                 }}
               />
-              <button className="w-full bg-white text-black">
+              <button
+                onClick={() => {
+                  tipTapEditorCommand("setColor", "#fffff");
+                  setToggleStyleValue((prev) => ({
+                    ...prev,
+                    textColor: "#fffff",
+                  }));
+                }}
+                className="w-full bg-white hover:bg-gray-300 text-black bottom-[1rem] p-1 mt-[-2px]"
+              >
                 Reset Color
               </button>
             </div>
@@ -260,6 +269,18 @@ export default function EdiitorButtonList({
                 }));
               }}
             />
+            <button
+              onClick={() => {
+                tipTapEditorCommand("setHighlight", { color: "#000000" });
+                setToggleStyleValue((prev) => ({
+                  ...prev,
+                  backgroundColor: "#000000",
+                }));
+              }}
+              className="w-full bg-white hover:bg-gray-300 text-black bottom-[1rem] p-1 mt-[-2px]"
+            >
+              Reset Color
+            </button>
           </div>
         ) : null}
       </div>
