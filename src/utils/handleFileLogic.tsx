@@ -1,13 +1,24 @@
 import { Editor } from "@tiptap/core";
-import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
+import "@sweetalert2/theme-dark/dark.css";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import Swal from "sweetalert2/dist/sweetalert2.min.js";
+
+function errorAlert(errorName: string, icon: string) {
+  const title = icon.slice(0, 1).toUpperCase() + icon.slice(1);
+  Swal.fire({
+    title: title,
+    text: errorName,
+    icon: icon,
+    confirmButtonColor: "#3085d6",
+  });
+}
 
 let removehandleFileInsertListener: (() => void) | null = null;
 export function handleFileInsert(file: File | null, editor: Editor) {
   if (file) {
     const filePath = file.path.replace(/\\/g, "/");
     const localFileUrl = `local-file:///${filePath}`;
-
-    const { errorAlert } = useSwalPopupBoxes();
 
     if (window.electronAPI) {
       let fileType = "";

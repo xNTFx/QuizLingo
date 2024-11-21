@@ -1,9 +1,9 @@
-import { categorizeFileType } from './categorizeFileType';
-import { handleFileCopied } from './handleFileLogic';
+import { categorizeFileType } from "./categorizeFileType";
+import { handleFileCopied } from "./handleFileLogic";
 
 export default function modifyHTMLAndCopyFiles(htmlString: string) {
   //Removing empty <p></p>
-  htmlString = htmlString.replace(/<p>\s*<\/p>/g, '');
+  htmlString = htmlString.replace(/<p>\s*<\/p>/g, "");
 
   //Replace src with alt
   const regex =
@@ -25,7 +25,7 @@ export default function modifyHTMLAndCopyFiles(htmlString: string) {
       const newSrc = `${altValue}`;
       srcAfter.push(newSrc);
       return `<${tag}${prefix}src="${newSrc}"${middle}alt="${newSrc}"${suffix}>`;
-    },
+    }
   );
 
   //List of unique src files
@@ -34,14 +34,14 @@ export default function modifyHTMLAndCopyFiles(htmlString: string) {
 
   for (let i = 0; i < newSrcAfter.length; i++) {
     if (
-      newSrcBefore[i].split('/')[0] !== 'images' &&
-      newSrcBefore[i].split('/')[0] !== 'audio' &&
-      newSrcBefore[i].split('/')[0] !== 'movies'
+      newSrcBefore[i].split("/")[0] !== "images" &&
+      newSrcBefore[i].split("/")[0] !== "audio" &&
+      newSrcBefore[i].split("/")[0] !== "movies"
     ) {
       handleFileCopied(
         newSrcAfter[i],
         categorizeFileType(newSrcAfter[i]),
-        newSrcBefore[i],
+        newSrcBefore[i]
       );
     }
   }

@@ -50,8 +50,6 @@ export default function EdiitorButtonList({
     openRef: bgColorMenuRef,
   } = useIsOpen(false);
 
-  console.log(editorsList);
-
   const [oneRender, setOneRender] = useState({
     bold: false,
     italic: false,
