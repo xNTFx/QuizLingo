@@ -28,9 +28,7 @@ export default function ModeSelection() {
           {modes.map(({ label, icon, color, mode }) => (
             <button
               key={label}
-              onClick={() =>
-                navigate("mode-selecion-menu", { state: { mode } })
-              }
+              onClick={() => navigate(mode)}
               className={`flex h-24 flex-col items-center justify-center overflow-hidden rounded-lg p-2 font-extrabold ${color}`}
             >
               <p>{label}</p>

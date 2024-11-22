@@ -104,8 +104,20 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
           </div>
         </div>
         <div className="flex flex-row justify-around">
-          <button className="w-[14.375rem] bg-blue-600 hover:opacity-80 py-[0.25rem] rounded-lg">{`Learn new vocabulary: ${deck.new}`}</button>
-          <button className="w-[14.375rem] bg-green-600 hover:opacity-80 py-[0.25rem] rounded-lg">{`Review vocabulary: ${deck.review}`}</button>
+          <button
+            onClick={() => navigate(`${deck.deck_id}/mode-selection/new-words`)}
+            disabled={Number(deck.new) === 0}
+            className="w-[14.375rem] bg-blue-600 hover:opacity-80 py-[0.25rem] rounded-lg"
+            style={Number(deck.new) === 0 ? { opacity: 0.4 } : undefined}
+          >{`Learn new vocabulary: ${deck.new}`}</button>
+          <button
+            onClick={() =>
+              navigate(`${deck.deck_id}/mode-selection/new-reviews`)
+            }
+            disabled={Number(deck.review) === 0}
+            className="w-[14.375rem] bg-green-600 hover:opacity-80 py-[0.25rem] rounded-lg"
+            style={Number(deck.review) === 0 ? { opacity: 0.4 } : undefined}
+          >{`Review vocabulary: ${deck.review}`}</button>
         </div>
       </div>
     );
