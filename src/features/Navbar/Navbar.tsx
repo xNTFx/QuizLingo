@@ -12,7 +12,7 @@ export default function Navbar() {
         <nav className="flex h-12 select-none flex-row bg-[#1F1F1F] text-white shadow-md">
           <button
             onClick={() => navigate(-1)}
-            className="m-1 flex cursor-pointer flex-col items-center justify-center rounded-lg p-1 hover:bg-gray-700"
+            className="m-1 flex cursor-pointer fixed flex-col items-center justify-center rounded-lg p-1 hover:bg-gray-700"
           >
             <p className="text-xs font-extrabold">Back</p>
             <IoMdArrowRoundBack className="font-extrabold" />

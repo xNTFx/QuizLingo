@@ -88,8 +88,9 @@ interface GetDeckWithCountType {
   deck_name: string;
   new?: number | string;
   review?: number | string;
-  total_words?: number;
-  learned_words?: number;
+  total_words?: string;
+  learned_words?: string;
+  deck_img?: string;
 }
 
 interface AddFlashcardResponse {

@@ -43,6 +43,22 @@ function isItAudioFile(fileName: string | null) {
   }
 }
 
+export default function isItImgFile(fileName: string) {
+  const extension = fileName.split(".").pop()?.toLowerCase();
+
+  switch (extension) {
+    case "png":
+    case "jpg":
+    case "jpeg":
+    case "gif":
+    case "bmp":
+    case "svg":
+      return true;
+    default:
+      return false;
+  }
+}
+
 function transformFilePathToAudioElement(filePath: string | null | undefined) {
   if (!filePath) return "";
 

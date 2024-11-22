@@ -9,6 +9,7 @@ import {
 import useHandleDeckRemove from "./useHandleDeckRemove";
 import useHandleVocabularyRemoveFunction from "../features/BrowseVocabularyScreen/hooks/useHandleVocabularyRemoveFunction";
 import { VocabularyType } from "../types/APITypes";
+import getRandomBg from "../utils/getRandomBg";
 
 export default function useSwalPopupBoxes() {
   const [createDeck] = useCreateDeckMutation();
@@ -24,8 +25,10 @@ export default function useSwalPopupBoxes() {
       confirmButtonText: "Create",
       showLoaderOnConfirm: true,
       preConfirm: async (input: string) => {
+        const randomColor = getRandomBg();
+
         try {
-          createDeck(input.trim());
+          createDeck({ deck_name: input.trim(), deck_img: randomColor });
         } catch (error) {
           console.error("An error occurred while creating the deck:", error);
         }

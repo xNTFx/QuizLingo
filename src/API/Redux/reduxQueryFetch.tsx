@@ -1,4 +1,4 @@
-import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react';
+import { BaseQueryFn, createApi } from "@reduxjs/toolkit/query/react";
 
 import {
   AddVocabularyType,
@@ -12,8 +12,8 @@ import {
   UpdateDeckType,
   UpdateReviewPropsArg,
   UpdateVocabularyParams,
-} from '../../types/APITypes';
-import { VocabularyType } from '../../types/APITypes';
+} from "../../types/APITypes";
+import { VocabularyType } from "../../types/APITypes";
 
 const electronBaseQuery: BaseQueryFn<
   ElectronBaseQueryArgs,
@@ -32,17 +32,17 @@ const electronBaseQuery: BaseQueryFn<
 };
 
 export const learningAppApi = createApi({
-  reducerPath: 'learningAppApi',
-  tagTypes: ['vocabulary', 'decks'],
+  reducerPath: "learningAppApi",
+  tagTypes: ["vocabulary", "decks"],
   baseQuery: electronBaseQuery,
   endpoints: (builder) => ({
     getVocabulary: builder.query<VocabularyType[], GetVocabularyArgumentsType>({
       query: ({ deckId, limit, offset, search }) => ({
-        url: 'get-vocabulary-to-browse',
-        method: 'GET',
+        url: "get-vocabulary-to-browse",
+        method: "GET",
         body: { deckId, limit, offset, search },
       }),
-      providesTags: ['vocabulary'],
+      providesTags: ["vocabulary"],
     }),
 
     getVocabularyForReview: builder.query<
@@ -50,90 +50,97 @@ export const learningAppApi = createApi({
       GetVocabularyArgumentsType
     >({
       query: (deckId) => ({
-        url: 'get-vocabulary-to-browse',
-        method: 'GET',
+        url: "get-vocabulary-to-browse",
+        method: "GET",
         body: { deckId },
       }),
     }),
 
     updateVocabulary: builder.mutation<VocabularyType, UpdateVocabularyParams>({
       query: (newVocabulary) => ({
-        url: 'update-vocabulary',
-        method: 'UPDATE',
+        url: "update-vocabulary",
+        method: "UPDATE",
         body: newVocabulary,
       }),
-      invalidatesTags: ['vocabulary'],
+      invalidatesTags: ["vocabulary"],
     }),
 
     addVocabulary: builder.mutation<AddVocabularyType, AddVocabularyType>({
-      query: (vocabularyProps) => ({
-        url: 'add-flashcard',
-        method: 'POST',
-        body: vocabularyProps,
-      }),
-      invalidatesTags: ['vocabulary'],
+      query: (vocabularyProps) => {
+        return {
+          url: "add-flashcard",
+          method: "POST",
+          body: vocabularyProps,
+        };
+      },
+      invalidatesTags: ["vocabulary"],
     }),
 
     getDecksWithLimit: builder.query<GetDeckWithCountType[], GetDecksArgsType>({
       query: ({ limit, offset }) => ({
-        url: 'get-decks-with-limit',
-        method: 'GET',
+        url: "get-decks-with-limit",
+        method: "GET",
         body: { limit, offset },
       }),
-      providesTags: ['decks', 'vocabulary'],
+      providesTags: ["decks", "vocabulary"],
     }),
 
     getDeckById: builder.query<GetDeckWithCountType[], number>({
       query: (deckId) => ({
-        url: 'get-deck-by-id',
-        method: 'GET',
+        url: "get-deck-by-id",
+        method: "GET",
         body: { deckId },
       }),
-      providesTags: ['decks', 'vocabulary'],
+      providesTags: ["decks", "vocabulary"],
     }),
 
     getDecks: builder.query<GetDecksType[], void>({
       query: () => ({
-        url: 'get-decks',
-        method: 'GET',
+        url: "get-decks",
+        method: "GET",
       }),
-      providesTags: ['decks'],
+      providesTags: ["decks"],
     }),
 
-    createDeck: builder.mutation<GetDeckWithCountType, string>({
-      query: (deck_name) => ({
-        url: 'create-deck',
-        method: 'POST',
-        body: { deck_name },
-      }),
-      invalidatesTags: ['decks'],
+    createDeck: builder.mutation<
+      GetDeckWithCountType,
+      { deck_name: string; deck_img: string }
+    >({
+      query: ({ deck_name, deck_img }) => {
+        return {
+          url: "create-deck",
+          method: "POST",
+          body: { deck_name, deck_img },
+        };
+      },
+      invalidatesTags: ["decks"],
     }),
 
     deleteDeck: builder.mutation<void, number>({
       query: (deckId) => ({
-        url: 'delete-deck',
-        method: 'DELETE',
+        url: "delete-deck",
+        method: "DELETE",
         body: { deckId },
       }),
-      invalidatesTags: ['decks'],
+      invalidatesTags: ["decks"],
     }),
 
     updateDeck: builder.mutation<GetDecksType, UpdateDeckType>({
       query: (newDeck) => ({
-        url: 'update-deck',
-        method: 'UPDATE',
+        url: "update-deck",
+        method: "UPDATE",
         body: newDeck,
       }),
-      invalidatesTags: ['decks'],
+      invalidatesTags: ["decks"],
     }),
 
     deleteVocabulary: builder.mutation<VocabularyType, number>({
       query: (vocabularyId) => ({
-        url: 'delete-vocabulary',
-        method: 'DELETE',
+        url: "delete-vocabulary",
+        method: "DELETE",
         body: { vocabularyId },
       }),
-      invalidatesTags: ['vocabulary'],
+      invalidatesTags: ["vocabulary"],
     }),
 
     getVocabularyToReview: builder.query<
@@ -141,11 +148,11 @@ export const learningAppApi = createApi({
       GetVocabularyToReviewArgType
     >({
       query: ({ deckId, limit, type }) => ({
-        url: 'get-vocabulary-to-review',
-        method: 'GET',
+        url: "get-vocabulary-to-review",
+        method: "GET",
         body: { deckId, limit, type },
       }),
-      providesTags: ['vocabulary'],
+      providesTags: ["vocabulary"],
     }),
 
     updateReview: builder.mutation<void, UpdateReviewPropsArg>({
@@ -156,8 +163,8 @@ export const learningAppApi = createApi({
         easeFactor,
         repetition,
       }) => ({
-        url: 'update-review',
-        method: 'UPDATE',
+        url: "update-review",
+        method: "UPDATE",
         body: {
           reviewId,
           vocabularyId,
@@ -166,7 +173,7 @@ export const learningAppApi = createApi({
           repetition,
         },
       }),
-      invalidatesTags: ['vocabulary'],
+      invalidatesTags: ["vocabulary"],
     }),
   }),
 });

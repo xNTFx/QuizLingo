@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FaGear } from "react-icons/fa6";
 
 import useSwalPopupBoxes from "../../../hooks/useSwalPopupBoxes";
+import DeckImage from "./DeckImage";
 
 export default function DeckRows({ data }: { data: GetDecksType[] }) {
   //Used to set the position of the popover
@@ -38,21 +39,26 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
 
   const deckRows = data?.map((deck: GetDeckWithCountType) => {
     const deckProgress =
-      deck.learned_words !== undefined && deck.total_words !== undefined
-        ? deck.learned_words / deck.total_words
+      deck.learned_words !== undefined && deck.total_words
+        ? Number(deck.learned_words) / Number(deck.total_words)
         : 0;
 
     return (
-      <div key={deck.deck_id} className="flex flex-col gap-2">
+      <article
+        key={deck.deck_id}
+        className="flex flex-col gap-2 bg-[#2C2C2C] p-2 rounded-md"
+      >
         <div className="flex flex-row gap-4">
-          <div className="rounded w-[64px] h-[64px] bg-red-500"></div>
+          <button className="hover:opacity-40 w-[64px] h-[64px] relative rounded">
+            <DeckImage randomBg={deck.deck_img} />
+            <div className="absolute rounded top-0 left-0 w-full h-full flex items-center justify-center opacity-0 hover:opacity-100 bg-black/50 text-white">
+              <p>Change Image</p>
+            </div>
+          </button>
           <div className="w-[30rem] max-w-[30rem]">
-            <button
-              onClick={() => navigate(`${deck.deck_id}/mode-selection`)}
-              className="text-lg overflow-auto max-w-[30rem] hover:underline"
-            >
+            <h2 className="text-lg overflow-auto max-w-[30rem]">
               {deck.deck_name}
-            </button>
+            </h2>
             <div>
               <div className="flex justify-end">
                 <p className="text-sm">{`${deck.learned_words}/${deck.total_words} words learned`}</p>
@@ -119,7 +125,7 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
             style={Number(deck.review) === 0 ? { opacity: 0.4 } : undefined}
           >{`Review vocabulary: ${deck.review}`}</button>
         </div>
-      </div>
+      </article>
     );
   });
 

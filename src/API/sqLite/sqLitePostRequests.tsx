@@ -1,10 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain } from "electron";
 
-import { Statement } from '../../types/APITypes';
-import db from './sqLite';
+import { Statement } from "../../types/APITypes";
+import db from "./sqLite";
 
 export default function sqLitePostRequests() {
-  ipcMain.handle('add-flashcard', async (_event, data) => {
+  ipcMain.handle("add-flashcard", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const {
         deckId,
@@ -42,35 +42,39 @@ export default function sqLitePostRequests() {
         ],
         function (this: Statement, err: Error) {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             //Get id of inserted item
             resolve({ flashcardId: this.lastID });
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('create-deck', async (_event, data) => {
+  ipcMain.handle("create-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
-      const { deck_name } = data;
+      const { deck_name, deck_img } = data;
 
       const sql = `INSERT INTO decks (
-        deck_name
-      ) VALUES (?)`;
+        deck_name, deck_img
+      ) VALUES (?, ?)`;
 
-      db.run(sql, [deck_name], function (this: Statement, err: Error) {
-        if (err) {
-          reject(new Error('Database error: ' + err.message));
-        } else {
-          resolve({ deck_id: this.lastID, deck_name });
+      db.run(
+        sql,
+        [deck_name, deck_img],
+        function (this: Statement, err: Error) {
+          if (err) {
+            reject(new Error("Database error: " + err.message));
+          } else {
+            resolve({ deck_id: this.lastID, deck_name });
+          }
         }
-      });
+      );
     });
   });
 
-  ipcMain.handle('create-review', async (_event, data) => {
+  ipcMain.handle("create-review", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { vocabularyId } = data;
 
@@ -80,7 +84,7 @@ export default function sqLitePostRequests() {
 
       db.run(sql, [vocabularyId], function (this: Statement, err: Error) {
         if (err) {
-          reject(new Error('Database error: ' + err.message));
+          reject(new Error("Database error: " + err.message));
         } else {
           resolve({ vocabularyId: this.lastID });
         }

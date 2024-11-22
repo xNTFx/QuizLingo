@@ -28,7 +28,8 @@ const db = new sqlite3.Database(dbPath);
 db.serialize(function () {
   db.run(`CREATE TABLE if not exists decks (
         deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        deck_name TEXT NOT NULL
+        deck_name TEXT NOT NULL,
+        deck_img TEXT
 )`);
 
   db.run(`CREATE TABLE if not exists vocabulary (
@@ -70,7 +71,7 @@ db.serialize(function () {
     AFTER INSERT ON vocabulary FOR EACH ROW
   BEGIN
     INSERT INTO reviews ( vocabulary_id, review_date, ease_factor, repetition)
-    VALUES (NEW.vocabulary_id, datetime('now'), 2.5, 1, 1);
+    VALUES (NEW.vocabulary_id, datetime('now'), 2.5, 1);
   END;`,
   );
 });
