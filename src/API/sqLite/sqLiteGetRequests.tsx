@@ -1,19 +1,19 @@
-import { ipcMain } from 'electron';
+import { ipcMain } from "electron";
 
 import {
   GetDeckWithCountType,
   GetDecksType,
   GetVocabularyToReview,
   VocabularyType,
-} from '../../types/APITypes';
-import db from './sqLite';
+} from "../../types/APITypes";
+import db from "./sqLite";
 
 export default function sqLiteGetRequests() {
-  ipcMain.handle('get-decks', async () => {
+  ipcMain.handle("get-decks", async () => {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM decks', [], (err: Error, rows: GetDecksType) => {
+      db.all("SELECT * FROM decks", [], (err: Error, rows: GetDecksType) => {
         if (err) {
-          reject(new Error('Database error: ' + err.message));
+          reject(new Error("Database error: " + err.message));
         } else {
           resolve(rows);
         }
@@ -21,39 +21,43 @@ export default function sqLiteGetRequests() {
     });
   });
 
-  ipcMain.handle('get-decks-with-limit', async (_event, data) => {
+  ipcMain.handle("get-decks-with-limit", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { limit, offset } = data;
       db.all(
         `SELECT decks.*,
-        CASE 
-          WHEN COALESCE(SUM(CASE WHEN reviews.repetition = 1 THEN 1 ELSE 0 END), 0) > 999 
-          THEN '+999'
-          ELSE CAST(COALESCE(SUM(CASE WHEN reviews.repetition = 1 THEN 1 ELSE 0 END), 0) AS CHAR)
-        END AS new,
-        CASE 
-          WHEN COALESCE(SUM(CASE WHEN reviews.repetition > 1 AND julianday('now') > julianday(reviews.review_date) THEN 1 ELSE 0 END), 0) > 999 
-          THEN '+999'
-          ELSE CAST(COALESCE(SUM(CASE WHEN reviews.repetition > 1 AND julianday('now') > julianday(reviews.review_date) THEN 1 ELSE 0 END), 0) AS CHAR)
-        END AS review
-      FROM decks
-      LEFT JOIN vocabulary ON vocabulary.deck_id = decks.deck_id 
-      LEFT JOIN reviews ON reviews.vocabulary_id = vocabulary.vocabulary_id
-      GROUP BY decks.deck_id
+          CASE 
+            WHEN COALESCE(SUM(CASE WHEN reviews.repetition = 1 THEN 1 ELSE 0 END), 0) > 999 
+            THEN '+999'
+            ELSE CAST(COALESCE(SUM(CASE WHEN reviews.repetition = 1 THEN 1 ELSE 0 END), 0) AS CHAR)
+          END AS new,
+          CASE 
+            WHEN COALESCE(SUM(CASE WHEN reviews.repetition > 1 AND julianday('now') > julianday(reviews.review_date) THEN 1 ELSE 0 END), 0) > 999 
+            THEN '+999'
+            ELSE CAST(COALESCE(SUM(CASE WHEN reviews.repetition > 1 AND julianday('now') > julianday(reviews.review_date) THEN 1 ELSE 0 END), 0) AS CHAR)
+          END AS review,
+          -- total number of words in the deck
+          COUNT(vocabulary.vocabulary_id) AS total_words,
+          -- number of learned words in the deck
+          SUM(CASE WHEN reviews.repetition >= 3 AND reviews.ease_factor >= 2.5 THEN 1 ELSE 0 END) AS learned_words
+        FROM decks
+        LEFT JOIN vocabulary ON vocabulary.deck_id = decks.deck_id 
+        LEFT JOIN reviews ON reviews.vocabulary_id = vocabulary.vocabulary_id
+        GROUP BY decks.deck_id
         LIMIT ? OFFSET ?`,
         [limit, offset],
         (err: Error, rows: GetDeckWithCountType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('get-deck-by-id', async (_event, data) => {
+  ipcMain.handle("get-deck-by-id", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId } = data;
       db.all(
@@ -76,16 +80,16 @@ export default function sqLiteGetRequests() {
         [deckId],
         (err: Error, rows: GetDeckWithCountType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('get-vocabulary-to-delete-deck', async (_event, data) => {
+  ipcMain.handle("get-vocabulary-to-delete-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId } = data;
       db.all(
@@ -94,16 +98,16 @@ export default function sqLiteGetRequests() {
         [deckId],
         (err: Error, rows: VocabularyType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('get-vocabulary-to-browse', async (_event, data) => {
+  ipcMain.handle("get-vocabulary-to-browse", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId, limit, offset, search } = data;
       db.all(
@@ -114,16 +118,16 @@ export default function sqLiteGetRequests() {
         [deckId, deckId, search, limit, offset],
         (err: Error, rows: VocabularyType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('get-vocabulary-to-remove-deck', async (_event, data) => {
+  ipcMain.handle("get-vocabulary-to-remove-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId } = data;
       db.all(
@@ -133,16 +137,16 @@ export default function sqLiteGetRequests() {
         [deckId],
         (err: Error, rows: VocabularyType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('check-if-img-or-audio-exists', async (_event, data) => {
+  ipcMain.handle("check-if-img-or-audio-exists", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { vocabularyId, html } = data;
       db.all(
@@ -155,19 +159,19 @@ export default function sqLiteGetRequests() {
         [vocabularyId, html, html, html],
         (err: Error, rows: VocabularyType) => {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             resolve(rows);
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('get-vocabulary-to-review', async (_event, data) => {
+  ipcMain.handle("get-vocabulary-to-review", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId, limit, type } = data;
-      if (type === 'new-reviews') {
+      if (type === "new-reviews") {
         db.all(
           `SELECT reviews.*, vocabulary.* FROM reviews  
           JOIN vocabulary ON vocabulary.vocabulary_id = reviews.vocabulary_id
@@ -175,11 +179,11 @@ export default function sqLiteGetRequests() {
           [deckId, limit],
           (err: Error, rows: GetVocabularyToReview[]) => {
             if (err) {
-              reject(new Error('Database error: ' + err.message));
+              reject(new Error("Database error: " + err.message));
             } else {
               resolve(rows);
             }
-          },
+          }
         );
       } else {
         db.all(
@@ -189,11 +193,11 @@ export default function sqLiteGetRequests() {
           [deckId, limit],
           (err: Error, rows: GetVocabularyToReview[]) => {
             if (err) {
-              reject(new Error('Database error: ' + err.message));
+              reject(new Error("Database error: " + err.message));
             } else {
               resolve(rows);
             }
-          },
+          }
         );
       }
     });

@@ -11,7 +11,6 @@ interface BackFlashCardProps {
     difficulty: string,
     ease_factor: number,
     repetition: number,
-    interval: number,
     quality: number
   ) => void;
 }
@@ -64,7 +63,6 @@ export default function BackFlashCard({
                   "easy",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  vocabulary.interval,
                   5
                 )
               }
@@ -80,7 +78,6 @@ export default function BackFlashCard({
                   "good",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  vocabulary.interval,
                   4
                 )
               }
@@ -96,7 +93,6 @@ export default function BackFlashCard({
                   "hard",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  vocabulary.interval,
                   3
                 )
               }
@@ -112,7 +108,6 @@ export default function BackFlashCard({
                   "again",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  vocabulary.interval,
                   0
                 )
               }

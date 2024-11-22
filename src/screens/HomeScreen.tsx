@@ -53,23 +53,13 @@ export default function HomeScreen() {
           loader={<p>...Loading</p>}
           scrollableTarget="scrollableDiv"
         >
-          <table className="border-collapse">
-            <thead className="border-b-2 border-b-cyan-600">
-              <tr>
-                <th className="text-left">Decks</th>
-                <th className="px-2 pl-8 font-extrabold">New</th>
-                <th className="px-2 font-extrabold">Review</th>
-                <th className="px-2 font-extrabold">Settings</th>
-              </tr>
-            </thead>
-            <tbody>{<DeckRows data={data} />}</tbody>
-          </table>
+          <DeckRows data={data} />
         </InfiniteScroll>
       </div>
       <div className="p-4 text-white">
         <button
           onClick={createDeckFunction}
-          className="rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
+          className="rounded-xl bg-[#382bf0] p-2 w-40 font-extrabold hover:bg-[#5e43f3]"
         >
           Create Deck
         </button>

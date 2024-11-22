@@ -50,7 +50,6 @@ export default function FlashCardsScreen() {
     difficulty: string,
     ease_factor: number,
     repetition: number,
-    interval: number,
     quality: number
   ) {
     if (!data) return;
@@ -59,7 +58,6 @@ export default function FlashCardsScreen() {
       vocabularyId,
       ease_factor,
       repetition,
-      interval,
       quality
     );
     if (reviewIndex < vocabularyList?.length - 1) {

@@ -32,7 +32,6 @@ interface GetVocabularyToReviewType {
   review_date: string;
   ease_factor: number;
   repetition: number;
-  interval: number;
   deck_id: number;
   front_word: string;
   back_word: string;
@@ -55,7 +54,6 @@ interface UpdateReviewPropsArg {
   reviewDate: string;
   easeFactor: number;
   repetition: number;
-  interval: number;
 }
 
 interface UpdateVocabularyParams {
@@ -90,6 +88,8 @@ interface GetDeckWithCountType {
   deck_name: string;
   new?: number | string;
   review?: number | string;
+  total_words?: number;
+  learned_words?: number;
 }
 
 interface AddFlashcardResponse {
@@ -119,7 +119,6 @@ interface GetVocabularyToReview {
   review_date: string;
   ease_factor: number;
   repetition: number;
-  interval: number;
   deck_id: number;
   front_word: string;
   back_word: string;

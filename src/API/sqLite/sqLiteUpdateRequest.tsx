@@ -1,10 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain } from "electron";
 
-import { Statement } from '../../types/APITypes';
-import db from './sqLite';
+import { Statement } from "../../types/APITypes";
+import db from "./sqLite";
 
 export default function sqLiteUpdateRequests() {
-  ipcMain.handle('update-deck', async (_event, data) => {
+  ipcMain.handle("update-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId, deckName } = data;
 
@@ -14,7 +14,7 @@ export default function sqLiteUpdateRequests() {
 
       db.run(sql, [deckName, deckId], function (this: Statement, err: Error) {
         if (err) {
-          reject(new Error('Database error: ' + err.message));
+          reject(new Error("Database error: " + err.message));
         } else {
           //Get id of updated item
           resolve({ deckId: this.lastID });
@@ -23,7 +23,7 @@ export default function sqLiteUpdateRequests() {
     });
   });
 
-  ipcMain.handle('update-vocabulary', async (_event, data) => {
+  ipcMain.handle("update-vocabulary", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const {
         front_word,
@@ -60,7 +60,7 @@ export default function sqLiteUpdateRequests() {
         ],
         function (this: Statement, err: Error) {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             //Get id of updated item
             resolve({
@@ -74,37 +74,31 @@ export default function sqLiteUpdateRequests() {
               vocabulary_id,
             });
           }
-        },
+        }
       );
     });
   });
 
-  ipcMain.handle('update-review', async (_event, data) => {
+  ipcMain.handle("update-review", async (_event, data) => {
     return new Promise((resolve, reject) => {
-      const {
-        reviewId,
-        vocabularyId,
-        reviewDate,
-        easeFactor,
-        repetition,
-        interval,
-      } = data;
+      const { reviewId, vocabularyId, reviewDate, easeFactor, repetition } =
+        data;
 
       const sql = `UPDATE reviews
-        SET vocabulary_id = ?, review_date = ?, ease_factor = ?, repetition = ?, interval = ?
+        SET vocabulary_id = ?, review_date = ?, ease_factor = ?, repetition = ?
         WHERE review_id = ?`;
 
       db.run(
         sql,
-        [vocabularyId, reviewDate, easeFactor, repetition, interval, reviewId],
+        [vocabularyId, reviewDate, easeFactor, repetition, reviewId],
         function (this: Statement, err: Error) {
           if (err) {
-            reject(new Error('Database error: ' + err.message));
+            reject(new Error("Database error: " + err.message));
           } else {
             //Get id of updated item
             resolve({ deckId: this.lastID });
           }
-        },
+        }
       );
     });
   });

@@ -50,7 +50,6 @@ db.serialize(function () {
     review_date TEXT NOT NULL,
     ease_factor NUMERIC NOT NULL DEFAULT 2.5,
     repetition INTEGER NOT NULL DEFAULT 1,
-    interval INTEGER DEFAULT 1 NOT NULL,
     FOREIGN KEY (vocabulary_id) REFERENCES vocabulary(vocabulary_id)
 )`);
 
@@ -70,7 +69,7 @@ db.serialize(function () {
     `CREATE TRIGGER if not exists after_vocabulary_insert
     AFTER INSERT ON vocabulary FOR EACH ROW
   BEGIN
-    INSERT INTO reviews ( vocabulary_id, review_date, ease_factor, repetition, interval)
+    INSERT INTO reviews ( vocabulary_id, review_date, ease_factor, repetition)
     VALUES (NEW.vocabulary_id, datetime('now'), 2.5, 1, 1);
   END;`,
   );

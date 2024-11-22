@@ -155,7 +155,6 @@ export const learningAppApi = createApi({
         reviewDate,
         easeFactor,
         repetition,
-        interval,
       }) => ({
         url: 'update-review',
         method: 'UPDATE',
@@ -165,7 +164,6 @@ export const learningAppApi = createApi({
           reviewDate,
           easeFactor,
           repetition,
-          interval,
         },
       }),
       invalidatesTags: ['vocabulary'],

@@ -56,7 +56,6 @@ export default function TranslationScreen() {
           vocabulary.vocabulary_id,
           vocabulary.ease_factor,
           vocabulary.repetition,
-          vocabulary.repetition,
           5
         );
       } else {
@@ -65,8 +64,7 @@ export default function TranslationScreen() {
           vocabulary.vocabulary_id,
           vocabulary.ease_factor,
           vocabulary.repetition,
-          vocabulary.repetition,
-          3
+          2
         );
       }
 

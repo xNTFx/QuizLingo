@@ -36,57 +36,80 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
 
   if (!data) return;
 
-  const deckRows = data?.map((deck: GetDeckWithCountType) => (
-    <tr key={deck.deck_id} className="text-center">
-      <td className="max-w-[50vw] select-text overflow-auto text-start">
-        <button
-          onClick={() => {
-            navigate(`${deck.deck_id}/mode-selection`);
-          }}
-          className="cursor-pointer rounded-lg p-1 hover:bg-black hover:underline"
-        >
-          {deck.deck_name}
-        </button>
-      </td>
-      <td className="px-2 pl-8 text-blue-700">{deck.new ? deck.new : "0"}</td>
-      <td className="px-2 text-green-400">{deck.review ? deck.review : "0"}</td>
-      <td className="relative px-2 text-center">
-        <button
-          className="text-center transition-transform hover:rotate-90"
-          onClick={(event) => handleClick(event, deck.deck_id)}
-        >
-          <FaGear />
-        </button>
-        <ThemeProvider theme={darkTheme}>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={selectedDeckId === deck.deck_id}
-            onClose={handleClose}
-          >
-            <MenuItem>Settings</MenuItem>
-            <MenuItem
-              onClick={() => {
-                updateDeckFunction(deck.deck_id, deck.deck_name);
-                handleClose();
-              }}
+  const deckRows = data?.map((deck: GetDeckWithCountType) => {
+    const deckProgress =
+      deck.learned_words !== undefined && deck.total_words !== undefined
+        ? deck.learned_words / deck.total_words
+        : 0;
+
+    return (
+      <div key={deck.deck_id} className="flex flex-col gap-2">
+        <div className="flex flex-row gap-4">
+          <div className="rounded w-[64px] h-[64px] bg-red-500"></div>
+          <div className="w-[30rem] max-w-[30rem]">
+            <button
+              onClick={() => navigate(`${deck.deck_id}/mode-selection`)}
+              className="text-lg overflow-auto max-w-[30rem] hover:underline"
             >
-              Rename
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleDeckRemoveFunction(deck.deck_id);
-                handleClose();
-              }}
+              {deck.deck_name}
+            </button>
+            <div>
+              <div className="flex justify-end">
+                <p className="text-sm">{`${deck.learned_words}/${deck.total_words} words learned`}</p>
+              </div>
+              <div className="w-full h-2 rounded-lg bg-gray-600 relative">
+                <div
+                  style={{
+                    width: `${deckProgress * 100}%`,
+                  }}
+                  className="h-2 rounded-lg bg-yellow-400 absolute w-[30rem] max-w-[30rem]"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-8">
+            <button
+              className="absolute text-center transition-transform hover:rotate-90 p-1"
+              onClick={(event) => handleClick(event, deck.deck_id)}
             >
-              Delete
-            </MenuItem>
-          </Menu>
-        </ThemeProvider>
-      </td>
-    </tr>
-  ));
+              <FaGear />
+            </button>
+            <ThemeProvider theme={darkTheme}>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={selectedDeckId === deck.deck_id}
+                onClose={handleClose}
+              >
+                <MenuItem>Settings</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    updateDeckFunction(deck.deck_id, deck.deck_name);
+                    handleClose();
+                  }}
+                >
+                  Rename
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleDeckRemoveFunction(deck.deck_id);
+                    handleClose();
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+            </ThemeProvider>
+          </div>
+        </div>
+        <div className="flex flex-row justify-around">
+          <button className="w-[14.375rem] bg-blue-600 hover:opacity-80 py-[0.25rem] rounded-lg">{`Learn new vocabulary: ${deck.new}`}</button>
+          <button className="w-[14.375rem] bg-green-600 hover:opacity-80 py-[0.25rem] rounded-lg">{`Review vocabulary: ${deck.review}`}</button>
+        </div>
+      </div>
+    );
+  });
 
   return deckRows;
 }
