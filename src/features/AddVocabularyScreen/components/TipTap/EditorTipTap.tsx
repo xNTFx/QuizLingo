@@ -155,7 +155,7 @@ export default function EditorTipTap({
           </div>
         </div>
       ) : (
-        <div className="rounded-md bg-black text-white">
+        <div className="rounded-md bg-black text-white resize-y overflow-auto min-h-[3rem]">
           <div
             onClick={() => setActiveEditor(editor)}
             className="cursor-text p-2"

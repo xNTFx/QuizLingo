@@ -115,7 +115,7 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
             disabled={Number(deck.new) === 0}
             className="w-[14.375rem] bg-blue-600 hover:opacity-80 py-[0.25rem] rounded-lg"
             style={Number(deck.new) === 0 ? { opacity: 0.4 } : undefined}
-          >{`Learn new vocabulary: ${deck.new}`}</button>
+          >{`New vocabulary: ${deck.new}`}</button>
           <button
             onClick={() =>
               navigate(`${deck.deck_id}/mode-selection/new-reviews`)
