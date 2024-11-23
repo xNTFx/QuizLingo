@@ -6,6 +6,12 @@ export default function Navbar() {
   const { id } = useParams();
   const deckId = id ? id : 0;
 
+  const navButtons = [
+    { label: "Decks", path: "/" },
+    { label: "Browse", path: `${deckId}/browse-vocabulary` },
+    { label: "Add", path: `${deckId}/add-vocabulary` },
+  ];
+
   return (
     <>
       <header>
@@ -19,24 +25,15 @@ export default function Navbar() {
           </button>
           <div className="flex w-full items-center justify-center">
             <div className="flex h-full items-center gap-1 rounded-b-xl bg-slate-800 p-3">
-              <button
-                className="rounded-lg p-2 hover:bg-slate-600"
-                onClick={() => navigate("/")}
-              >
-                Decks
-              </button>
-              <button
-                className="rounded-lg p-2 hover:bg-slate-600"
-                onClick={() => navigate(`${deckId}/browse-vocabulary`)}
-              >
-                Browse
-              </button>
-              <button
-                onClick={() => navigate(`${deckId}/add-vocabulary`)}
-                className="rounded-lg p-2 hover:bg-slate-600"
-              >
-                Add
-              </button>
+              {navButtons.map((button, index) => (
+                <button
+                  key={index}
+                  className="w-20 rounded-lg p-2 hover:bg-slate-600"
+                  onClick={() => navigate(button.path)}
+                >
+                  {button.label}
+                </button>
+              ))}
             </div>
           </div>
         </nav>

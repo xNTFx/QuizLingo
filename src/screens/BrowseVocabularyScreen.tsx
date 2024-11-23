@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Split from "react-split";
 
-import { useGetVocabularyQuery } from "../API/Redux/reduxQueryFetch";
+import {
+  useGetDecksQuery,
+  useGetVocabularyQuery,
+} from "../API/Redux/reduxQueryFetch";
+import LoadingDivComponent from "../components/LoadingComponents/LoadingDivComponent";
+import DeckSelectionContainer from "../features/AddVocabularyScreen/components/DeckSelectionContainer";
 import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
@@ -26,7 +31,9 @@ export default function BrowseVocabularyScreen() {
     search: `%${debouncedSearchValue}%`,
   });
 
-  const [selectedDeck, setSelectedDeck] = useState<VocabularyType | null>(null);
+  const [selectedVocabulary, setSelectedVocabulary] =
+    useState<VocabularyType | null>(null);
+  const [currentDeck, setCurrentDeck] = useState({ deckId: "0", deckName: "" });
 
   // Ref for tracking whether there is more data to load
   const hasMore = useRef(true);
@@ -50,7 +57,7 @@ export default function BrowseVocabularyScreen() {
     if (data && data.length > 0 && !initialized.current) {
       const audioSrc =
         extractSingleAudioAndImageSrc(data[0].audio_name) || null;
-      setSelectedDeck({ ...data[0], audio_name: audioSrc });
+      setSelectedVocabulary({ ...data[0], audio_name: audioSrc });
       initialized.current = true;
     }
   }, [data]);
@@ -69,18 +76,23 @@ export default function BrowseVocabularyScreen() {
   };
 
   function handleChangeVocabulary(vocabularyId: number) {
-    const selectedVocabulary = data?.find(
+    const selectedVocabularyById = data?.find(
       (vocabulary: VocabularyType) => vocabulary.vocabulary_id === vocabularyId,
     );
 
     if (
+      selectedVocabularyById &&
       selectedVocabulary &&
-      selectedDeck &&
-      selectedVocabulary.vocabulary_id !== Number(selectedDeck.vocabulary_id)
+      selectedVocabularyById.vocabulary_id !==
+        Number(selectedVocabulary.vocabulary_id)
     ) {
       const audioSrc =
-        extractSingleAudioAndImageSrc(selectedVocabulary.audio_name) || null;
-      setSelectedDeck({ ...selectedVocabulary, audio_name: audioSrc });
+        extractSingleAudioAndImageSrc(selectedVocabularyById.audio_name) ||
+        null;
+      setSelectedVocabulary({
+        ...selectedVocabularyById,
+        audio_name: audioSrc,
+      });
     }
   }
 
@@ -90,6 +102,8 @@ export default function BrowseVocabularyScreen() {
       setDebouncedSearchValue(event?.target.value);
     }, 500);
   }
+
+  const { data: deckList, isLoading: deckListIsLoading } = useGetDecksQuery();
 
   if (!data) return;
   if (error) {
@@ -113,6 +127,18 @@ export default function BrowseVocabularyScreen() {
         <section className="mt-12 h-[calc(100vh-3rem)]">
           <div className="flex flex-col items-center justify-center">
             <div className="flex w-11/12 flex-col items-center justify-center gap-4 rounded-lg bg-[#2C2C2C] p-4">
+              {!deckListIsLoading ? (
+                <DeckSelectionContainer
+                  deckList={deckList}
+                  selectedDeck={null}
+                  id={id}
+                  currentDeck={currentDeck}
+                  setCurrentDeck={setCurrentDeck}
+                  isInitialDeck={false}
+                />
+              ) : (
+                <LoadingDivComponent />
+              )}
               <VocabularySearchBar
                 inputSearchValue={inputSearchValue}
                 handleSearchInputChange={handleSearchInputChange}
@@ -122,7 +148,7 @@ export default function BrowseVocabularyScreen() {
                 handleScroll={handleScroll}
                 handleChangeVocabulary={handleChangeVocabulary}
                 removeVocabulary={removeVocabulary}
-                setSelectedDeck={setSelectedDeck}
+                setSelectedDeck={setSelectedVocabulary}
                 isLoading={isLoading}
               />
             </div>
@@ -131,7 +157,7 @@ export default function BrowseVocabularyScreen() {
         {data.length > 0 ? (
           <section>
             <AddVocabularyScreen
-              selectedDeck={selectedDeck ? selectedDeck : null}
+              selectedDeck={selectedVocabulary ? selectedVocabulary : null}
             />
           </section>
         ) : null}

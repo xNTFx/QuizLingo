@@ -13,9 +13,9 @@ import useSwalPopupBoxes from "./useSwalPopupBoxes";
 export default function useInsertOrUpdateVocabulary(
   editorsList: Editor[],
   selectedDeck: VocabularyType | null,
-  currentDeckName: string,
+  currentDeckId: string,
   deckList: GetDecksType[] | undefined,
-  setEditorsList: React.Dispatch<React.SetStateAction<Editor[]>>
+  setEditorsList: React.Dispatch<React.SetStateAction<Editor[]>>,
 ) {
   const { id } = useParams();
 
@@ -29,11 +29,6 @@ export default function useInsertOrUpdateVocabulary(
     console.error(error);
     console.error(addVocabularyError);
     return;
-  }
-
-  function findDeckIdByName(deckName: string) {
-    const deck = deckList?.find((deck) => deck.deck_name === deckName);
-    return deck ? deck.deck_id : 0;
   }
 
   async function handleVocabularyButton() {
@@ -58,9 +53,9 @@ export default function useInsertOrUpdateVocabulary(
     if (!selectedDeck && id && deckList) {
       const deckId =
         id === "0"
-          ? currentDeckName === ""
+          ? currentDeckId === "0"
             ? deckList[0].deck_id
-            : Number(findDeckIdByName(currentDeckName))
+            : Number(currentDeckId)
           : Number(id);
 
       addVocabulary({

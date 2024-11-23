@@ -12,14 +12,18 @@ import { GetDecksType } from "../../../types/APITypes";
 
 interface DeckSelectionTypes {
   deckList: GetDecksType[];
-  currentDeckName: string;
-  setCurrentDeckName: React.Dispatch<React.SetStateAction<string>>;
+  currentDeck: { deckId: string; deckName: string };
+  setCurrentDeck: React.Dispatch<
+    React.SetStateAction<{ deckId: string; deckName: string }>
+  >;
+  isInitialDeck: boolean;
 }
 
 export default function DeckSelection({
   deckList,
-  currentDeckName,
-  setCurrentDeckName,
+  currentDeck,
+  setCurrentDeck,
+  isInitialDeck,
 }: DeckSelectionTypes) {
   const { id } = useParams();
 
@@ -38,17 +42,11 @@ export default function DeckSelection({
     },
   });
 
-  function findDeckNamebyId(deckId: number) {
-    const deck = deckList?.find((deck) => deck.deck_id === deckId);
-    return deck ? deck.deck_name : "";
+  function findDeckById(deckId: string) {
+    return deckList?.find((deck) => String(deck.deck_id) === deckId) || null;
   }
 
-  const initialDeckName =
-    deckList && deckList.length > 0
-      ? id !== "0"
-        ? findDeckNamebyId(Number(id))
-        : deckList[0].deck_name
-      : "";
+  const initialDeck = findDeckById(id ?? "0") || deckList[0];
 
   return (
     <>
@@ -58,14 +56,19 @@ export default function DeckSelection({
           <Select
             labelId="add-deck-select-label"
             id="add-deck-select"
-            value={currentDeckName || initialDeckName}
-            label={currentDeckName || "Deck"}
+            value={Number(currentDeck.deckId) || initialDeck.deck_id}
+            label="Deck"
             onChange={(event) => {
-              setCurrentDeckName(event.target.value);
+              const selectedId = event.target.value;
+              const selectedDeck = findDeckById(selectedId.toString());
+              setCurrentDeck({
+                deckId: selectedId.toString(),
+                deckName: selectedDeck?.deck_name || "",
+              });
             }}
           >
             {deckList?.map((deck) => (
-              <MenuItem key={deck.deck_id} value={deck.deck_name}>
+              <MenuItem key={deck.deck_id} value={deck.deck_id}>
                 {deck.deck_name}
               </MenuItem>
             ))}

@@ -19,7 +19,7 @@ export default function VocabularySearchBar({
     <div className="w-[90%]">
       <ThemeProvider theme={darkTheme}>
         <TextField
-          label="Search"
+          label="Search vocabulary"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             handleSearchInputChange(event);
           }}

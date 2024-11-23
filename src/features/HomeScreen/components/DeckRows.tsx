@@ -59,19 +59,21 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
             <h2 className="max-w-[30rem] overflow-auto text-lg">
               {deck.deck_name}
             </h2>
-            <div>
-              <div className="flex justify-end">
-                <p className="text-sm">{`${deck.learned_words}/${deck.total_words} words learned`}</p>
+            {Number(deck.total_words) > 0 ? (
+              <div>
+                <div className="flex justify-end">
+                  <p className="text-sm">{`${deck.learned_words}/${deck.total_words} vocabulary learned`}</p>
+                </div>
+                <div className="relative h-2 w-full rounded-lg bg-gray-600">
+                  <div
+                    style={{
+                      width: `${deckProgress * 100}%`,
+                    }}
+                    className="absolute h-2 w-[30rem] max-w-[30rem] rounded-lg bg-yellow-400"
+                  ></div>
+                </div>
               </div>
-              <div className="relative h-2 w-full rounded-lg bg-gray-600">
-                <div
-                  style={{
-                    width: `${deckProgress * 100}%`,
-                  }}
-                  className="absolute h-2 w-[30rem] max-w-[30rem] rounded-lg bg-yellow-400"
-                ></div>
-              </div>
-            </div>
+            ) : null}
           </div>
           <div className="relative w-8">
             <button

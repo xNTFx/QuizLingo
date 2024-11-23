@@ -23,7 +23,7 @@ export default function AddVocabularyScreen({
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [currentDeckName, setCurrentDeckName] = useState("");
+  const [currentDeck, setCurrentDeck] = useState({ deckId: "0", deckName: "" });
   const [editorsList, setEditorsList] = useState<Editor[]>([]);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const [hiddenInputs, setHiddenInputs] = useState<number[]>([]);
@@ -31,7 +31,7 @@ export default function AddVocabularyScreen({
   const handleVocabularyButton = useInsertOrUpdateVocabulary(
     editorsList,
     selectedDeck,
-    currentDeckName,
+    currentDeck.deckId,
     deckList,
     setEditorsList,
   );
@@ -46,7 +46,7 @@ export default function AddVocabularyScreen({
 
   const handleEditorUpdate = useCallback(
     (editor: Editor) => {
-      if (editorsList.length >= 5) return; //to prevent infinity loop
+      if (editorsList.length >= 5) return; // to prevent infinity loop
       setEditorsList((prev) => [...prev, editor]);
     },
     [editorsList],
@@ -61,14 +61,16 @@ export default function AddVocabularyScreen({
     return <NoDeckScreen navigate={navigate} />;
   }
 
+  console.log(currentDeck, currentDeck.deckId);
+
   return (
     <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F]">
       <DeckSelectionContainer
         deckList={deckList}
         selectedDeck={selectedDeck}
         id={id}
-        currentDeckName={currentDeckName}
-        setCurrentDeckName={setCurrentDeckName}
+        currentDeck={currentDeck}
+        setCurrentDeck={setCurrentDeck}
       />
       <VocabularyEditor
         hiddenInputs={hiddenInputs}
