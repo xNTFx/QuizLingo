@@ -21,9 +21,9 @@ export default function ModeSelection() {
   ];
 
   return (
-    <main className="flex h-[calc(100vh-3rem)] select-none flex-col items-center justify-start pt-10 bg-[#1F1F1F]">
+    <main className="flex h-[calc(100vh-3rem)] select-none flex-col items-center justify-start bg-[#1F1F1F] pt-10">
       <div className="w-[60%] rounded-lg bg-[#2C2C2C] p-5 text-white shadow-lg">
-        <h1 className="text-2xl font-extrabold text-center mb-5">Modes</h1>
+        <h1 className="mb-5 text-center text-2xl font-extrabold">Modes</h1>
         <div className="grid grid-cols-2 gap-3">
           {modes.map(({ label, icon, color, mode }) => (
             <button

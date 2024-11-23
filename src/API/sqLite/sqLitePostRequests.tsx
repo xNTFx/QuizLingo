@@ -47,7 +47,7 @@ export default function sqLitePostRequests() {
             //Get id of inserted item
             resolve({ flashcardId: this.lastID });
           }
-        }
+        },
       );
     });
   });
@@ -69,7 +69,7 @@ export default function sqLitePostRequests() {
           } else {
             resolve({ deck_id: this.lastID, deck_name });
           }
-        }
+        },
       );
     });
   });

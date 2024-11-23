@@ -1,8 +1,9 @@
 import DOMPurify from "dompurify";
-import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
+import { Dispatch } from "react";
+
 import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
-import { Dispatch } from "react";
+import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 interface FrontTranslationCardProps {
   vocabulary: GetVocabularyToReviewType;
@@ -20,10 +21,10 @@ export default function FrontTranslationCard({
   handleShowAnswer,
 }: FrontTranslationCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(
-    vocabulary.front_word_html ?? ""
+    vocabulary.front_word_html ?? "",
   );
   const sanitizedFrontDescHtml = DOMPurify.sanitize(
-    vocabulary.front_desc_html ?? ""
+    vocabulary.front_desc_html ?? "",
   );
 
   return (

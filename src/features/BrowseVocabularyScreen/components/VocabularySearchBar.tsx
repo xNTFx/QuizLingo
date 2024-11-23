@@ -11,7 +11,10 @@ const darkTheme = createTheme({
   },
 });
 
-export default function VocabularySearchBar({ inputSearchValue, handleSearchInputChange }: Props) {
+export default function VocabularySearchBar({
+  inputSearchValue,
+  handleSearchInputChange,
+}: Props) {
   return (
     <div className="w-[90%]">
       <ThemeProvider theme={darkTheme}>

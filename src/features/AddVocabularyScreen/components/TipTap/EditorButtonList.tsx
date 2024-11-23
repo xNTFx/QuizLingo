@@ -69,7 +69,7 @@ export default function EdiitorButtonList({
   const [tempFontSize, setTempFontSize] = useState(
     toggleStyleValue.fontSize === ""
       ? defaultFontSize
-      : toggleStyleValue.fontSize
+      : toggleStyleValue.fontSize,
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,7 +84,7 @@ export default function EdiitorButtonList({
   const handleInputChange = (
     _event: React.SyntheticEvent<Element, Event>,
     value: string,
-    reason: string
+    reason: string,
   ) => {
     if (reason === "input") {
       if (/^(?!0)\d*$|^$/.test(value)) {
@@ -95,7 +95,7 @@ export default function EdiitorButtonList({
 
   const handleOptionSelect = (
     _event: React.SyntheticEvent<Element, Event>,
-    value: string | null
+    value: string | null,
   ) => {
     if (value !== null) {
       setToggleStyleValue((prev) => ({ ...prev, fontSize: value }));
@@ -215,7 +215,7 @@ export default function EdiitorButtonList({
 
         {isTxColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div className="p-2 rounded shadow-lg text-black">
+            <div className="rounded p-2 text-black shadow-lg">
               <SketchPicker
                 color={toggleStyleValue.textColor}
                 onChangeComplete={(color) => {
@@ -230,7 +230,7 @@ export default function EdiitorButtonList({
                 onClick={() => {
                   setIsTxColorPickerOpen(false);
                 }}
-                className="w-full bg-white hover:bg-gray-300 text-black p-1 mt-[-2px]"
+                className="mt-[-2px] w-full bg-white p-1 text-black hover:bg-gray-300"
               >
                 Ok
               </button>
@@ -254,7 +254,7 @@ export default function EdiitorButtonList({
 
         {isBgColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div className="p-2 rounded shadow-lg text-black">
+            <div className="rounded p-2 text-black shadow-lg">
               <SketchPicker
                 color={toggleStyleValue.backgroundColor}
                 onChangeComplete={(color) => {
@@ -269,7 +269,7 @@ export default function EdiitorButtonList({
                 onClick={() => {
                   setIsBgColorPickerOpen(false);
                 }}
-                className="w-full bg-white hover:bg-gray-300 text-black p-1 mt-[-2px]"
+                className="mt-[-2px] w-full bg-white p-1 text-black hover:bg-gray-300"
               >
                 Ok
               </button>

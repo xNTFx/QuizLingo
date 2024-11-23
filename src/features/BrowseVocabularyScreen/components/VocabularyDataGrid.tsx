@@ -1,8 +1,9 @@
-import { MdDeleteForever } from "react-icons/md";
 import DataGrid from "react-data-grid";
 import "react-data-grid/lib/styles.css";
-import { VocabularyType } from "../../../types/APITypes";
+import { MdDeleteForever } from "react-icons/md";
+
 import LoadingDivComponent from "../../../components/LoadingComponents/LoadingDivComponent";
+import { VocabularyType } from "../../../types/APITypes";
 
 type Props = {
   data: VocabularyType[];
@@ -11,7 +12,7 @@ type Props = {
   removeVocabulary: (
     vocabularyId: number,
     data: VocabularyType[],
-    setSelectedDeck: any
+    setSelectedDeck: any,
   ) => void;
   setSelectedDeck: React.Dispatch<React.SetStateAction<VocabularyType | null>>;
   isLoading: boolean;

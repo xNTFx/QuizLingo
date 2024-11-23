@@ -21,6 +21,7 @@ import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import { useEffect, useRef } from "react";
 import { IoTrashBin } from "react-icons/io5";
 
+import useSwalPopupBoxes from "../../../../hooks/useSwalPopupBoxes";
 import { EditorTipTapType } from "../../../../types/TypeScriptTypes";
 import { isItAudioFile } from "../../../../utils/categorizeFileType";
 import {
@@ -30,7 +31,6 @@ import {
 import FileHandler from "./Extensions/FileHandler";
 import FontSize from "./Extensions/FontSize";
 import { ImageResize } from "./Extensions/ImageResize";
-import useSwalPopupBoxes from "../../../../hooks/useSwalPopupBoxes";
 
 export default function EditorTipTap({
   index,
@@ -155,7 +155,7 @@ export default function EditorTipTap({
           </div>
         </div>
       ) : (
-        <div className="rounded-md bg-black text-white resize-y overflow-auto min-h-[3rem]">
+        <div className="min-h-[3rem] resize-y overflow-auto rounded-md bg-black text-white">
           <div
             onClick={() => setActiveEditor(editor)}
             className="cursor-text p-2"

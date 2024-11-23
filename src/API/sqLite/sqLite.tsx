@@ -1,26 +1,26 @@
-import { app } from 'electron';
-import fs from 'fs';
-import path from 'path';
+import { app } from "electron";
+import fs from "fs";
+import path from "path";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require("sqlite3").verbose();
 
 const appPath = app.getAppPath();
-const dbPath = path.join(appPath, 'dataResources', 'database', 'database.db');
+const dbPath = path.join(appPath, "dataResources", "database", "database.db");
 
-const dirName = 'dataResources';
+const dirName = "dataResources";
 
 const targetPath = path.join(appPath, dirName);
 if (!fs.existsSync(targetPath)) {
   fs.mkdirSync(targetPath, { recursive: true });
 }
 
-if (!fs.existsSync(path.join(targetPath, 'database'))) {
-  fs.mkdirSync(path.join(targetPath, 'database'));
+if (!fs.existsSync(path.join(targetPath, "database"))) {
+  fs.mkdirSync(path.join(targetPath, "database"));
 }
 
-if (!fs.existsSync(path.join(targetPath, 'database/database.db'))) {
-  fs.writeFileSync(path.join(targetPath, 'database/database.db'), '');
+if (!fs.existsSync(path.join(targetPath, "database/database.db"))) {
+  fs.writeFileSync(path.join(targetPath, "database/database.db"), "");
 }
 
 const db = new sqlite3.Database(dbPath);

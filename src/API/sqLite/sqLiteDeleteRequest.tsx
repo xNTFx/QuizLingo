@@ -1,10 +1,10 @@
-import { ipcMain } from 'electron';
+import { ipcMain } from "electron";
 
-import { Statement } from '../../types/APITypes';
-import db from './sqLite';
+import { Statement } from "../../types/APITypes";
+import db from "./sqLite";
 
 export default function sqLiteDeleteRequests() {
-  ipcMain.handle('delete-deck', async (_event, data) => {
+  ipcMain.handle("delete-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { deckId } = data;
 
@@ -12,7 +12,7 @@ export default function sqLiteDeleteRequests() {
 
       db.run(sql, [deckId], function (this: Statement, err: Error) {
         if (err) {
-          reject(new Error('Database error: ' + err.message));
+          reject(new Error("Database error: " + err.message));
         } else {
           resolve({ deckId: this.lastID });
         }
@@ -20,7 +20,7 @@ export default function sqLiteDeleteRequests() {
     });
   });
 
-  ipcMain.handle('delete-vocabulary', async (_event, data) => {
+  ipcMain.handle("delete-vocabulary", async (_event, data) => {
     return new Promise((resolve, reject) => {
       const { vocabularyId } = data;
 
@@ -28,7 +28,7 @@ export default function sqLiteDeleteRequests() {
 
       db.run(sql, [vocabularyId], function (this: Statement, err: Error) {
         if (err) {
-          reject(new Error('Database error: ' + err.message));
+          reject(new Error("Database error: " + err.message));
         } else {
           resolve({ vocabularyId: this.lastID });
         }

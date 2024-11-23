@@ -1,7 +1,8 @@
 import DOMPurify from "dompurify";
-import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
+
 import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
+import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 interface BackFlashCardProps {
   vocabulary: GetVocabularyToReviewType;
@@ -11,7 +12,7 @@ interface BackFlashCardProps {
     difficulty: string,
     ease_factor: number,
     repetition: number,
-    quality: number
+    quality: number,
   ) => void;
 }
 
@@ -21,10 +22,10 @@ export default function BackFlashCard({
 }: BackFlashCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(vocabulary.front_word_html);
   const sanitizedFrontDescHtml = DOMPurify.sanitize(
-    vocabulary.front_desc_html ?? ""
+    vocabulary.front_desc_html ?? "",
   );
   const sanitizedBack = DOMPurify.sanitize(
-    vocabulary.back_word_html + vocabulary.back_desc_html
+    vocabulary.back_word_html + vocabulary.back_desc_html,
   );
   return (
     <article>
@@ -63,7 +64,7 @@ export default function BackFlashCard({
                   "easy",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  5
+                  5,
                 )
               }
               className="flex items-center justify-center rounded-lg border-2 border-solid border-green-600 px-2 py-1 font-bold hover:bg-green-600"
@@ -78,7 +79,7 @@ export default function BackFlashCard({
                   "good",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  4
+                  4,
                 )
               }
               className="flex items-center justify-center rounded-lg border-2 border-solid border-gray-400 px-2 py-1 font-bold hover:bg-gray-400 hover:text-black"
@@ -93,7 +94,7 @@ export default function BackFlashCard({
                   "hard",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  3
+                  3,
                 )
               }
               className="flex items-center justify-center rounded-lg border-2 border-solid border-orange-600 px-2 py-1 font-bold hover:bg-red-600"
@@ -108,7 +109,7 @@ export default function BackFlashCard({
                   "again",
                   vocabulary.ease_factor,
                   vocabulary.repetition,
-                  0
+                  0,
                 )
               }
               className="flex items-center justify-center rounded-lg border-2 border-solid border-red-600 px-2 py-1 font-bold hover:bg-orange-600"

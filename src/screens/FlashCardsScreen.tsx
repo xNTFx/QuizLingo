@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useGetVocabularyToReviewQuery } from "../API/Redux/reduxQueryFetch";
-import useSuperMemo2Implementation from "../hooks/useSuperMemo2Implementation";
-import { GetVocabularyToReviewType } from "../types/APITypes";
+import BackFlashCard from "../features/FlashCardsScreen/components/BackFlashCard";
+import FlashcardEndScreen from "../features/FlashCardsScreen/components/FlashcardEndScreen";
 import FrontFlashCard from "../features/FlashCardsScreen/components/FrontFlashCard";
 import NoVocabularyScreen from "../features/FlashCardsScreen/components/NoVocabularyScreen";
-import FlashcardEndScreen from "../features/FlashCardsScreen/components/FlashcardEndScreen";
-import BackFlashCard from "../features/FlashCardsScreen/components/BackFlashCard";
+import useSuperMemo2Implementation from "../hooks/useSuperMemo2Implementation";
+import { GetVocabularyToReviewType } from "../types/APITypes";
 
 export default function FlashCardsScreen() {
   const { id, type } = useParams();
@@ -50,7 +50,7 @@ export default function FlashCardsScreen() {
     difficulty: string,
     ease_factor: number,
     repetition: number,
-    quality: number
+    quality: number,
   ) {
     if (!data) return;
     superMemo2Implementation(
@@ -58,7 +58,7 @@ export default function FlashCardsScreen() {
       vocabularyId,
       ease_factor,
       repetition,
-      quality
+      quality,
     );
     if (reviewIndex < vocabularyList?.length - 1) {
       setReviewIndex((prev) => (prev += 1));

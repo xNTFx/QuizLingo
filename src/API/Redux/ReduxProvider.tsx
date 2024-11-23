@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import { learningAppApi } from './reduxQueryFetch';
+import { learningAppApi } from "./reduxQueryFetch";
 
 export const store = configureStore({
   reducer: {

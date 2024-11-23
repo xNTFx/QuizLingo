@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Split from "react-split";
+
 import { useGetVocabularyQuery } from "../API/Redux/reduxQueryFetch";
+import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
+import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
+import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
 import { VocabularyType } from "../types/APITypes";
 import { extractSingleAudioAndImageSrc } from "../utils/extractAudioAndImageSrc";
 import AddVocabularyScreen from "./AddVocabularyScreen";
-import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
-import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
-import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 
 export default function BrowseVocabularyScreen() {
   const { id } = useParams();
@@ -69,7 +70,7 @@ export default function BrowseVocabularyScreen() {
 
   function handleChangeVocabulary(vocabularyId: number) {
     const selectedVocabulary = data?.find(
-      (vocabulary: VocabularyType) => vocabulary.vocabulary_id === vocabularyId
+      (vocabulary: VocabularyType) => vocabulary.vocabulary_id === vocabularyId,
     );
 
     if (

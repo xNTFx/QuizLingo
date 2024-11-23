@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { GetDecksType, GetDeckWithCountType } from "../../../types/APITypes";
-import { createTheme, Menu, MenuItem, ThemeProvider } from "@mui/material";
+import { Menu, MenuItem, ThemeProvider, createTheme } from "@mui/material";
 import { useState } from "react";
 import { FaGear } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 import useSwalPopupBoxes from "../../../hooks/useSwalPopupBoxes";
+import { GetDeckWithCountType, GetDecksType } from "../../../types/APITypes";
 import DeckImage from "./DeckImage";
 
 export default function DeckRows({ data }: { data: GetDecksType[] }) {
@@ -24,7 +24,7 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
 
   function handleClick(
     event: React.MouseEvent<HTMLButtonElement>,
-    deckId: number
+    deckId: number,
   ) {
     setAnchorEl(event.currentTarget);
     setSelectedDeckId(deckId);
@@ -46,36 +46,36 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
     return (
       <article
         key={deck.deck_id}
-        className="flex flex-col gap-2 bg-[#2C2C2C] p-2 rounded-md"
+        className="flex flex-col gap-2 rounded-md bg-[#2C2C2C] p-2"
       >
         <div className="flex flex-row gap-4">
-          <button className="hover:opacity-40 w-[64px] h-[64px] relative rounded">
+          <button className="relative h-[64px] w-[64px] rounded hover:opacity-40">
             <DeckImage randomBg={deck.deck_img} />
-            <div className="absolute rounded top-0 left-0 w-full h-full flex items-center justify-center opacity-0 hover:opacity-100 bg-black/50 text-white">
+            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded bg-black/50 text-white opacity-0 hover:opacity-100">
               <p>Change Image</p>
             </div>
           </button>
           <div className="w-[30rem] max-w-[30rem]">
-            <h2 className="text-lg overflow-auto max-w-[30rem]">
+            <h2 className="max-w-[30rem] overflow-auto text-lg">
               {deck.deck_name}
             </h2>
             <div>
               <div className="flex justify-end">
                 <p className="text-sm">{`${deck.learned_words}/${deck.total_words} words learned`}</p>
               </div>
-              <div className="w-full h-2 rounded-lg bg-gray-600 relative">
+              <div className="relative h-2 w-full rounded-lg bg-gray-600">
                 <div
                   style={{
                     width: `${deckProgress * 100}%`,
                   }}
-                  className="h-2 rounded-lg bg-yellow-400 absolute w-[30rem] max-w-[30rem]"
+                  className="absolute h-2 w-[30rem] max-w-[30rem] rounded-lg bg-yellow-400"
                 ></div>
               </div>
             </div>
           </div>
           <div className="relative w-8">
             <button
-              className="absolute text-center transition-transform hover:rotate-90 p-1"
+              className="absolute p-1 text-center transition-transform hover:rotate-90"
               onClick={(event) => handleClick(event, deck.deck_id)}
             >
               <FaGear />
@@ -113,7 +113,7 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
           <button
             onClick={() => navigate(`${deck.deck_id}/mode-selection/new-words`)}
             disabled={Number(deck.new) === 0}
-            className="w-[14.375rem] bg-blue-600 hover:opacity-80 py-[0.25rem] rounded-lg"
+            className="w-[14.375rem] rounded-lg bg-blue-600 py-[0.25rem] hover:opacity-80"
             style={Number(deck.new) === 0 ? { opacity: 0.4 } : undefined}
           >{`New vocabulary: ${deck.new}`}</button>
           <button
@@ -121,7 +121,7 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
               navigate(`${deck.deck_id}/mode-selection/new-reviews`)
             }
             disabled={Number(deck.review) === 0}
-            className="w-[14.375rem] bg-green-600 hover:opacity-80 py-[0.25rem] rounded-lg"
+            className="w-[14.375rem] rounded-lg bg-green-600 py-[0.25rem] hover:opacity-80"
             style={Number(deck.review) === 0 ? { opacity: 0.4 } : undefined}
           >{`Review vocabulary: ${deck.review}`}</button>
         </div>

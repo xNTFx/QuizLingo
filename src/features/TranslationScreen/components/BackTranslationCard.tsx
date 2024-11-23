@@ -1,7 +1,8 @@
 import DOMPurify from "dompurify";
-import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
+
 import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
+import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 interface BackTranslationCardProps {
   vocabulary: GetVocabularyToReviewType;
@@ -14,11 +15,11 @@ export default function BackTranslationCard({
 }: BackTranslationCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(vocabulary.front_word_html);
   const sanitizedFrontDescHtml = DOMPurify.sanitize(
-    vocabulary.front_desc_html ?? ""
+    vocabulary.front_desc_html ?? "",
   );
   const sanitizedBack = DOMPurify.sanitize(
     vocabulary.back_word_html +
-      (vocabulary.back_desc_html ? vocabulary.back_desc_html : "")
+      (vocabulary.back_desc_html ? vocabulary.back_desc_html : ""),
   );
 
   return (

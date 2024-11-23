@@ -19,7 +19,7 @@ export default function DeckImage({
         : "bg-blue-500";
     return (
       <div
-        className={`flex items-center justify-center text-5xl rounded w-[64px] h-[64px] ${tailwindColor}`}
+        className={`flex h-[64px] w-[64px] items-center justify-center rounded text-5xl ${tailwindColor}`}
       >
         D
       </div>
@@ -27,7 +27,7 @@ export default function DeckImage({
   }
 
   return (
-    <div className="w-[64px] h-[64px] rounded">
+    <div className="h-[64px] w-[64px] rounded">
       {defaultDeckImage(randomBg)}
     </div>
   );

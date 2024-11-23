@@ -1,8 +1,9 @@
 import DOMPurify from "dompurify";
-import AudioButton from "../../../components/AudioButton";
-import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 import { Dispatch } from "react";
+
+import AudioButton from "../../../components/AudioButton";
 import { GetVocabularyToReviewType } from "../../../types/APITypes";
+import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 interface FrontFlashCardProps {
   vocabulary: GetVocabularyToReviewType;
@@ -15,7 +16,7 @@ export default function FrontFlashCard({
 }: FrontFlashCardProps) {
   const sanitizedFrontHtml = DOMPurify.sanitize(vocabulary.front_word_html);
   const sanitizedFrontDescHtml = DOMPurify.sanitize(
-    vocabulary.front_desc_html ?? ""
+    vocabulary.front_desc_html ?? "",
   );
   return (
     <article>

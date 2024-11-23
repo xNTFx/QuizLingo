@@ -74,7 +74,7 @@ export default function sqLiteUpdateRequests() {
               vocabulary_id,
             });
           }
-        }
+        },
       );
     });
   });
@@ -98,7 +98,7 @@ export default function sqLiteUpdateRequests() {
             //Get id of updated item
             resolve({ deckId: this.lastID });
           }
-        }
+        },
       );
     });
   });

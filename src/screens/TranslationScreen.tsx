@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useGetVocabularyToReviewQuery } from "../API/Redux/reduxQueryFetch";
+import BackTranslationCard from "../features/TranslationScreen/components/BackTranslationCard";
+import DefaultEndScreen from "../features/TranslationScreen/components/DefaultEndScreen";
+import FrontTranslationCard from "../features/TranslationScreen/components/FrontTranslationCard";
+import HandleShowAnswerMessage from "../features/TranslationScreen/components/HandleShowAnswerMessage";
+import NoVocabularyScreen from "../features/TranslationScreen/components/NoVocabularyScreen";
 import useSuperMemo2Implementation from "../hooks/useSuperMemo2Implementation";
 import { GetVocabularyToReviewType } from "../types/APITypes";
-import BackTranslationCard from "../features/TranslationScreen/components/BackTranslationCard";
-import FrontTranslationCard from "../features/TranslationScreen/components/FrontTranslationCard";
-import DefaultEndScreen from "../features/TranslationScreen/components/DefaultEndScreen";
-import NoVocabularyScreen from "../features/TranslationScreen/components/NoVocabularyScreen";
-import HandleShowAnswerMessage from "../features/TranslationScreen/components/HandleShowAnswerMessage";
 
 export default function TranslationScreen() {
   const { id, type } = useParams();
@@ -24,7 +24,7 @@ export default function TranslationScreen() {
   const [isEnd, setIsEnd] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [correctVocabulary, setCorrectVocabulary] = useState<string | null>(
-    null
+    null,
   );
   const [isInputErrorMessage, setIsInputErrorMessage] = useState(false);
 
@@ -56,7 +56,7 @@ export default function TranslationScreen() {
           vocabulary.vocabulary_id,
           vocabulary.ease_factor,
           vocabulary.repetition,
-          5
+          5,
         );
       } else {
         superMemo2Implementation(
@@ -64,7 +64,7 @@ export default function TranslationScreen() {
           vocabulary.vocabulary_id,
           vocabulary.ease_factor,
           vocabulary.repetition,
-          2
+          2,
         );
       }
 

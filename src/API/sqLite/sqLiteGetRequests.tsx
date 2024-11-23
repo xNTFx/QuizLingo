@@ -52,7 +52,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -84,7 +84,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -102,7 +102,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -122,7 +122,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -141,7 +141,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -163,7 +163,7 @@ export default function sqLiteGetRequests() {
           } else {
             resolve(rows);
           }
-        }
+        },
       );
     });
   });
@@ -183,7 +183,7 @@ export default function sqLiteGetRequests() {
             } else {
               resolve(rows);
             }
-          }
+          },
         );
       } else {
         db.all(
@@ -197,7 +197,7 @@ export default function sqLiteGetRequests() {
             } else {
               resolve(rows);
             }
-          }
+          },
         );
       }
     });

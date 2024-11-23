@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { useGetDecksWithLimitQuery } from "../API/Redux/reduxQueryFetch";
-
 import DeckRows from "../features/HomeScreen/components/DeckRows";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
 
@@ -69,7 +68,7 @@ export default function HomeScreen() {
       <div className="p-4 text-white">
         <button
           onClick={createDeckFunction}
-          className="rounded-xl bg-[#382bf0] p-2 w-40 font-extrabold hover:bg-[#5e43f3]"
+          className="w-40 rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
         >
           Create Deck
         </button>

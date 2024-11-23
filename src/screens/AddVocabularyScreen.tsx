@@ -1,15 +1,16 @@
+import { Editor } from "@tiptap/core";
+import { useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { useGetDecksQuery } from "../API/Redux/reduxQueryFetch";
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useCallback } from "react";
+import DeckSelectionContainer from "../features/AddVocabularyScreen/components/DeckSelectionContainer";
+import NoDeckScreen from "../features/AddVocabularyScreen/components/NoDeckScreen";
+import VocabularyEditor from "../features/AddVocabularyScreen/components/VocabularyEditor";
+import useInsertOrUpdateVocabulary from "../hooks/useInsertOrUpdateVocabulary";
 import {
   AddVocabularyScreenProps,
   EditorInputValuesType,
 } from "../types/TypeScriptTypes";
-import { Editor } from "@tiptap/core";
-import DeckSelectionContainer from "../features/AddVocabularyScreen/components/DeckSelectionContainer";
-import VocabularyEditor from "../features/AddVocabularyScreen/components/VocabularyEditor";
-import NoDeckScreen from "../features/AddVocabularyScreen/components/NoDeckScreen";
-import useInsertOrUpdateVocabulary from "../hooks/useInsertOrUpdateVocabulary";
 
 export default function AddVocabularyScreen({
   selectedDeck = null,
@@ -32,7 +33,7 @@ export default function AddVocabularyScreen({
     selectedDeck,
     currentDeckName,
     deckList,
-    setEditorsList
+    setEditorsList,
   );
 
   const editorInputValues: EditorInputValuesType = {
@@ -48,7 +49,7 @@ export default function AddVocabularyScreen({
       if (editorsList.length >= 5) return; //to prevent infinity loop
       setEditorsList((prev) => [...prev, editor]);
     },
-    [editorsList]
+    [editorsList],
   );
 
   if (deckListError) {

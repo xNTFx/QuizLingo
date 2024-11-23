@@ -1,5 +1,6 @@
 import { Editor } from "@tiptap/core";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+
 import { EditorInputValuesType } from "../../../types/TypeScriptTypes";
 import EditorButtonList from "./TipTap/EditorButtonList";
 import EditorTipTap from "./TipTap/EditorTipTap";
@@ -28,7 +29,7 @@ export default function VocabularyEditor({
     setHiddenInputs((prev) =>
       prev.some((input) => input === inputId)
         ? prev.filter((input) => input !== inputId)
-        : [...prev, inputId]
+        : [...prev, inputId],
     );
   };
 
@@ -51,7 +52,7 @@ export default function VocabularyEditor({
               }}
             >
               {index === 0 || index === 1 ? null : hiddenInputs.includes(
-                  index
+                  index,
                 ) ? (
                 <FaAngleUp />
               ) : (
