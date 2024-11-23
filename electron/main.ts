@@ -1,12 +1,13 @@
-import { BrowserWindow, app, protocol, nativeTheme } from "electron";
+import { BrowserWindow, app, nativeTheme, protocol } from "electron";
 import fs from "fs";
 import path from "node:path";
+
 import NodeRequests from "../src/API/nodeFileSystem/NodeRequests";
+import db from "../src/API/sqLite/sqLite";
+import sqLiteDeleteRequests from "../src/API/sqLite/sqLiteDeleteRequest";
 import sqLiteGetRequests from "../src/API/sqLite/sqLiteGetRequests";
 import sqLitePostRequests from "../src/API/sqLite/sqLitePostRequests";
 import sqLiteUpdateRequests from "../src/API/sqLite/sqLiteUpdateRequest";
-import sqLiteDeleteRequests from "../src/API/sqLite/sqLiteDeleteRequest";
-import db from "../src/API/sqLite/sqLite";
 
 // The built directory structure
 //
@@ -88,6 +89,11 @@ app.on("ready", () => {
   const audioPath = path.join(targetPath, "mediaFiles/audio");
   if (!fs.existsSync(audioPath)) {
     fs.mkdirSync(audioPath, { recursive: true });
+  }
+
+  const deckImagesPath = path.join(targetPath, "mediaFiles/deckImages");
+  if (!fs.existsSync(deckImagesPath)) {
+    fs.mkdirSync(deckImagesPath, { recursive: true });
   }
 });
 

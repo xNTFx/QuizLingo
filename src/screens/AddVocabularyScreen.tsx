@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useGetDecksQuery } from "../API/Redux/reduxQueryFetch";
-import DeckSelectionContainer from "../features/AddVocabularyScreen/components/DeckSelectionContainer";
+import DeckSelectionContainer from "../components/DeckSelection/DeckSelectionContainer";
 import NoDeckScreen from "../features/AddVocabularyScreen/components/NoDeckScreen";
 import VocabularyEditor from "../features/AddVocabularyScreen/components/VocabularyEditor";
 import useInsertOrUpdateVocabulary from "../hooks/useInsertOrUpdateVocabulary";

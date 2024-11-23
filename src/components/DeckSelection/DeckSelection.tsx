@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 
-import { GetDecksType } from "../../../types/APITypes";
+import { GetDecksType } from "../../types/APITypes";
 
 interface DeckSelectionTypes {
   deckList: GetDecksType[];

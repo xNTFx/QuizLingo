@@ -6,8 +6,8 @@ import {
   useGetDecksQuery,
   useGetVocabularyQuery,
 } from "../API/Redux/reduxQueryFetch";
+import DeckSelectionContainer from "../components/DeckSelection/DeckSelectionContainer";
 import LoadingDivComponent from "../components/LoadingComponents/LoadingDivComponent";
-import DeckSelectionContainer from "../features/AddVocabularyScreen/components/DeckSelectionContainer";
 import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
