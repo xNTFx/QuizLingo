@@ -37,24 +37,27 @@ export const learningAppApi = createApi({
   baseQuery: electronBaseQuery,
   endpoints: (builder) => ({
     getVocabulary: builder.query<VocabularyType[], GetVocabularyArgumentsType>({
-      query: ({ deckId, limit, offset, search }) => ({
-        url: "get-vocabulary-to-browse",
-        method: "GET",
-        body: { deckId, limit, offset, search },
-      }),
+      query: ({ deckId, limit, offset, search }) => {
+        console.log(deckId, limit, offset, search);
+        return {
+          url: "get-vocabulary-to-browse",
+          method: "GET",
+          body: { deckId, limit, offset, search },
+        };
+      },
       providesTags: ["vocabulary"],
     }),
 
-    getVocabularyForReview: builder.query<
-      VocabularyType[],
-      GetVocabularyArgumentsType
-    >({
-      query: (deckId) => ({
-        url: "get-vocabulary-to-browse",
-        method: "GET",
-        body: { deckId },
-      }),
-    }),
+    // getVocabularyForReview: builder.query<
+    //   VocabularyType[],
+    //   GetVocabularyArgumentsType
+    // >({
+    //   query: (deckId) => ({
+    //     url: "get-vocabulary-to-browse",
+    //     method: "GET",
+    //     body: { deckId },
+    //   }),
+    // }),
 
     updateVocabulary: builder.mutation<VocabularyType, UpdateVocabularyParams>({
       query: (newVocabulary) => ({

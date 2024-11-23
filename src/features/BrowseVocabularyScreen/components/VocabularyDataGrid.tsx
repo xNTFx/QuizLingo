@@ -57,21 +57,22 @@ export default function VocabularyDataGrid({
   }
 
   return (
-    <DataGrid
-      style={{
-        width: "100%",
-        height: "75vh",
-        maxHeight: "75vh",
-      }}
-      onScroll={handleScroll}
-      onCellClick={(e) => {
-        handleChangeVocabulary(e.row.id);
-        if (e.column.key === "remove_vocabulary_key") {
-          removeVocabulary(e.row.id, data, setSelectedDeck);
-        }
-      }}
-      columns={columns}
-      rows={rows}
-    />
+      <DataGrid
+        style={{
+          width: "100%",
+          height: "65vh",
+          maxHeight: "65vh",
+          overflow: "auto",
+        }}
+        onScroll={handleScroll}
+        onCellClick={(e) => {
+          handleChangeVocabulary(e.row.id);
+          if (e.column.key === "remove_vocabulary_key") {
+            removeVocabulary(e.row.id, data, setSelectedDeck);
+          }
+        }}
+        columns={columns}
+        rows={rows}
+      />
   );
 }

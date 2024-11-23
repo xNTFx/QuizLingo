@@ -18,7 +18,7 @@ export default function DeckSelectionContainer({
   isInitialDeck?: boolean;
 }) {
   return (
-    <div className="mt-10 w-8/12 bg-black">
+    <div className="w-full bg-black">
       {!selectedDeck && id === "0" ? (
         <DeckSelection
           deckList={deckList}

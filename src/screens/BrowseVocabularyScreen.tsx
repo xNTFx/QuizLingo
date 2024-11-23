@@ -23,17 +23,16 @@ export default function BrowseVocabularyScreen() {
   const itemHeight = 35;
   const initialLimit = Math.ceil(window.innerHeight / itemHeight) + 1;
   const [limit, setLimit] = useState(initialLimit);
+  const [selectedVocabulary, setSelectedVocabulary] =
+    useState<VocabularyType | null>(null);
+  const [currentDeck, setCurrentDeck] = useState({ deckId: "0", deckName: "" });
 
   const { data, error, isLoading } = useGetVocabularyQuery({
-    deckId: Number(id),
+    deckId: id !== "0" ? Number(id) : Number(currentDeck.deckId),
     limit,
     offset: 0,
     search: `%${debouncedSearchValue}%`,
   });
-
-  const [selectedVocabulary, setSelectedVocabulary] =
-    useState<VocabularyType | null>(null);
-  const [currentDeck, setCurrentDeck] = useState({ deckId: "0", deckName: "" });
 
   // Ref for tracking whether there is more data to load
   const hasMore = useRef(true);
@@ -100,7 +99,7 @@ export default function BrowseVocabularyScreen() {
     setInputSearchValue(event?.target.value);
     setTimeout(() => {
       setDebouncedSearchValue(event?.target.value);
-    }, 500);
+    }, 250);
   }
 
   const { data: deckList, isLoading: deckListIsLoading } = useGetDecksQuery();
@@ -116,7 +115,8 @@ export default function BrowseVocabularyScreen() {
       <Split
         sizes={data.length > 0 ? [50, 50] : [100, 0]}
         className="flex flex-row justify-center bg-[#1F1F1F]"
-        minSize={0}
+        minSize={[100, 0]}
+        maxSize={data.length > 0 ? [Infinity, Infinity] : [Infinity, 0]}
         expandToMin={false}
         gutterSize={10}
         gutterAlign="center"
@@ -125,8 +125,8 @@ export default function BrowseVocabularyScreen() {
         direction="horizontal"
       >
         <section className="mt-12 h-[calc(100vh-3rem)]">
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex w-11/12 flex-col items-center justify-center gap-4 rounded-lg bg-[#2C2C2C] p-4">
+          <div className="flex flex-col items-center">
+            <div className="flex w-11/12 flex-col justify-start gap-4 rounded-lg bg-[#2C2C2C] p-4">
               {!deckListIsLoading ? (
                 <DeckSelectionContainer
                   deckList={deckList}

@@ -56,7 +56,10 @@ export default function DeckSelection({
           <Select
             labelId="add-deck-select-label"
             id="add-deck-select"
-            value={Number(currentDeck.deckId) || initialDeck.deck_id}
+            value={
+              Number(currentDeck.deckId) ||
+              (isInitialDeck ? initialDeck.deck_id : 0)
+            }
             label="Deck"
             onChange={(event) => {
               const selectedId = event.target.value;
@@ -67,6 +70,8 @@ export default function DeckSelection({
               });
             }}
           >
+            {!isInitialDeck && <MenuItem value="0">All Decks</MenuItem>}
+
             {deckList?.map((deck) => (
               <MenuItem key={deck.deck_id} value={deck.deck_id}>
                 {deck.deck_name}

@@ -16,7 +16,7 @@ export default function VocabularySearchBar({
   handleSearchInputChange,
 }: Props) {
   return (
-    <div className="w-[90%]">
+    <div className="w-full">
       <ThemeProvider theme={darkTheme}>
         <TextField
           label="Search vocabulary"

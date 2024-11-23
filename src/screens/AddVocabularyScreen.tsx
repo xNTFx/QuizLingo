@@ -61,17 +61,17 @@ export default function AddVocabularyScreen({
     return <NoDeckScreen navigate={navigate} />;
   }
 
-  console.log(currentDeck, currentDeck.deckId);
-
   return (
-    <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F]">
-      <DeckSelectionContainer
-        deckList={deckList}
-        selectedDeck={selectedDeck}
-        id={id}
-        currentDeck={currentDeck}
-        setCurrentDeck={setCurrentDeck}
-      />
+    <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F] pt-10">
+      <div className="w-8/12">
+        <DeckSelectionContainer
+          deckList={deckList}
+          selectedDeck={selectedDeck}
+          id={id}
+          currentDeck={currentDeck}
+          setCurrentDeck={setCurrentDeck}
+        />
+      </div>
       <VocabularyEditor
         hiddenInputs={hiddenInputs}
         setHiddenInputs={setHiddenInputs}
