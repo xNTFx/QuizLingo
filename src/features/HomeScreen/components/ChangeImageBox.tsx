@@ -3,20 +3,22 @@ import { useRef, useState } from "react";
 import { useUpdateDeckImgMutation } from "../../../API/Redux/reduxQueryFetch";
 import { InfoBox } from "../../../components/InfoBox";
 import useSwalPopupBoxes from "../../../hooks/useSwalPopupBoxes";
+import { GetDeckWithCountType } from "../../../types/APITypes";
 import isItImageFile from "../../../utils/categorizeFileType";
 import {
   handleCheckIfFileExists,
   handleFileCopied,
 } from "../../../utils/handleFileLogic";
+import DeckImage from "./DeckImage";
 
 interface ChangeImageBoxProps {
   setIsChangeImageBoxOpen: (isOpen: boolean) => void;
-  selectedDeckId: number | null;
+  selectedDeck: GetDeckWithCountType | null;
 }
 
 export default function ChangeImageBox({
   setIsChangeImageBoxOpen,
-  selectedDeckId,
+  selectedDeck,
 }: ChangeImageBoxProps) {
   const [currentFile, setCurrentFile] = useState<{
     file: File;
@@ -76,7 +78,7 @@ export default function ChangeImageBox({
                 alt="Selected file preview"
               />
             ) : (
-              <div className="h-[64px] w-[64px] rounded bg-slate-900"></div>
+              <DeckImage deckImg={selectedDeck?.deck_img} />
             )}
             <div className="absolute top-[-18px]">
               <p>64px</p>
@@ -93,31 +95,33 @@ export default function ChangeImageBox({
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
       <InfoBox onClickOutside={() => setIsChangeImageBoxOpen(false)}>
-        <div className="pointer-events-auto flex h-[25rem] w-[25rem] flex-col items-center rounded bg-[#2C2C2C] p-4 text-white">
-          <h2 className="text-xl">Deck Image Selection</h2>
+        <div className="pointer-events-auto flex h-[25rem] w-[25rem] flex-col items-center gap-6 rounded bg-[#2C2C2C] p-4 text-white">
+          <h2 className="text-xl font-bold">Deck Image Selection</h2>
           <div className="h-full">
             <SquareImage />
-            <div className="flex flex-col items-center justify-center">
-              <button
-                title="Upload image"
-                onClick={() => fileInputRef.current?.click()}
-                className="m-1 rounded bg-black p-2 font-bold text-white hover:bg-blue-400 hover:text-white"
-              >
-                Upload Image
-              </button>
-              <input
-                ref={fileInputRef}
-                onChange={(e) => {
-                  const file = e.target.files ? e.target.files[0] : null;
-                  if (file) {
-                    checkImageFile(file);
-                  }
-                  e.target.value = ""; // Reset input value
-                }}
-                type="file"
-                accept="image/*"
-                className="hidden"
-              />
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="pt-6">
+                <button
+                  title="Upload image"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="m-1 rounded bg-black p-2 font-bold text-white hover:bg-blue-400 hover:text-white"
+                >
+                  Upload Image
+                </button>
+                <input
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    if (file) {
+                      checkImageFile(file);
+                    }
+                    e.target.value = ""; // Reset input value
+                  }}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                />
+              </div>
               <div className="max-w-[22rem] overflow-x-auto">
                 <p className="max-w-[95%] whitespace-nowrap">
                   {currentFile?.file.name || "No file selected"}
@@ -125,6 +129,10 @@ export default function ChangeImageBox({
               </div>
             </div>
           </div>
+          <p>
+            The Image in the deck is 64 pixels by 64 pixels, other image sizes
+            may result in an indistinct image
+          </p>
           <div className="flex w-full justify-evenly">
             <button
               onClick={() => {
@@ -143,9 +151,13 @@ export default function ChangeImageBox({
                 const newPath = `${directoryName}${fileName}`;
 
                 handleFileCopied(newPath, "deckImages", normalizedPath);
-                if (selectedDeckId && currentFile && currentFile.path !== "") {
+                if (
+                  selectedDeck?.deck_id &&
+                  currentFile &&
+                  currentFile.path !== ""
+                ) {
                   updateDeckImg({
-                    deck_id: selectedDeckId,
+                    deck_id: selectedDeck.deck_id,
                     deck_img: currentFile.path,
                   });
                 } else {
@@ -153,13 +165,13 @@ export default function ChangeImageBox({
                 }
                 setIsChangeImageBoxOpen(false);
               }}
-              className="w-16 rounded-sm bg-green-500 p-1 hover:opacity-60"
+              className="w-20 rounded-sm bg-green-500 p-1 hover:opacity-60"
             >
               Ok
             </button>
             <button
               onClick={() => setIsChangeImageBoxOpen(false)}
-              className="w-16 rounded-sm bg-blue-500 p-1 hover:opacity-60"
+              className="w-20 rounded-sm bg-blue-500 p-1 hover:opacity-60"
             >
               Cancel
             </button>

@@ -10,11 +10,13 @@ import DeckImage from "./DeckImage";
 export default function DeckRows({
   data,
   setIsChangeImageBoxOpen,
-  useSelectedDeckId,
+  useSelectedDeck,
 }: {
   data: GetDecksType[];
   setIsChangeImageBoxOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  useSelectedDeckId: React.Dispatch<React.SetStateAction<number | null>>;
+  useSelectedDeck: React.Dispatch<
+    React.SetStateAction<GetDeckWithCountType | null>
+  >;
 }) {
   //Used to set the position of the popover
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -60,7 +62,7 @@ export default function DeckRows({
           <button
             onClick={() => {
               setIsChangeImageBoxOpen((prev) => !prev);
-              useSelectedDeckId(deck.deck_id);
+              useSelectedDeck(deck);
             }}
             className="relative h-[64px] w-[64px] rounded hover:opacity-40"
           >

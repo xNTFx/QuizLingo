@@ -6,6 +6,7 @@ import { useGetDecksWithLimitQuery } from "../API/Redux/reduxQueryFetch";
 import ChangeImageBox from "../features/HomeScreen/components/ChangeImageBox";
 import DeckRows from "../features/HomeScreen/components/DeckRows";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
+import { GetDeckWithCountType } from "../types/APITypes";
 
 export default function HomeScreen() {
   const itemHeight = 120;
@@ -14,7 +15,7 @@ export default function HomeScreen() {
 
   const [limit, setLimit] = useState(updatedLimit);
   const [isChangeImageBoxOpen, setIsChangeImageBoxOpen] = useState(false);
-  const [selectedDeckId, useSelectedDeckId] = useState<number | null>(null);
+  const [selectedDeck, useSelectedDeck] = useState<GetDeckWithCountType | null>(null);
 
   const { createDeckFunction } = useSwalPopupBoxes();
 
@@ -43,7 +44,7 @@ export default function HomeScreen() {
   return (
     <main className="flex h-[calc(100vh-3rem)] select-none flex-col items-center bg-[#1F1F1F]">
       {isChangeImageBoxOpen ? (
-        <ChangeImageBox setIsChangeImageBoxOpen={setIsChangeImageBoxOpen} selectedDeckId={selectedDeckId}/>
+        <ChangeImageBox setIsChangeImageBoxOpen={setIsChangeImageBoxOpen} selectedDeck={selectedDeck}/>
       ) : null}
       {data.length > 0 ? (
         <>
@@ -64,7 +65,7 @@ export default function HomeScreen() {
                 <DeckRows
                   data={data}
                   setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
-                  useSelectedDeckId={useSelectedDeckId}
+                  useSelectedDeck={useSelectedDeck}
                 />
               </div>
             </InfiniteScroll>
