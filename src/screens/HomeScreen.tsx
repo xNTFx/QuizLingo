@@ -1,6 +1,5 @@
-import { debounce } from "lodash";
 import { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { useGetDecksWithLimitQuery } from "../API/Redux/reduxQueryFetch";
 import ChangeImageBox from "../features/HomeScreen/components/ChangeImageBox";
@@ -9,29 +8,24 @@ import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
 import { GetDeckWithCountType } from "../types/APITypes";
 
 export default function HomeScreen() {
-  const itemHeight = 120;
-
-  const updatedLimit = Math.ceil((window.innerHeight * 0.8) / itemHeight) + 1;
-
-  const [limit, setLimit] = useState(updatedLimit);
   const [isChangeImageBoxOpen, setIsChangeImageBoxOpen] = useState(false);
-  const [selectedDeck, useSelectedDeck] = useState<GetDeckWithCountType | null>(null);
+  const [selectedDeck, useSelectedDeck] = useState<GetDeckWithCountType | null>(
+    null,
+  );
+  const [decks, setDecks] = useState<GetDeckWithCountType[]>([]);
 
   const { createDeckFunction } = useSwalPopupBoxes();
 
   const { data, isLoading } = useGetDecksWithLimitQuery({
-    limit: limit,
+    limit: 100,
     offset: 0,
   });
 
   useEffect(() => {
-    const handleResize = debounce(() => {
-      setLimit(Math.ceil(window.innerHeight / itemHeight) + 1);
-    }, 100);
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (data) {
+      setDecks(data);
+    }
+  }, [data]);
 
   if (!data) {
     return;
@@ -41,42 +35,76 @@ export default function HomeScreen() {
     return <div>Loading...</div>;
   }
 
+  // handle drag end
+  const handleDragEnd = (result: any) => {
+    const { source, destination } = result;
+
+    if (!destination) {
+      return; // dropped outside of the list
+    }
+
+    const updatedDecks = Array.from(decks);
+    const [movedDeck] = updatedDecks.splice(source.index, 1);
+    updatedDecks.splice(destination.index, 0, movedDeck);
+
+    setDecks(updatedDecks);
+  };
+
   return (
     <main className="flex h-[calc(100vh-3rem)] select-none flex-col items-center bg-[#1F1F1F]">
       {isChangeImageBoxOpen ? (
-        <ChangeImageBox setIsChangeImageBoxOpen={setIsChangeImageBoxOpen} selectedDeck={selectedDeck}/>
+        <ChangeImageBox
+          setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
+          selectedDeck={selectedDeck}
+        />
       ) : null}
-      {data.length > 0 ? (
-        <>
-          <div
-            id="scrollableDiv"
-            className="mt-10 box-border flex max-h-[80vh] flex-col gap-2 overflow-auto rounded-lg p-4 text-white shadow-md"
-          >
-            <InfiniteScroll
-              dataLength={data.length}
-              next={() => {
-                setLimit((prev) => (prev += 30));
-              }}
-              hasMore={data.length === limit}
-              loader={<p>...Loading</p>}
-              scrollableTarget="scrollableDiv"
-            >
-              <div className="flex flex-col gap-4">
-                <DeckRows
-                  data={data}
-                  setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
-                  useSelectedDeck={useSelectedDeck}
-                />
-              </div>
-            </InfiniteScroll>
-          </div>
-        </>
+      {decks.length > 0 ? (
+        <div
+          id="scrollableDiv"
+          className="mt-10 box-border flex max-h-[80vh] flex-col overflow-auto rounded-lg p-4 text-white shadow-md"
+        >
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="decks">
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="flex flex-col"
+                >
+                  {decks.map((deck, index) => (
+                    <Draggable
+                      key={deck.deck_id}
+                      draggableId={deck.deck_id.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="mb-4 rounded-lg bg-[#2b2b2b] shadow-md"
+                        >
+                          <DeckRows
+                            data={[deck]}
+                            setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
+                            useSelectedDeck={useSelectedDeck}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       ) : (
         <div className="mt-10">
           <h2 className="text-xl">Please, create a deck</h2>
         </div>
       )}
-      <div className="p-4 text-white">
+      <div className="text-white">
         <button
           onClick={createDeckFunction}
           className="w-40 rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"

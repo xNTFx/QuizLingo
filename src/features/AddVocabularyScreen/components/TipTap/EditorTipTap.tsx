@@ -112,8 +112,6 @@ export default function EditorTipTap({
 
   if (initialValue === undefined) return <div>Loading...</div>;
 
-  console.log(editor.getHTML());
-
   return (
     <>
       {index === 2 ? (

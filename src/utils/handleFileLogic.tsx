@@ -168,8 +168,7 @@ export async function handleCheckIfFileExists(
     return new Promise((resolve) => {
       removehandleCheckIfFileExists = window.electronAPI.receive(
         "file-exists",
-        (success: boolean | null, status: string) => {
-          console.log(`status: ${status}`);
+        (success: boolean | null) => {
           resolve(success);
         },
       );

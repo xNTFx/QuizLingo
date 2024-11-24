@@ -106,7 +106,6 @@ export default function DeckRows({
                 open={selectedDeckId === deck.deck_id}
                 onClose={handleClose}
               >
-                <MenuItem>Settings</MenuItem>
                 <MenuItem
                   onClick={() => {
                     updateDeckFunction(deck.deck_id, deck.deck_name);
