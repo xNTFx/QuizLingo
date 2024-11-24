@@ -1,8 +1,8 @@
-import { mergeAttributes, nodeInputRule } from '@tiptap/core';
-import Image from '@tiptap/extension-image';
-import { ReactNodeViewRenderer } from '@tiptap/react';
+import { mergeAttributes, nodeInputRule } from "@tiptap/core";
+import Image from "@tiptap/extension-image";
+import { ReactNodeViewRenderer } from "@tiptap/react";
 
-import ImageResizeComponent from './ResizeIcon';
+import ImageResizeComponent from "./ResizeIcon";
 
 export interface ImageOptions {
   inline: boolean;
@@ -10,7 +10,8 @@ export interface ImageOptions {
   HTMLAttributes: Record<string, number>;
   useFigure: boolean;
 }
-declare module '@tiptap/core' {
+
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     imageResize: {
       setImage: (options: {
@@ -24,10 +25,14 @@ declare module '@tiptap/core' {
     };
   }
 }
+
 export const inputRegex = /(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/;
+
 export const ImageResize = Image.extend<ImageOptions>({
-  name: 'imageResize',
-  draggable: true,
+  name: "imageResize",
+  draggable: true, // Make the image draggable in the editor
+
+  // Define default options for the extension
   addOptions() {
     return {
       inline: true,
@@ -36,6 +41,7 @@ export const ImageResize = Image.extend<ImageOptions>({
       useFigure: false,
     };
   },
+
   addAttributes() {
     return {
       src: {
@@ -45,45 +51,49 @@ export const ImageResize = Image.extend<ImageOptions>({
         default: null,
       },
       width: {
-        renderHTML: (attributes) => {
-          return {
-            width: attributes.width,
-          };
-        },
+        default: null,
+        renderHTML: (attributes) => ({
+          width: attributes.width,
+        }),
       },
       height: {
-        renderHTML: (attributes) => {
-          return {
-            height: attributes.height,
-          };
-        },
+        default: null,
+        renderHTML: (attributes) => ({
+          height: attributes.height,
+        }),
       },
     };
   },
+
   parseHTML() {
     return [
       {
-        tag: 'img',
+        tag: "img", // Parse <img> tags as this node type
       },
     ];
   },
 
+  // Specify how the editor node should render into HTML
   renderHTML({ HTMLAttributes }) {
     return [
-      'img',
+      "img",
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
     ];
   },
 
+  // Use a custom React component for the node view
   addNodeView() {
     return ReactNodeViewRenderer(ImageResizeComponent);
   },
+
+  // Add input rules for automatic image insertion
   addInputRules() {
     return [
       nodeInputRule({
-        find: inputRegex,
-        type: this.type,
+        find: inputRegex, // Use the defined regex to match input patterns
+        type: this.type, // Node type to create
         getAttributes: (match) => {
+          // Extract attributes from the matched input
           const [, , alt, src, title, height, width, isDraggable] = match;
           return { src, alt, title, height, width, isDraggable };
         },

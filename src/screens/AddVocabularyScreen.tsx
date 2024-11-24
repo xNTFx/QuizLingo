@@ -46,6 +46,7 @@ export default function AddVocabularyScreen({
 
   const handleEditorUpdate = useCallback(
     (editor: Editor) => {
+      console.log(Editor)
       if (editorsList.length >= 5) return; // to prevent infinity loop
       setEditorsList((prev) => [...prev, editor]);
     },

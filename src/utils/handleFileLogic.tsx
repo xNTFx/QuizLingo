@@ -149,10 +149,11 @@ export async function handleGetAllFiles() {
 }
 
 let removehandleCheckIfFileExists: (() => void) | null = null;
+
 export async function handleCheckIfFileExists(
   file: string | null,
   directoryName?: string,
-) {
+): Promise<boolean | null> {
   const fileName = file?.split("\\").slice(-1)[0];
   if (fileName) {
     await window.electronAPI.send("check-if-file-exists", {
@@ -167,13 +168,14 @@ export async function handleCheckIfFileExists(
     return new Promise((resolve) => {
       removehandleCheckIfFileExists = window.electronAPI.receive(
         "file-exists",
-        (success: boolean) => {
+        (success: boolean | null, status: string) => {
+          console.log(`status: ${status}`);
           resolve(success);
         },
       );
     });
   } else {
     console.error("No file provided or file is null.");
-    return false;
+    return null;
   }
 }

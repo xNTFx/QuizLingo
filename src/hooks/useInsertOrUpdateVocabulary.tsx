@@ -49,6 +49,7 @@ export default function useInsertOrUpdateVocabulary(
       errorAlert("Back word field cannot be empty", "warning");
       return;
     }
+    console.log("test");
 
     if (!selectedDeck && id && deckList) {
       const deckId =
@@ -78,6 +79,16 @@ export default function useInsertOrUpdateVocabulary(
 
       setEditorsList([]);
     } else if (selectedDeck) {
+      console.log({
+        front_word: editorsList[0].getText().trim(),
+        back_word: editorsList[1].getText().trim(),
+        audio_name: transformFilePathToAudioElement(editorsList[2].getText()),
+        front_word_html: modifyHTMLAndCopyFiles(editorsList[0].getHTML()),
+        back_word_html: modifyHTMLAndCopyFiles(editorsList[1].getHTML()),
+        front_desc_html: modifyHTMLAndCopyFiles(editorsList[3].getHTML()),
+        back_desc_html: modifyHTMLAndCopyFiles(editorsList[4].getHTML()),
+        vocabulary_id: Number(selectedDeck.vocabulary_id),
+      });
       await updateVocabulary({
         front_word: editorsList[0].getText().trim(),
         back_word: editorsList[1].getText().trim(),

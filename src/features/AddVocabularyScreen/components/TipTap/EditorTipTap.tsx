@@ -84,9 +84,11 @@ export default function EditorTipTap({
   const { errorAlert } = useSwalPopupBoxes();
 
   useEffect(() => {
-    setTimeout(() => {
-      editor?.commands.setContent(initialValue);
-    });
+    if (initialValue) {
+      setTimeout(() => {
+        editor?.commands.setContent(initialValue);
+      });
+    }
   }, [initialValue, editor]);
 
   useEffect(() => {
@@ -109,6 +111,8 @@ export default function EditorTipTap({
   }
 
   if (initialValue === undefined) return <div>Loading...</div>;
+
+  console.log(editor.getHTML());
 
   return (
     <>

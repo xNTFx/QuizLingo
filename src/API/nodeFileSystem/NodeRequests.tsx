@@ -88,39 +88,45 @@ export default function NodeRequests() {
     }
   });
 
-  ipcMain.on("check-if-file-exists", async (event, { uniqueFilename, directoryName = "audio" }) => {
-    const appPath = app.getAppPath();
-    const targetPath = path.join(
-      appPath,
-      `dataResources/mediaFiles/${directoryName}`,
-      uniqueFilename,
-    );
+  ipcMain.on(
+    "check-if-file-exists",
+    async (event, { uniqueFilename, directoryName = "audio" }) => {
+      const appPath = app.getAppPath();
+      const targetPath = path.join(
+        appPath,
+        `dataResources/mediaFiles/${directoryName}`,
+        uniqueFilename,
+      );
 
-    if (fs.existsSync(targetPath)) {
-      const options = {
-        buttons: ["Yes", "No"],
-        title: "File Exists",
-        message:
-          "The file already exists. Do you want to insert an existing file?",
-      };
+      if (fs.existsSync(targetPath)) {
+        const options = {
+          buttons: ["Yes", "No"],
+          title: "File Exists",
+          message:
+            "The file already exists. Do you want to insert an existing file?",
+        };
 
-      const mainWindow = BrowserWindow.getFocusedWindow();
+        const mainWindow = BrowserWindow.getFocusedWindow();
+        if (!mainWindow) return;
 
-      if (!mainWindow) return;
-
-      dialog.showMessageBox(mainWindow, options).then((response) => {
-        if (response.response === 0) {
-          event.reply("file-exists", true, "file-exists-insert-existing-file");
-        } else {
-          event.reply(
-            "file-exists",
-            false,
-            "file-exists-do-not-insert-existing-file",
-          );
-        }
-      });
-    } else {
-      event.reply("file-exists", true, "file-does-not-exist");
-    }
-  });
+        dialog.showMessageBox(mainWindow, options).then((response) => {
+          if (response.response === 0) {
+            event.reply(
+              "file-exists",
+              true,
+              "file-exists-insert-existing-file",
+            );
+          } else {
+            event.reply(
+              "file-exists",
+              false,
+              "file-exists-do-not-insert-existing-file",
+            );
+          }
+        });
+      } else {
+        event.reply("file-exists", null, "file-does-not-exist");
+      }
+    },
+  );
 }

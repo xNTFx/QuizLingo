@@ -36,24 +36,33 @@ export default function ChangeImageBox({
     }
 
     const fileExists = await handleCheckIfFileExists(file.name, "deckImages");
-    if (!fileExists) {
+
+    if (fileExists === false) {
       setCurrentFile(null);
       return;
     }
+    if (fileExists === true) {
+      const newFile = {
+        file,
+        path: `${directoryName}${file.name}`,
+      };
+      setCurrentFile(newFile);
+      return;
+    }
+
+    const filePath = file.path.replace(/\\/g, "/");
+    const localFileUrl = filePath ? `local-file:///${filePath}` : "";
 
     if (isItImageFile(file.name)) {
       const newFile = {
         file,
-        path: `${directoryName}${file.name}`,
+        path: localFileUrl,
       };
       setCurrentFile(newFile);
     } else {
       errorAlert("File is not an image", "error");
     }
   }
-
-  const filePath = currentFile?.file?.path.replace(/\\/g, "/");
-  const localFileUrl = filePath ? `local-file:///${filePath}` : "";
 
   function SquareImage() {
     return (
@@ -62,7 +71,7 @@ export default function ChangeImageBox({
           <div className="relative flex h-[64px] w-[64px] flex-row items-end rounded">
             {currentFile ? (
               <img
-                src={localFileUrl}
+                src={currentFile.path}
                 className="h-[64px] w-[64px] rounded object-cover"
                 alt="Selected file preview"
               />
@@ -134,7 +143,7 @@ export default function ChangeImageBox({
                 const newPath = `${directoryName}${fileName}`;
 
                 handleFileCopied(newPath, "deckImages", normalizedPath);
-                if (selectedDeckId) {
+                if (selectedDeckId && currentFile && currentFile.path !== "") {
                   updateDeckImg({
                     deck_id: selectedDeckId,
                     deck_img: currentFile.path,
