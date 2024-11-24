@@ -99,14 +99,21 @@ export default function HomeScreen() {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="mb-4 rounded-lg bg-[#2b2b2b] shadow-md"
+                          className="mb-4 flex flex-row rounded-lg bg-[#2b2b2b] shadow-md"
                         >
-                          <DeckRows
-                            data={[deck]}
-                            setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
-                            useSelectedDeck={useSelectedDeck}
-                          />
+                          <div className="flex-grow cursor-default">
+                            <DeckRows
+                              data={[deck]}
+                              setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
+                              useSelectedDeck={useSelectedDeck}
+                            />
+                          </div>
+                          <div
+                            className="flex h-full w-6 cursor-pointer items-center justify-center bg-blue-500"
+                            {...provided.dragHandleProps}
+                          >
+                            <p className="rotate-90">Drag</p>
+                          </div>
                         </div>
                       )}
                     </Draggable>
