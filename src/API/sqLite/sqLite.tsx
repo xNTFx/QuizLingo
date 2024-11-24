@@ -29,7 +29,8 @@ db.serialize(function () {
   db.run(`CREATE TABLE if not exists decks (
         deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
         deck_name TEXT NOT NULL,
-        deck_img TEXT
+        deck_img TEXT,
+        deck_position INTEGER
 )`);
 
   db.run(`CREATE TABLE if not exists vocabulary (

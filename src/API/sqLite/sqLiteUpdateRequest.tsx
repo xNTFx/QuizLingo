@@ -6,20 +6,24 @@ import db from "./sqLite";
 export default function sqLiteUpdateRequests() {
   ipcMain.handle("update-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
-      const { deckId, deckName } = data;
+      const { deckId, deckName, deckPosition } = data;
 
       const sql = `UPDATE decks
-        SET deck_name = ?
+        SET deck_name = ?, deck_position = ?
         WHERE deck_id = ?`;
 
-      db.run(sql, [deckName, deckId], function (this: Statement, err: Error) {
-        if (err) {
-          reject(new Error("Database error: " + err.message));
-        } else {
-          //Get id of updated item
-          resolve({ deckId: this.lastID });
-        }
-      });
+      db.run(
+        sql,
+        [deckName, deckPosition, deckId],
+        function (this: Statement, err: Error) {
+          if (err) {
+            reject(new Error("Database error: " + err.message));
+          } else {
+            //Get id of updated item
+            resolve({ deckId: this.lastID });
+          }
+        },
+      );
     });
   });
 

@@ -12,6 +12,7 @@ interface ElectronBaseQueryArgs {
 interface UpdateDeckType {
   deckId: number;
   deckName: string;
+  deckPosition: number;
 }
 
 interface GetVocabularyArgumentsType {
@@ -81,6 +82,7 @@ interface AddVocabularyType {
 interface GetDecksType {
   deck_id: number;
   deck_name: string;
+  deck_position: number;
 }
 
 interface GetDeckWithCountType {
@@ -91,6 +93,7 @@ interface GetDeckWithCountType {
   total_words?: string;
   learned_words?: string;
   deck_img?: string;
+  deck_position: number;
 }
 
 interface UpdateDeckImgProps {

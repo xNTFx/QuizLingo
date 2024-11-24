@@ -54,15 +54,15 @@ export default function sqLitePostRequests() {
 
   ipcMain.handle("create-deck", async (_event, data) => {
     return new Promise((resolve, reject) => {
-      const { deck_name, deck_img } = data;
+      const { deck_name, deck_img, deck_position } = data;
 
       const sql = `INSERT INTO decks (
-        deck_name, deck_img
-      ) VALUES (?, ?)`;
+        deck_name, deck_img, deck_position
+      ) VALUES (?, ?, ?)`;
 
       db.run(
         sql,
-        [deck_name, deck_img],
+        [deck_name, deck_img, deck_position],
         function (this: Statement, err: Error) {
           if (err) {
             reject(new Error("Database error: " + err.message));

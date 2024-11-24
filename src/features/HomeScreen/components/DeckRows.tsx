@@ -108,7 +108,7 @@ export default function DeckRows({
               >
                 <MenuItem
                   onClick={() => {
-                    updateDeckFunction(deck.deck_id, deck.deck_name);
+                    updateDeckFunction(deck.deck_id, deck.deck_name, deck.deck_position);
                     handleClose();
                   }}
                 >

@@ -107,13 +107,13 @@ export const learningAppApi = createApi({
 
     createDeck: builder.mutation<
       GetDeckWithCountType,
-      { deck_name: string; deck_img: string }
+      { deck_name: string; deck_img: string; deck_position: number }
     >({
-      query: ({ deck_name, deck_img }) => {
+      query: ({ deck_name, deck_img, deck_position }) => {
         return {
           url: "create-deck",
           method: "POST",
-          body: { deck_name, deck_img },
+          body: { deck_name, deck_img, deck_position },
         };
       },
       invalidatesTags: ["decks"],

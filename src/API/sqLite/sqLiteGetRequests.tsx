@@ -11,13 +11,17 @@ import db from "./sqLite";
 export default function sqLiteGetRequests() {
   ipcMain.handle("get-decks", async () => {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM decks", [], (err: Error, rows: GetDecksType) => {
-        if (err) {
-          reject(new Error("Database error: " + err.message));
-        } else {
-          resolve(rows);
-        }
-      });
+      db.all(
+        "SELECT * FROM decks ORDER BY deck_position DESC",
+        [],
+        (err: Error, rows: GetDecksType) => {
+          if (err) {
+            reject(new Error("Database error: " + err.message));
+          } else {
+            resolve(rows);
+          }
+        },
+      );
     });
   });
 
@@ -44,6 +48,7 @@ export default function sqLiteGetRequests() {
         LEFT JOIN vocabulary ON vocabulary.deck_id = decks.deck_id 
         LEFT JOIN reviews ON reviews.vocabulary_id = vocabulary.vocabulary_id
         GROUP BY decks.deck_id
+        ORDER BY deck_position DESC
         LIMIT ? OFFSET ?`,
         [limit, offset],
         (err: Error, rows: GetDeckWithCountType) => {

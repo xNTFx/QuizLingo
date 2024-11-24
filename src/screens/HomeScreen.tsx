@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import { useGetDecksWithLimitQuery } from "../API/Redux/reduxQueryFetch";
+import {
+  useGetDecksWithLimitQuery,
+  useUpdateDeckMutation,
+} from "../API/Redux/reduxQueryFetch";
 import ChangeImageBox from "../features/HomeScreen/components/ChangeImageBox";
 import DeckRows from "../features/HomeScreen/components/DeckRows";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
@@ -20,6 +23,7 @@ export default function HomeScreen() {
     limit: 100,
     offset: 0,
   });
+  const [updateDeck] = useUpdateDeckMutation();
 
   useEffect(() => {
     if (data) {
@@ -47,7 +51,21 @@ export default function HomeScreen() {
     const [movedDeck] = updatedDecks.splice(source.index, 1);
     updatedDecks.splice(destination.index, 0, movedDeck);
 
-    setDecks(updatedDecks);
+    const updatedDeckWithPositions = updatedDecks.map((deck, index) => ({
+      ...deck,
+      deck_position: updatedDecks.length - index,
+    }));
+
+    setDecks(updatedDeckWithPositions);
+    updatedDeckWithPositions.forEach(
+      (deck, index) =>
+        deck.deck_position !== updatedDecks[index].deck_position &&
+        updateDeck({
+          deckId: deck.deck_id,
+          deckName: deck.deck_name,
+          deckPosition: deck.deck_position,
+        }),
+    );
   };
 
   return (
@@ -106,7 +124,7 @@ export default function HomeScreen() {
       )}
       <div className="text-white">
         <button
-          onClick={createDeckFunction}
+          onClick={() => createDeckFunction(data)}
           className="w-40 rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
         >
           Create Deck

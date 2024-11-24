@@ -2,14 +2,15 @@ import "@sweetalert2/theme-dark/dark.css";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import Swal from "sweetalert2/dist/sweetalert2.min.js";
+
 import {
   useCreateDeckMutation,
   useUpdateDeckMutation,
 } from "../API/Redux/reduxQueryFetch";
-import useHandleDeckRemove from "./useHandleDeckRemove";
 import useHandleVocabularyRemoveFunction from "../features/BrowseVocabularyScreen/hooks/useHandleVocabularyRemoveFunction";
-import { VocabularyType } from "../types/APITypes";
+import { GetDeckWithCountType, VocabularyType } from "../types/APITypes";
 import getRandomBg from "../utils/getRandomBg";
+import useHandleDeckRemove from "./useHandleDeckRemove";
 
 export default function useSwalPopupBoxes() {
   const [createDeck] = useCreateDeckMutation();
@@ -17,7 +18,7 @@ export default function useSwalPopupBoxes() {
   const handleDeckRemove = useHandleDeckRemove();
   const handleVocabularyRemoveFunction = useHandleVocabularyRemoveFunction();
 
-  function createDeckFunction() {
+  function createDeckFunction(data: GetDeckWithCountType[]) {
     Swal.fire({
       title: "Write a deck name",
       input: "text",
@@ -27,8 +28,24 @@ export default function useSwalPopupBoxes() {
       preConfirm: async (input: string) => {
         const randomColor = getRandomBg();
 
+        const positionsArray = data.reduce<(number | null)[]>((acc, cur) => {
+          acc.push(cur.deck_position ?? null);
+          return acc;
+        }, []);
+
+        const newPosition =
+          positionsArray.length > 0
+            ? Math.max(
+                ...positionsArray.filter((pos): pos is number => pos !== null),
+              ) + 1
+            : 1;
+
         try {
-          createDeck({ deck_name: input.trim(), deck_img: randomColor });
+          createDeck({
+            deck_name: input.trim(),
+            deck_img: randomColor,
+            deck_position: newPosition,
+          });
         } catch (error) {
           console.error("An error occurred while creating the deck:", error);
         }
@@ -36,7 +53,11 @@ export default function useSwalPopupBoxes() {
     });
   }
 
-  function updateDeckFunction(deckId: number, deckName: string) {
+  function updateDeckFunction(
+    deckId: number,
+    deckName: string,
+    deckPosition: number,
+  ) {
     Swal.fire({
       title: "Rename the deck",
       input: "text",
@@ -46,7 +67,7 @@ export default function useSwalPopupBoxes() {
       showLoaderOnConfirm: true,
       preConfirm: (input: string) => {
         if (input.trim() !== deckName) {
-          updateDeck({ deckId, deckName: input.trim() });
+          updateDeck({ deckId, deckName: input.trim(), deckPosition });
         }
       },
     });
@@ -70,7 +91,9 @@ export default function useSwalPopupBoxes() {
   function removeVocabulary(
     rowId: number,
     data: VocabularyType[],
-    setSelectedDeck: React.Dispatch<React.SetStateAction<VocabularyType | null>>
+    setSelectedDeck: React.Dispatch<
+      React.SetStateAction<VocabularyType | null>
+    >,
   ) {
     Swal.fire({
       title: "Are you sure you want to delete the vocabulary?",
