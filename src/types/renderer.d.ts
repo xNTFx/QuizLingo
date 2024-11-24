@@ -14,7 +14,7 @@ export interface IElectronAPI {
 declare global {
   interface Window {
     electronAPI: {
-      send(arg0: string, arg1: { uniqueFilename: string }): unknown;
+      send(arg0: string, arg1: { uniqueFilename: string, directoryName?: string }): unknown;
       send(
         arg0: string,
         arg1: { filePath: string; uniqueFilename: string; fileType: string },

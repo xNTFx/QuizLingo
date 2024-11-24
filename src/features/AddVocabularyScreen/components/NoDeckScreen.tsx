@@ -6,9 +6,9 @@ export default function NoDeckScreen({
   navigate: ReturnType<typeof useNavigate>;
 }) {
   return (
-    <div className="flex h-[calc(100vh-3rem)] items-center justify-center bg-[#1F1F1F] font-bold text-white">
-      <div className="flex h-2/5 flex-col items-center justify-center gap-3">
-        <h1 className="text-3xl">
+    <div className="flex h-[calc(100vh-3rem)] justify-center bg-[#1F1F1F] pt-10 font-bold text-white">
+      <div className="flex h-2/5 flex-col items-center gap-3">
+        <h1 className="text-xl">
           You cannot add a vocabulary when there is no deck
         </h1>
         <button

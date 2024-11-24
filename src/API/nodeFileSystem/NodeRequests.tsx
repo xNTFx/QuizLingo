@@ -88,11 +88,11 @@ export default function NodeRequests() {
     }
   });
 
-  ipcMain.on("check-if-file-exists", async (event, { uniqueFilename }) => {
+  ipcMain.on("check-if-file-exists", async (event, { uniqueFilename, directoryName = "audio" }) => {
     const appPath = app.getAppPath();
     const targetPath = path.join(
       appPath,
-      "dataResources/mediaFiles/audio",
+      `dataResources/mediaFiles/${directoryName}`,
       uniqueFilename,
     );
 

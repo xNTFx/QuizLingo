@@ -8,6 +8,8 @@ import {
 } from "../API/Redux/reduxQueryFetch";
 import DeckSelectionContainer from "../components/DeckSelection/DeckSelectionContainer";
 import LoadingDivComponent from "../components/LoadingComponents/LoadingDivComponent";
+import LoadingPageComponent from "../components/LoadingComponents/LoadingPageComponent";
+import NoDecksScreen from "../features/BrowseVocabularyScreen/components/NoDecksScreen";
 import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
@@ -108,7 +110,16 @@ export default function BrowseVocabularyScreen() {
   if (error) {
     console.error(error);
   }
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadingPageComponent />
+      </div>
+    );
+
+  if (deckList?.length === 0 && !deckListIsLoading) {
+    <NoDecksScreen />;
+  }
 
   return (
     <main>
@@ -143,14 +154,20 @@ export default function BrowseVocabularyScreen() {
                 inputSearchValue={inputSearchValue}
                 handleSearchInputChange={handleSearchInputChange}
               />
-              <VocabularyDataGrid
-                data={data}
-                handleScroll={handleScroll}
-                handleChangeVocabulary={handleChangeVocabulary}
-                removeVocabulary={removeVocabulary}
-                setSelectedDeck={setSelectedVocabulary}
-                isLoading={isLoading}
-              />
+              {data.length > 0 ? (
+                <VocabularyDataGrid
+                  data={data}
+                  handleScroll={handleScroll}
+                  handleChangeVocabulary={handleChangeVocabulary}
+                  removeVocabulary={removeVocabulary}
+                  setSelectedDeck={setSelectedVocabulary}
+                  isLoading={isLoading}
+                />
+              ) : (
+                <div className="flex items-center justify-center text-xl">
+                  <p>No vocabulary in a deck</p>
+                </div>
+              )}
             </div>
           </div>
         </section>

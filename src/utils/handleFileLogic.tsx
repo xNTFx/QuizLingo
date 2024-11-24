@@ -1,5 +1,5 @@
-import { Editor } from "@tiptap/core";
 import "@sweetalert2/theme-dark/dark.css";
+import { Editor } from "@tiptap/core";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import Swal from "sweetalert2/dist/sweetalert2.min.js";
@@ -63,7 +63,7 @@ export function handleFileInsert(file: File | null, editor: Editor) {
           } else {
             console.error("Error during image insertion");
           }
-        }
+        },
       ) as () => void;
     } else {
       console.error("No file provided or file is null.");
@@ -76,7 +76,7 @@ let removeFileCopiedListener: (() => void) | null = null;
 export function handleFileCopied(
   fileName: string,
   fileType: string | undefined,
-  filePath: string
+  filePath: string | undefined,
 ) {
   if (fileName && fileType && filePath) {
     if (window.electronAPI) {
@@ -97,7 +97,7 @@ export function handleFileCopied(
             if (removeFileCopiedListener) removeFileCopiedListener();
             removeFileCopiedListener = null;
           }
-        }
+        },
       ) as () => void;
     }
   }
@@ -125,7 +125,7 @@ export function handleFileRemove(value: string) {
           } else {
             console.error("Error copying file");
           }
-        }
+        },
       ) as () => void;
     } else {
       console.error("IPC renderer is not available in this context.");
@@ -149,11 +149,15 @@ export async function handleGetAllFiles() {
 }
 
 let removehandleCheckIfFileExists: (() => void) | null = null;
-export async function handleCheckIfFileExists(file: string | null) {
+export async function handleCheckIfFileExists(
+  file: string | null,
+  directoryName?: string,
+) {
   const fileName = file?.split("\\").slice(-1)[0];
   if (fileName) {
     await window.electronAPI.send("check-if-file-exists", {
       uniqueFilename: fileName,
+      directoryName,
     });
 
     if (removehandleCheckIfFileExists) {
@@ -165,7 +169,7 @@ export async function handleCheckIfFileExists(file: string | null) {
         "file-exists",
         (success: boolean) => {
           resolve(success);
-        }
+        },
       );
     });
   } else {

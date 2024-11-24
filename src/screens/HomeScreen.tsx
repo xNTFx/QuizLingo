@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { useGetDecksWithLimitQuery } from "../API/Redux/reduxQueryFetch";
+import ChangeImageBox from "../features/HomeScreen/components/ChangeImageBox";
 import DeckRows from "../features/HomeScreen/components/DeckRows";
 import useSwalPopupBoxes from "../hooks/useSwalPopupBoxes";
 
@@ -12,6 +13,8 @@ export default function HomeScreen() {
   const updatedLimit = Math.ceil((window.innerHeight * 0.8) / itemHeight) + 1;
 
   const [limit, setLimit] = useState(updatedLimit);
+  const [isChangeImageBoxOpen, setIsChangeImageBoxOpen] = useState(false);
+  const [selectedDeckId, useSelectedDeckId] = useState<number | null>(null);
 
   const { createDeckFunction } = useSwalPopupBoxes();
 
@@ -39,6 +42,9 @@ export default function HomeScreen() {
 
   return (
     <main className="flex h-[calc(100vh-3rem)] select-none flex-col items-center bg-[#1F1F1F]">
+      {isChangeImageBoxOpen ? (
+        <ChangeImageBox setIsChangeImageBoxOpen={setIsChangeImageBoxOpen} selectedDeckId={selectedDeckId}/>
+      ) : null}
       {data.length > 0 ? (
         <>
           <div
@@ -55,7 +61,11 @@ export default function HomeScreen() {
               scrollableTarget="scrollableDiv"
             >
               <div className="flex flex-col gap-4">
-                <DeckRows data={data} />
+                <DeckRows
+                  data={data}
+                  setIsChangeImageBoxOpen={setIsChangeImageBoxOpen}
+                  useSelectedDeckId={useSelectedDeckId}
+                />
               </div>
             </InfiniteScroll>
           </div>

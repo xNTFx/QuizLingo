@@ -1,29 +1,30 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld("electronAPI", {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   send: (channel: string, data: any) => {
     // whitelist channels
     const validChannels = [
-      'copy-file-to-public',
-      'remove-file-from-public',
-      'get-all-files-from-public',
-      'local-file',
-      'handle-image-insert',
-      'get-decks',
-      'get-decks-with-limit',
-      'add-flashcard',
-      'update-deck',
-      'delete-deck',
-      'create-deck',
-      'get-vocabulary-to-browse',
-      'get-vocabulary-to-delete-deck',
-      'update-vocabulary',
-      'delete-vocabulary',
-      'check-if-file-exists',
-      'get-vocabulary-to-review',
-      'update-review',
-      'get-deck-by-id',
+      "copy-file-to-public",
+      "remove-file-from-public",
+      "get-all-files-from-public",
+      "local-file",
+      "handle-image-insert",
+      "get-decks",
+      "get-decks-with-limit",
+      "add-flashcard",
+      "update-deck",
+      "delete-deck",
+      "create-deck",
+      "get-vocabulary-to-browse",
+      "get-vocabulary-to-delete-deck",
+      "update-vocabulary",
+      "delete-vocabulary",
+      "check-if-file-exists",
+      "get-vocabulary-to-review",
+      "update-review",
+      "get-deck-by-id",
+      "update-deck-img",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
@@ -32,10 +33,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   receive: (channel: string, func: any) => {
     const validChannels = [
-      'file-copied',
-      'file-removed',
-      'image-inserted',
-      'file-exists',
+      "file-copied",
+      "file-removed",
+      "image-inserted",
+      "file-exists",
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`
@@ -55,13 +56,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
 // --------- Preload scripts loading ---------
 function domReady(
-  condition: DocumentReadyState[] = ['complete', 'interactive'],
+  condition: DocumentReadyState[] = ["complete", "interactive"],
 ) {
   return new Promise((resolve) => {
     if (condition.includes(document.readyState)) {
       resolve(true);
     } else {
-      document.addEventListener('readystatechange', () => {
+      document.addEventListener("readystatechange", () => {
         if (condition.includes(document.readyState)) {
           resolve(true);
         }
@@ -118,12 +119,12 @@ function useLoading() {
   z-index: 9;
 }
     `;
-  const oStyle = document.createElement('style');
-  const oDiv = document.createElement('div');
+  const oStyle = document.createElement("style");
+  const oDiv = document.createElement("div");
 
-  oStyle.id = 'app-loading-style';
+  oStyle.id = "app-loading-style";
   oStyle.innerHTML = styleContent;
-  oDiv.className = 'app-loading-wrap';
+  oDiv.className = "app-loading-wrap";
   oDiv.innerHTML = `<div class="${className}"><div></div></div>`;
 
   return {
@@ -145,7 +146,7 @@ const { appendLoading, removeLoading } = useLoading();
 domReady().then(appendLoading);
 
 window.onmessage = (ev) => {
-  ev.data.payload === 'removeLoading' && removeLoading();
+  ev.data.payload === "removeLoading" && removeLoading();
 };
 
 setTimeout(removeLoading, 4999);

@@ -93,6 +93,11 @@ interface GetDeckWithCountType {
   deck_img?: string;
 }
 
+interface UpdateDeckImgProps {
+  deck_id: number;
+  deck_img: string;
+}
+
 interface AddFlashcardResponse {
   flashcardId: number;
 }
@@ -147,4 +152,5 @@ export type {
   UpdateDeckType,
   GetVocabularyToReview,
   GetDeckWithCountType,
+  UpdateDeckImgProps,
 };

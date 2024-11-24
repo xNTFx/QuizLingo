@@ -102,4 +102,23 @@ export default function sqLiteUpdateRequests() {
       );
     });
   });
+
+  ipcMain.handle("update-deck-img", async (_event, data) => {
+    return new Promise((resolve, reject) => {
+      const { deck_id, deck_img } = data;
+
+      const sql = `UPDATE decks
+        SET deck_img = ?
+        WHERE deck_id = ?`;
+
+      db.run(sql, [deck_img, deck_id], function (this: Statement, err: Error) {
+        if (err) {
+          reject(new Error("Database error: " + err.message));
+        } else {
+          //Get id of updated item
+          resolve({ deckId: this.lastID });
+        }
+      });
+    });
+  });
 }

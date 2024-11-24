@@ -7,7 +7,15 @@ import useSwalPopupBoxes from "../../../hooks/useSwalPopupBoxes";
 import { GetDeckWithCountType, GetDecksType } from "../../../types/APITypes";
 import DeckImage from "./DeckImage";
 
-export default function DeckRows({ data }: { data: GetDecksType[] }) {
+export default function DeckRows({
+  data,
+  setIsChangeImageBoxOpen,
+  useSelectedDeckId,
+}: {
+  data: GetDecksType[];
+  setIsChangeImageBoxOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  useSelectedDeckId: React.Dispatch<React.SetStateAction<number | null>>;
+}) {
   //Used to set the position of the popover
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectedDeckId, setSelectedDeckId] = useState<number | null>(null);
@@ -49,8 +57,14 @@ export default function DeckRows({ data }: { data: GetDecksType[] }) {
         className="flex flex-col gap-2 rounded-md bg-[#2C2C2C] p-2"
       >
         <div className="flex flex-row gap-4">
-          <button className="relative h-[64px] w-[64px] rounded hover:opacity-40">
-            <DeckImage randomBg={deck.deck_img} />
+          <button
+            onClick={() => {
+              setIsChangeImageBoxOpen((prev) => !prev);
+              useSelectedDeckId(deck.deck_id);
+            }}
+            className="relative h-[64px] w-[64px] rounded hover:opacity-40"
+          >
+            <DeckImage deckImg={deck.deck_img} />
             <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded bg-black/50 text-white opacity-0 hover:opacity-100">
               <p>Change Image</p>
             </div>

@@ -9,6 +9,7 @@ import {
   GetVocabularyArgumentsType,
   GetVocabularyToReviewArgType,
   GetVocabularyToReviewType,
+  UpdateDeckImgProps,
   UpdateDeckType,
   UpdateReviewPropsArg,
   UpdateVocabularyParams,
@@ -38,7 +39,6 @@ export const learningAppApi = createApi({
   endpoints: (builder) => ({
     getVocabulary: builder.query<VocabularyType[], GetVocabularyArgumentsType>({
       query: ({ deckId, limit, offset, search }) => {
-        console.log(deckId, limit, offset, search);
         return {
           url: "get-vocabulary-to-browse",
           method: "GET",
@@ -178,6 +178,20 @@ export const learningAppApi = createApi({
       }),
       invalidatesTags: ["vocabulary"],
     }),
+
+    updateDeckImg: builder.mutation<void, UpdateDeckImgProps>({
+      query: ({ deck_id, deck_img }) => {
+        return {
+          url: "update-deck-img",
+          method: "UPDATE",
+          body: {
+            deck_id,
+            deck_img,
+          },
+        };
+      },
+      invalidatesTags: ["decks"],
+    }),
   }),
 });
 
@@ -194,4 +208,5 @@ export const {
   useGetVocabularyToReviewQuery,
   useUpdateReviewMutation,
   useGetDeckByIdQuery,
+  useUpdateDeckImgMutation,
 } = learningAppApi;
