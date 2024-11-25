@@ -10,7 +10,7 @@
 - Vite
 
 ## Demo
-![Quizlingo gif](https://github.com/user-attachments/assets/b2a4c18e-f77d-4be3-a5a3-ba00d4874123)
+![Quizlingo_final](https://github.com/user-attachments/assets/a1539378-c04f-41f3-ab5c-033ab5b2514c)
 
 # Algorithm
 
