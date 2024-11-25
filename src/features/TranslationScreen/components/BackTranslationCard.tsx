@@ -52,7 +52,7 @@ export default function BackTranslationCard({
         <div className="flex flex-row justify-center rounded-lg bg-black p-2">
           <button
             onClick={handleNextVocabulary}
-            className="flex items-center justify-center rounded-lg border-2 border-solid border-green-600 px-2 py-1 font-bold hover:bg-green-600"
+            className="flex w-32 items-center justify-center rounded-lg border-2 border-solid border-green-600 px-2 py-1 font-bold hover:bg-green-600"
           >
             Next
           </button>

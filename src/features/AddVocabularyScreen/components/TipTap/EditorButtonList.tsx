@@ -61,7 +61,7 @@ export default function EdiitorButtonList({
 
   const [toggleStyleValue, setToggleStyleValue] = useState({
     textColor: "#ffffff",
-    backgroundColor: "#000000",
+    backgroundColor: "#00000000",
     fontType: "",
     fontSize: "",
   });
@@ -215,7 +215,7 @@ export default function EdiitorButtonList({
 
         {isTxColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div className="rounded p-2 text-black shadow-lg">
+            <div className="rounded bg-white p-2 text-black shadow-lg">
               <SketchPicker
                 color={toggleStyleValue.textColor}
                 onChangeComplete={(color) => {
@@ -228,9 +228,21 @@ export default function EdiitorButtonList({
               />
               <button
                 onClick={() => {
+                  tipTapEditorCommand("setColor", "#ffffff");
+                  setToggleStyleValue((prev) => ({
+                    ...prev,
+                    textColor: "#ffffff",
+                  }));
+                }}
+                className="mt-2 w-full border bg-gray-300 p-1 text-black hover:bg-gray-400"
+              >
+                Default Color
+              </button>
+              <button
+                onClick={() => {
                   setIsTxColorPickerOpen(false);
                 }}
-                className="mt-[-2px] w-full bg-white p-1 text-black hover:bg-gray-300"
+                className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Ok
               </button>
@@ -246,15 +258,22 @@ export default function EdiitorButtonList({
         <EditorButton
           onClick={() => setIsBgColorPickerOpen((prev) => !prev)}
           title="Background color"
-          className="hover:text-blue-400"
-          style={{ backgroundColor: toggleStyleValue.backgroundColor }}
+          className={`hover:text-blue-400 ${
+            toggleStyleValue.backgroundColor === "#00000000" ? "bg-black" : ""
+          }`}
+          style={{
+            backgroundColor:
+              toggleStyleValue.backgroundColor !== "#00000000"
+                ? toggleStyleValue.backgroundColor
+                : undefined,
+          }}
         >
           <FaHighlighter />
         </EditorButton>
 
         {isBgColorPickerOpen ? (
           <div className="absolute top-[100%] z-10">
-            <div className="rounded p-2 text-black shadow-lg">
+            <div className="rounded bg-white p-2 text-black shadow-lg">
               <SketchPicker
                 color={toggleStyleValue.backgroundColor}
                 onChangeComplete={(color) => {
@@ -267,9 +286,21 @@ export default function EdiitorButtonList({
               />
               <button
                 onClick={() => {
+                  tipTapEditorCommand("setHighlight", { color: "transparent" });
+                  setToggleStyleValue((prev) => ({
+                    ...prev,
+                    backgroundColor: "transparent",
+                  }));
+                }}
+                className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
+              >
+                Default Color
+              </button>
+              <button
+                onClick={() => {
                   setIsBgColorPickerOpen(false);
                 }}
-                className="mt-[-2px] w-full bg-white p-1 text-black hover:bg-gray-300"
+                className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Ok
               </button>

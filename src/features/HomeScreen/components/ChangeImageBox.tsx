@@ -115,7 +115,7 @@ export default function ChangeImageBox({
                     if (file) {
                       checkImageFile(file);
                     }
-                    e.target.value = ""; // Reset input value
+                    e.target.value = "";
                   }}
                   type="file"
                   accept="image/*"

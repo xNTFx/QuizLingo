@@ -2,11 +2,14 @@ import DOMPurify from "dompurify";
 import { Dispatch } from "react";
 
 import AudioButton from "../../../components/AudioButton";
-import { GetVocabularyToReviewType } from "../../../types/APITypes";
+import {
+  GetVocabularyToReviewType,
+  VocabularyType,
+} from "../../../types/APITypes";
 import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndImageSrc";
 
 interface FrontFlashCardProps {
-  vocabulary: GetVocabularyToReviewType;
+  vocabulary: GetVocabularyToReviewType | VocabularyType;
   setIsFrontPage: Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -19,10 +22,10 @@ export default function FrontFlashCard({
     vocabulary.front_desc_html ?? "",
   );
   return (
-    <article>
-      <div className="flex h-full flex-col gap-2">
-        <div className="h-full overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
-          <div className="flex w-full flex-col justify-center gap-4 text-center">
+    <article className="h-[80vh] w-full">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
+        <div className="h-full w-11/12 overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
+          <div className="flex w-full flex-col justify-center text-center">
             <div dangerouslySetInnerHTML={{ __html: sanitizedFrontHtml }} />
             <AudioButton
               audioSrc={extractSingleAudioAndImageSrc(vocabulary.audio_name)}
@@ -31,11 +34,11 @@ export default function FrontFlashCard({
           </div>
         </div>
 
-        <div className="flex flex-row justify-center overflow-x-auto rounded-lg bg-black p-2">
+        <div className="flex h-14 w-11/12 flex-row justify-center overflow-auto rounded-lg bg-black p-2">
           <div className="flex flex-row gap-4">
             <button
               onClick={() => setIsFrontPage(false)}
-              className="flex items-center justify-center rounded-lg border-2 border-solid border-white px-2 py-1 font-bold hover:bg-white hover:text-black"
+              className="flex w-full items-center justify-center rounded-lg border-2 border-solid border-white px-2 py-1 font-bold hover:bg-white hover:text-black"
             >
               Show Answer
             </button>

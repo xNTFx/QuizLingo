@@ -34,7 +34,7 @@ export default function VocabularyEditor({
   };
 
   return (
-    <div className="relative mt-2 flex h-full w-8/12 flex-col items-center overflow-auto rounded-lg bg-[#2C2C2C] text-white max-md:w-10/12">
+    <div className="relative flex h-[75vh] flex-col items-center overflow-auto rounded-lg bg-[#2C2C2C] text-white max-md:w-10/12">
       <div className="sticky top-0 z-50 w-full">
         <EditorButtonList
           editorsList={editorsList}

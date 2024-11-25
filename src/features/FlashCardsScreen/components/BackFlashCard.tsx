@@ -6,7 +6,7 @@ import { extractSingleAudioAndImageSrc } from "../../../utils/extractAudioAndIma
 
 interface BackFlashCardProps {
   vocabulary: GetVocabularyToReviewType;
-  handleDifficulty: (
+  handleDifficulty?: (
     reviewId: number,
     vocabularyId: number,
     difficulty: string,
@@ -27,92 +27,73 @@ export default function BackFlashCard({
   const sanitizedBack = DOMPurify.sanitize(
     vocabulary.back_word_html + vocabulary.back_desc_html,
   );
+
+  const handleButtonClick = (difficulty: string, quality: number) => {
+    if (handleDifficulty) {
+      handleDifficulty(
+        vocabulary.review_id,
+        vocabulary.vocabulary_id,
+        difficulty,
+        vocabulary.ease_factor,
+        vocabulary.repetition,
+        quality,
+      );
+    }
+  };
+
   return (
-    <article>
-      <div className="flex h-full flex-col gap-2">
-        <div className="h-full overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
-          <div className="flex w-full flex-col justify-center gap-4 text-center">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: sanitizedFrontHtml,
-              }}
-            />
-            <AudioButton
-              audioSrc={extractSingleAudioAndImageSrc(vocabulary.audio_name)}
-            />
-            <div
-              dangerouslySetInnerHTML={{
-                __html: sanitizedFrontDescHtml,
-              }}
-            />
+    <article className="h-[80vh]">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+        <div className="h-full w-11/12 overflow-auto rounded-lg bg-[#2C2C2C] p-6">
+          <div className="flex h-full flex-col justify-center gap-4 text-center">
+            <div className="h-1/2 overflow-auto">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: sanitizedFrontHtml,
+                }}
+              />
+              <AudioButton
+                audioSrc={extractSingleAudioAndImageSrc(vocabulary.audio_name)}
+              />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: sanitizedFrontDescHtml,
+                }}
+              />
+            </div>
             <hr />
-            <div
-              dangerouslySetInnerHTML={{
-                __html: sanitizedBack,
-              }}
-            />
+            <div className="h-1/2 overflow-auto">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: sanitizedBack,
+                }}
+              />
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-row justify-center overflow-x-auto rounded-lg bg-black p-2">
+        <div className="flex h-14 w-11/12 flex-row justify-center rounded-lg bg-black p-2">
           <div className="flex flex-row gap-4">
             <button
-              onClick={() =>
-                handleDifficulty(
-                  vocabulary.review_id,
-                  vocabulary.vocabulary_id,
-                  "easy",
-                  vocabulary.ease_factor,
-                  vocabulary.repetition,
-                  5,
-                )
-              }
-              className="flex items-center justify-center rounded-lg border-2 border-solid border-green-600 px-2 py-1 font-bold hover:bg-green-600"
+              onClick={() => handleButtonClick("easy", 5)}
+              className="flex w-20 items-center justify-center rounded-lg border-2 border-solid border-green-600 px-2 py-1 font-bold hover:bg-green-600"
             >
               Easy
             </button>
             <button
-              onClick={() =>
-                handleDifficulty(
-                  vocabulary.review_id,
-                  vocabulary.vocabulary_id,
-                  "good",
-                  vocabulary.ease_factor,
-                  vocabulary.repetition,
-                  4,
-                )
-              }
-              className="flex items-center justify-center rounded-lg border-2 border-solid border-gray-400 px-2 py-1 font-bold hover:bg-gray-400 hover:text-black"
+              onClick={() => handleButtonClick("good", 4)}
+              className="flex w-20 items-center justify-center rounded-lg border-2 border-solid border-gray-400 px-2 py-1 font-bold hover:bg-gray-400 hover:text-black"
             >
               Good
             </button>
             <button
-              onClick={() =>
-                handleDifficulty(
-                  vocabulary.review_id,
-                  vocabulary.vocabulary_id,
-                  "hard",
-                  vocabulary.ease_factor,
-                  vocabulary.repetition,
-                  3,
-                )
-              }
-              className="flex items-center justify-center rounded-lg border-2 border-solid border-orange-600 px-2 py-1 font-bold hover:bg-red-600"
+              onClick={() => handleButtonClick("hard", 3)}
+              className="flex w-20 items-center justify-center rounded-lg border-2 border-solid border-orange-600 px-2 py-1 font-bold hover:bg-red-600"
             >
               Hard
             </button>
             <button
-              onClick={() =>
-                handleDifficulty(
-                  vocabulary.review_id,
-                  vocabulary.vocabulary_id,
-                  "again",
-                  vocabulary.ease_factor,
-                  vocabulary.repetition,
-                  0,
-                )
-              }
-              className="flex items-center justify-center rounded-lg border-2 border-solid border-red-600 px-2 py-1 font-bold hover:bg-orange-600"
+              onClick={() => handleButtonClick("again", 0)}
+              className="flex w-20 items-center justify-center rounded-lg border-2 border-solid border-red-600 px-2 py-1 font-bold hover:bg-orange-600"
             >
               Again
             </button>

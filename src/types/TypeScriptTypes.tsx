@@ -1,6 +1,7 @@
-import { Editor } from '@tiptap/core';
-import { CSSProperties, MouseEventHandler } from 'react';
-import { VocabularyType } from './APITypes';
+import { Editor } from "@tiptap/core";
+import { CSSProperties, MouseEventHandler } from "react";
+
+import { VocabularyType } from "./APITypes";
 
 interface EditorButtonType {
   isActive?: boolean;

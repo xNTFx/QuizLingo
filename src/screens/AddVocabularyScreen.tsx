@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useGetDecksQuery } from "../API/Redux/reduxQueryFetch";
 import DeckSelectionContainer from "../components/DeckSelection/DeckSelectionContainer";
+import InspectScreen from "../features/AddVocabularyScreen/components/InspectScreen";
 import NoDeckScreen from "../features/AddVocabularyScreen/components/NoDeckScreen";
 import VocabularyEditor from "../features/AddVocabularyScreen/components/VocabularyEditor";
 import useInsertOrUpdateVocabulary from "../hooks/useInsertOrUpdateVocabulary";
@@ -27,6 +28,7 @@ export default function AddVocabularyScreen({
   const [editorsList, setEditorsList] = useState<Editor[]>([]);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const [hiddenInputs, setHiddenInputs] = useState<number[]>([]);
+  const [isInspected, setIsInspected] = useState(false);
 
   const handleVocabularyButton = useInsertOrUpdateVocabulary(
     editorsList,
@@ -62,38 +64,64 @@ export default function AddVocabularyScreen({
   }
 
   return (
-    <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F] pt-10">
-      <div className="w-8/12">
-        <DeckSelectionContainer
-          deckList={deckList}
-          selectedDeck={selectedDeck}
-          id={id}
-          currentDeck={currentDeck}
-          setCurrentDeck={setCurrentDeck}
+    <main className="flex h-[calc(100vh-3rem)] w-full flex-col items-center overflow-auto bg-[#1F1F1F] pt-10">
+      <div
+        className={`${
+          isInspected ? "hidden" : "block"
+        } flex h-full w-11/12 flex-col justify-between`}
+      >
+        <div>
+          <div>
+            <DeckSelectionContainer
+              deckList={deckList}
+              selectedDeck={selectedDeck}
+              id={id}
+              currentDeck={currentDeck}
+              setCurrentDeck={setCurrentDeck}
+            />
+          </div>
+          <div>
+            <VocabularyEditor
+              hiddenInputs={hiddenInputs}
+              setHiddenInputs={setHiddenInputs}
+              inputNames={[
+                "Front word",
+                "Back word",
+                "Audio",
+                "Front word description",
+                "Back word description",
+              ]}
+              editorInputValues={editorInputValues}
+              setActiveEditor={setActiveEditor}
+              handleEditorUpdate={handleEditorUpdate}
+              editorsList={editorsList}
+              activeEditor={activeEditor}
+            />
+          </div>
+        </div>
+        <div className="">
+          <div className="mb-10 flex flex-row items-center justify-center">
+            <button
+              onClick={() => setIsInspected(true)}
+              className="m-4 w-44 rounded-xl bg-blue-600 p-2 font-extrabold hover:opacity-60"
+            >
+              Preview
+            </button>
+            <button
+              className="m-4 w-44 rounded-xl bg-green-600 p-2 font-extrabold hover:opacity-60"
+              onClick={handleVocabularyButton}
+            >
+              {selectedDeck ? "Update vocabulary" : "Post vocabulary"}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className={`${isInspected ? "block" : "hidden"} h-full w-full`}>
+        <InspectScreen
+          setIsInspected={setIsInspected}
+          editorsList={editorsList}
         />
       </div>
-      <VocabularyEditor
-        hiddenInputs={hiddenInputs}
-        setHiddenInputs={setHiddenInputs}
-        inputNames={[
-          "Front word",
-          "Back word",
-          "Audio",
-          "Front word description",
-          "Back word description",
-        ]}
-        editorInputValues={editorInputValues}
-        setActiveEditor={setActiveEditor}
-        handleEditorUpdate={handleEditorUpdate}
-        editorsList={editorsList}
-        activeEditor={activeEditor}
-      />
-      <button
-        className="m-4 rounded-xl bg-[#382bf0] p-2 font-extrabold hover:bg-[#5e43f3]"
-        onClick={handleVocabularyButton}
-      >
-        {selectedDeck ? "Update vocabulary" : "Post vocabulary"}
-      </button>
     </main>
   );
 }

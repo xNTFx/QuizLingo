@@ -52,7 +52,7 @@ export default function FrontTranslationCard({
             <div className="flex w-full items-center justify-center">
               <input
                 value={inputValue}
-                placeholder="Write vocabulary"
+                placeholder="Write a translation of the vocabulary"
                 onChange={(e) => {
                   e.preventDefault();
                   setInputValue(e.target.value);
@@ -61,7 +61,7 @@ export default function FrontTranslationCard({
               />
             </div>
             {isInputErrorMessage ? (
-              <p className="rounded-md bg-red-200 p-1 font-bold text-red-600">
+              <p className="rounded-md p-1 font-bold text-red-600">
                 Input cannot be empty
               </p>
             ) : null}

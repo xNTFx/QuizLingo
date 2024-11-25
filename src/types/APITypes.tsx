@@ -116,7 +116,7 @@ interface VocabularyType {
   back_word: string;
   audio_name: string | null;
   front_word_html: string;
-  backWord_html: string;
+  back_word_html: string;
   front_desc_html: string;
   back_desc_html: string;
   deck_name: string;

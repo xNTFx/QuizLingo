@@ -107,13 +107,7 @@ export default function TranslationScreen() {
     <main className="flex h-[calc(100vh-3rem)] flex-col items-center justify-center overflow-auto bg-[#1F1F1F] py-10">
       {!isEnd ? (
         <>
-          {isFrontPage ? (
-            <div className="flex w-full justify-center px-6">
-              <h1 className="w-8/12 pb-1 text-white">
-                Type the correct translation
-              </h1>
-            </div>
-          ) : (
+          {isFrontPage ? null : (
             <HandleShowAnswerMessage
               isFrontPage={isFrontPage}
               correctVocabulary={correctVocabulary}
@@ -136,7 +130,7 @@ export default function TranslationScreen() {
                 />
               ) : null}
             </div>
-            <div className="absolute inset-0 rounded-xl [transform:rotateY(180deg)] [backface-visibility:hidden]">
+            <div className="absolute inset-0 rounded-xl [backface-visibility:hidden] [transform:rotateY(180deg)]">
               {!isFrontPage ? (
                 <BackTranslationCard
                   vocabulary={vocabulary}
