@@ -10,8 +10,7 @@
 - Vite
 
 ## Demo
-
-![AnimationQuizApp](https://github.com/xNTFx/QuizLingo/assets/135262384/eca8049a-87d6-4c87-af32-c02233576b3c)
+![Quizlingo gif](https://github.com/user-attachments/assets/b2a4c18e-f77d-4be3-a5a3-ba00d4874123)
 
 # Algorithm
 
