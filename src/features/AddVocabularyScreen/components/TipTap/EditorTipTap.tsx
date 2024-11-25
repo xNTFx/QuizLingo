@@ -101,8 +101,8 @@ export default function EditorTipTap({
 
   async function checkAudioFileExtension(filePath: string | null) {
     if (isItAudioFile(filePath)) {
-      const ifFileExist = await handleCheckIfFileExists(filePath);
-      if (ifFileExist) {
+      const ifFileExist = await handleCheckIfFileExists(filePath, "audio");
+      if (ifFileExist !== false) {
         editor?.commands.setContent(filePath);
       }
     } else {
