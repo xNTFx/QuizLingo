@@ -24,7 +24,7 @@ export default function BackTranslationCard({
 
   return (
     <article>
-      <div className="flex h-full flex-col gap-2">
+      <div className="flex h-[68vh] flex-col gap-2">
         <div className="h-full overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
           <div className="flex w-full flex-col justify-center gap-4 text-center">
             <div

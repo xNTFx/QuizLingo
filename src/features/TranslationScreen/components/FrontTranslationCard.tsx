@@ -29,7 +29,7 @@ export default function FrontTranslationCard({
 
   return (
     <article>
-      <div className="flex h-full flex-col">
+      <div className="flex h-[80vh] flex-col">
         <div className="h-full overflow-auto break-all rounded-t-lg bg-[#2C2C2C] p-6">
           <div className="flex w-full flex-col justify-center gap-4 text-center">
             <div dangerouslySetInnerHTML={{ __html: sanitizedFrontHtml }} />
