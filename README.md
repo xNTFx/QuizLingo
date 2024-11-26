@@ -21,7 +21,7 @@
 ## Algorithm
 
 the application uses the **SuperMemo 2 algorithm** for spaced repetition. learn more about the algorithm here:  
-[supermemo 2 algorithm documentation](https://super-memory.com/english/ol/sm2.htm)
+https://super-memory.com/english/ol/sm2.htm
 
 ## Demo
 
