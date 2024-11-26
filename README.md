@@ -10,6 +10,10 @@
 - **TailwindCSS**
 - **Vite**
 
+## Demo
+
+![Quizlingo](https://github.com/user-attachments/assets/a1539378-c04f-41f3-ab5c-033ab5b2514c)
+
 ## Features
 
 - **Adding flashcards with images**: users can upload images and edit them by resizing, changing colors, adjusting font sizes for labels or captions, and in many other ways to suit their preferences.
@@ -22,10 +26,6 @@
 
 the application uses the **SuperMemo 2 algorithm** for spaced repetition. learn more about the algorithm here:  
 https://super-memory.com/english/ol/sm2.htm
-
-## Demo
-
-![Quizlingo](https://github.com/user-attachments/assets/a1539378-c04f-41f3-ab5c-033ab5b2514c)
 
 ## Installation
 
