@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ReviewHistoryInfoProps {
   currentReviewHistory: {
     ease_factor: number;
