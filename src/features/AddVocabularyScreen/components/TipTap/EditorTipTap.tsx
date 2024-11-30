@@ -162,7 +162,9 @@ export default function EditorTipTap({
             onClick={() => setActiveEditor(editor)}
             className="cursor-text p-2"
           >
-            <EditorContent editor={editor} style={{ padding: "0.2rem" }} />
+            <form>
+              <EditorContent editor={editor} style={{ padding: "0.2rem" }} />
+            </form>
           </div>
         </div>
       )}

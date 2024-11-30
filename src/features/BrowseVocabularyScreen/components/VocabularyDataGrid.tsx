@@ -57,11 +57,11 @@ export default function VocabularyDataGrid({
   }
 
   return (
+    <div className="overflow-y-auto h-full">
       <DataGrid
         style={{
           width: "100%",
-          height: "65vh",
-          maxHeight: "65vh",
+          height: "100%",
           overflow: "auto",
         }}
         onScroll={handleScroll}
@@ -74,5 +74,6 @@ export default function VocabularyDataGrid({
         columns={columns}
         rows={rows}
       />
+    </div>
   );
 }

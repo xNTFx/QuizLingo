@@ -20,7 +20,7 @@ export default function AddVocabularyScreen({
     data: deckList,
     error: deckListError,
     isLoading: deckListIsLoading,
-  } = useGetDecksQuery();
+  } = useGetDecksQuery({});
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -99,16 +99,16 @@ export default function AddVocabularyScreen({
             />
           </div>
         </div>
-        <div className="">
-          <div className="mb-10 flex flex-row items-center justify-center">
+        <div>
+          <div className="mb-10 flex flex-row items-center justify-center gap-4">
             <button
               onClick={() => setIsInspected(true)}
-              className="m-4 w-44 rounded-xl bg-blue-600 p-2 font-extrabold hover:opacity-60"
+              className="w-44 rounded-xl bg-blue-600 p-2 font-extrabold hover:opacity-60"
             >
               Preview
             </button>
             <button
-              className="m-4 w-44 rounded-xl bg-green-600 p-2 font-extrabold hover:opacity-60"
+              className="w-44 rounded-xl bg-green-600 p-2 font-extrabold hover:opacity-60"
               onClick={handleVocabularyButton}
             >
               {selectedDeck ? "Update vocabulary" : "Post vocabulary"}

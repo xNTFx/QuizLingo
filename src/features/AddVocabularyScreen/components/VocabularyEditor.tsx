@@ -33,6 +33,23 @@ export default function VocabularyEditor({
     );
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
+    if (event.key === "Tab") {
+      event.preventDefault();
+
+      const inputIndex = index === 1 ? 2 : index; // Skip index === 2
+
+      const nextIndex = (inputIndex + 1) % inputNames.length;
+
+      const nextEditor = editorsList[nextIndex];
+
+      if (nextEditor) {
+        setActiveEditor(nextEditor);
+        nextEditor.commands.focus();
+      }
+    }
+  };
+
   return (
     <div className="relative flex h-[75vh] flex-col items-center overflow-auto rounded-lg bg-[#2C2C2C] text-white max-md:w-10/12">
       <div className="sticky top-0 z-50 w-full">
@@ -43,7 +60,11 @@ export default function VocabularyEditor({
       </div>
       <div className="w-full">
         {inputNames.map((item, index) => (
-          <div key={index} className="px-6 py-2">
+          <div
+            key={index}
+            className="select-none px-6 py-2"
+            onKeyDown={(e) => handleKeyDown(e, index)}
+          >
             <button
               onClick={() => hiddenInputsFunction(index)}
               className="mb-1 flex flex-row items-center gap-1"

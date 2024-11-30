@@ -104,7 +104,7 @@ export default function BrowseVocabularyScreen() {
     }, 250);
   }
 
-  const { data: deckList, isLoading: deckListIsLoading } = useGetDecksQuery();
+  const { data: deckList, isLoading: deckListIsLoading } = useGetDecksQuery({});
 
   if (!data) return;
   if (error) {
@@ -135,9 +135,9 @@ export default function BrowseVocabularyScreen() {
         dragInterval={1}
         direction="horizontal"
       >
-        <section className="mt-12 h-[calc(100vh-3rem)]">
+        <section className="mt-12 h-[calc(100vh-3rem)] overflow-y-auto">
           <div className="flex flex-col items-center">
-            <div className="flex w-11/12 flex-col justify-start gap-4 rounded-lg bg-[#2C2C2C] p-4">
+            <div className="flex h-[75vh] w-11/12 flex-col justify-start gap-4 overflow-y-auto rounded-lg bg-[#2C2C2C] p-4">
               {!deckListIsLoading ? (
                 <DeckSelectionContainer
                   deckList={deckList}
@@ -155,14 +155,16 @@ export default function BrowseVocabularyScreen() {
                 handleSearchInputChange={handleSearchInputChange}
               />
               {data.length > 0 ? (
-                <VocabularyDataGrid
-                  data={data}
-                  handleScroll={handleScroll}
-                  handleChangeVocabulary={handleChangeVocabulary}
-                  removeVocabulary={removeVocabulary}
-                  setSelectedDeck={setSelectedVocabulary}
-                  isLoading={isLoading}
-                />
+                <div className="h-full overflow-y-auto">
+                  <VocabularyDataGrid
+                    data={data}
+                    handleScroll={handleScroll}
+                    handleChangeVocabulary={handleChangeVocabulary}
+                    removeVocabulary={removeVocabulary}
+                    setSelectedDeck={setSelectedVocabulary}
+                    isLoading={isLoading}
+                  />
+                </div>
               ) : (
                 <div className="flex items-center justify-center text-xl">
                   <p>No vocabulary in a deck</p>
