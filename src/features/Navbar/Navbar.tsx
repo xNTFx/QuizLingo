@@ -8,8 +8,9 @@ export default function Navbar() {
 
   const navButtons = [
     { label: "Decks", path: "/" },
-    { label: "Browse", path: `${deckId}/browse-vocabulary` },
     { label: "Add", path: `${deckId}/add-vocabulary` },
+    { label: "Browse", path: `${deckId}/browse-vocabulary` },
+    { label: "Statistics", path: `${deckId}/statistics` },
   ];
 
   return (

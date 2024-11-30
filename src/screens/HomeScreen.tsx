@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import {
-  useGetDecksWithLimitQuery,
+  useGetDecksQuery,
   useUpdateDeckMutation,
 } from "../API/Redux/reduxQueryFetch";
 import ChangeImageBox from "../features/HomeScreen/components/ChangeImageBox";
@@ -19,10 +19,7 @@ export default function HomeScreen() {
 
   const { createDeckFunction } = useSwalPopupBoxes();
 
-  const { data, isLoading } = useGetDecksWithLimitQuery({
-    limit: 100,
-    offset: 0,
-  });
+  const { data, isLoading } = useGetDecksQuery({});
   const [updateDeck] = useUpdateDeckMutation();
 
   useEffect(() => {
@@ -79,7 +76,7 @@ export default function HomeScreen() {
       {decks.length > 0 ? (
         <div
           id="scrollableDiv"
-          className="mt-10 box-border flex max-h-[80vh] flex-col overflow-auto rounded-lg p-4 text-white shadow-md"
+          className="mt-10 box-border flex max-h-[80vh] flex-col overflow-auto rounded-lg p-4 text-white"
         >
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="decks">
@@ -99,7 +96,7 @@ export default function HomeScreen() {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className="mb-4 flex flex-row rounded-lg bg-[#2b2b2b] shadow-md"
+                          className="mb-4 flex flex-row rounded-lg bg-[#2b2b2b]"
                         >
                           <div className="flex-grow cursor-default">
                             <DeckRows

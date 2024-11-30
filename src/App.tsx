@@ -8,6 +8,7 @@ import BrowseVocabularyScreen from "./screens/BrowseVocabularyScreen";
 import FlashCardsScreen from "./screens/FlashCardsScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ModeSelection from "./screens/ModeSelectionScreen";
+import StatisticsScreen from "./screens/StatisticsScreen";
 import TranslationScreen from "./screens/TranslationScreen";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                 path="browse-vocabulary"
                 element={<BrowseVocabularyScreen />}
               />
+              <Route path="statistics" element={<StatisticsScreen />} />
               <Route path="mode-selection/:type" element={<Outlet />}>
                 <Route index element={<ModeSelection />} />
                 <Route path="flashcard" element={<FlashCardsScreen />} />

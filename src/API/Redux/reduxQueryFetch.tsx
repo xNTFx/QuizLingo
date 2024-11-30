@@ -4,7 +4,6 @@ import {
   AddVocabularyType,
   ElectronBaseQueryArgs,
   GetDeckWithCountType,
-  GetDecksArgsType,
   GetDecksType,
   GetVocabularyArgumentsType,
   GetVocabularyToReviewArgType,
@@ -79,11 +78,10 @@ export const learningAppApi = createApi({
       invalidatesTags: ["vocabulary"],
     }),
 
-    getDecksWithLimit: builder.query<GetDeckWithCountType[], GetDecksArgsType>({
-      query: ({ limit, offset }) => ({
-        url: "get-decks-with-limit",
+    getDecks: builder.query({
+      query: () => ({
+        url: "get-decks",
         method: "GET",
-        body: { limit, offset },
       }),
       providesTags: ["decks", "vocabulary"],
     }),
@@ -95,14 +93,6 @@ export const learningAppApi = createApi({
         body: { deckId },
       }),
       providesTags: ["decks", "vocabulary"],
-    }),
-
-    getDecks: builder.query<GetDecksType[], void>({
-      query: () => ({
-        url: "get-decks",
-        method: "GET",
-      }),
-      providesTags: ["decks"],
     }),
 
     createDeck: builder.mutation<
@@ -199,7 +189,6 @@ export const {
   useGetVocabularyQuery,
   useUpdateVocabularyMutation,
   useGetDecksQuery,
-  useGetDecksWithLimitQuery,
   useCreateDeckMutation,
   useDeleteDeckMutation,
   useUpdateDeckMutation,

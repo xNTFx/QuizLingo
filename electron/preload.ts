@@ -11,7 +11,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "local-file",
       "handle-image-insert",
       "get-decks",
-      "get-decks-with-limit",
       "add-flashcard",
       "update-deck",
       "delete-deck",
