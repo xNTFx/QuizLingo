@@ -126,7 +126,7 @@ export default function BrowseVocabularyScreen() {
       <Split
         sizes={data.length > 0 ? [50, 50] : [100, 0]}
         className="flex flex-row justify-center bg-[#1F1F1F]"
-        minSize={[100, 0]}
+        minSize={[0, 0]}
         maxSize={data.length > 0 ? [Infinity, Infinity] : [Infinity, 0]}
         expandToMin={false}
         gutterSize={10}
@@ -141,7 +141,7 @@ export default function BrowseVocabularyScreen() {
               {!deckListIsLoading ? (
                 <DeckSelectionContainer
                   deckList={deckList}
-                  selectedDeck={null}
+                  selectedVocabulary={null}
                   id={id}
                   currentDeck={currentDeck}
                   setCurrentDeck={setCurrentDeck}
@@ -161,7 +161,7 @@ export default function BrowseVocabularyScreen() {
                     handleScroll={handleScroll}
                     handleChangeVocabulary={handleChangeVocabulary}
                     removeVocabulary={removeVocabulary}
-                    setSelectedDeck={setSelectedVocabulary}
+                    setSelectedVocabulary={setSelectedVocabulary}
                     isLoading={isLoading}
                   />
                 </div>
@@ -176,7 +176,7 @@ export default function BrowseVocabularyScreen() {
         {data.length > 0 ? (
           <section>
             <AddVocabularyScreen
-              selectedDeck={selectedVocabulary ? selectedVocabulary : null}
+              selectedVocabulary={selectedVocabulary ? selectedVocabulary : null}
             />
           </section>
         ) : null}

@@ -18,7 +18,7 @@ interface EditorButtonListType {
 }
 
 interface AddVocabularyScreenProps {
-  selectedDeck?: VocabularyType | null;
+  selectedVocabulary?: VocabularyType | null;
   setVocabularyList?: React.Dispatch<React.SetStateAction<VocabularyType[]>>;
 }
 

@@ -14,7 +14,7 @@ import {
 } from "../types/TypeScriptTypes";
 
 export default function AddVocabularyScreen({
-  selectedDeck = null,
+  selectedVocabulary = null,
 }: AddVocabularyScreenProps) {
   const {
     data: deckList,
@@ -32,18 +32,18 @@ export default function AddVocabularyScreen({
 
   const handleVocabularyButton = useInsertOrUpdateVocabulary(
     editorsList,
-    selectedDeck,
+    selectedVocabulary,
     currentDeck.deckId,
     deckList,
     setEditorsList,
   );
 
   const editorInputValues: EditorInputValuesType = {
-    0: selectedDeck?.front_word_html?.toString() ?? "",
-    1: selectedDeck?.back_word_html?.toString() ?? "",
-    2: selectedDeck?.audio_name?.toString() ?? "",
-    3: selectedDeck?.front_desc_html?.toString() ?? "",
-    4: selectedDeck?.back_desc_html?.toString() ?? "",
+    0: selectedVocabulary?.front_word_html?.toString() ?? "",
+    1: selectedVocabulary?.back_word_html?.toString() ?? "",
+    2: selectedVocabulary?.audio_name?.toString() ?? "",
+    3: selectedVocabulary?.front_desc_html?.toString() ?? "",
+    4: selectedVocabulary?.back_desc_html?.toString() ?? "",
   };
 
   const handleEditorUpdate = useCallback(
@@ -74,7 +74,7 @@ export default function AddVocabularyScreen({
           <div>
             <DeckSelectionContainer
               deckList={deckList}
-              selectedDeck={selectedDeck}
+              selectedVocabulary={selectedVocabulary}
               id={id}
               currentDeck={currentDeck}
               setCurrentDeck={setCurrentDeck}
@@ -100,7 +100,7 @@ export default function AddVocabularyScreen({
           </div>
         </div>
         <div>
-          <div className="mb-10 flex flex-row items-center justify-center gap-4">
+          <div className="mb-10 mt-4 flex flex-row items-center justify-center gap-4">
             <button
               onClick={() => setIsInspected(true)}
               className="w-44 rounded-xl bg-blue-600 p-2 font-extrabold hover:opacity-60"
@@ -111,7 +111,7 @@ export default function AddVocabularyScreen({
               className="w-44 rounded-xl bg-green-600 p-2 font-extrabold hover:opacity-60"
               onClick={handleVocabularyButton}
             >
-              {selectedDeck ? "Update vocabulary" : "Post vocabulary"}
+              {selectedVocabulary ? "Update vocabulary" : "Post vocabulary"}
             </button>
           </div>
         </div>

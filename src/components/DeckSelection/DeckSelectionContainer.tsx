@@ -2,14 +2,14 @@ import DeckSelection from "./DeckSelection";
 
 export default function DeckSelectionContainer({
   deckList,
-  selectedDeck,
+  selectedVocabulary,
   id,
   currentDeck,
   setCurrentDeck,
   isInitialDeck = true,
 }: {
   deckList: any;
-  selectedDeck: any;
+  selectedVocabulary: any;
   id: string | undefined;
   currentDeck: { deckId: string; deckName: string };
   setCurrentDeck: React.Dispatch<
@@ -19,7 +19,7 @@ export default function DeckSelectionContainer({
 }) {
   return (
     <div className="w-full bg-black">
-      {!selectedDeck && id === "0" ? (
+      {!selectedVocabulary && id === "0" ? (
         <DeckSelection
           deckList={deckList}
           currentDeck={currentDeck}

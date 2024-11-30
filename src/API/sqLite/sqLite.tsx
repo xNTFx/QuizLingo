@@ -57,7 +57,10 @@ db.serialize(function () {
 
   db.run(`CREATE TABLE if not exists reviews_history (
       review_history_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      vocabulary_id INTEGER REFERENCES vocabulary (vocabulary_id) NOT NULL
+      vocabulary_id INTEGER REFERENCES vocabulary (vocabulary_id) NOT NULL,
+      ease_factor NUMERIC NOT NULL,
+      quality INTEGER NOT NULL,
+      review_date TEXT NOT NULL
   );`);
 
   db.run(`CREATE TRIGGER if not exists after_vocabulary_delete
@@ -67,11 +70,18 @@ db.serialize(function () {
       DELETE FROM reviews WHERE reviews.vocabulary_id = OLD.vocabulary_id;
   END;`);
 
+  db.run(`CREATE TRIGGER if not exists after_vocabulary_delete
+    AFTER DELETE ON vocabulary
+    FOR EACH ROW
+    BEGIN
+        DELETE FROM reviews_history WHERE reviews_history.vocabulary_id = OLD.vocabulary_id;
+    END;`);
+
   db.run(
     `CREATE TRIGGER if not exists after_vocabulary_insert
     AFTER INSERT ON vocabulary FOR EACH ROW
   BEGIN
-    INSERT INTO reviews ( vocabulary_id, review_date, ease_factor, repetition)
+    INSERT INTO reviews (vocabulary_id, review_date, ease_factor, repetition)
     VALUES (NEW.vocabulary_id, datetime('now'), 2.5, 1);
   END;`,
   );

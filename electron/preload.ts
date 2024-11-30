@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "update-review",
       "get-deck-by-id",
       "update-deck-img",
+      "create-reviews-history",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

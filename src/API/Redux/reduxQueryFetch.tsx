@@ -8,6 +8,7 @@ import {
   GetVocabularyArgumentsType,
   GetVocabularyToReviewArgType,
   GetVocabularyToReviewType,
+  ReviewsHistory,
   UpdateDeckImgProps,
   UpdateDeckType,
   UpdateReviewPropsArg,
@@ -47,17 +48,6 @@ export const learningAppApi = createApi({
       providesTags: ["vocabulary"],
     }),
 
-    // getVocabularyForReview: builder.query<
-    //   VocabularyType[],
-    //   GetVocabularyArgumentsType
-    // >({
-    //   query: (deckId) => ({
-    //     url: "get-vocabulary-to-browse",
-    //     method: "GET",
-    //     body: { deckId },
-    //   }),
-    // }),
-
     updateVocabulary: builder.mutation<VocabularyType, UpdateVocabularyParams>({
       query: (newVocabulary) => ({
         url: "update-vocabulary",
@@ -82,15 +72,6 @@ export const learningAppApi = createApi({
       query: () => ({
         url: "get-decks",
         method: "GET",
-      }),
-      providesTags: ["decks", "vocabulary"],
-    }),
-
-    getDeckById: builder.query<GetDeckWithCountType[], number>({
-      query: (deckId) => ({
-        url: "get-deck-by-id",
-        method: "GET",
-        body: { deckId },
       }),
       providesTags: ["decks", "vocabulary"],
     }),
@@ -182,6 +163,39 @@ export const learningAppApi = createApi({
       },
       invalidatesTags: ["decks"],
     }),
+
+    createReviewsHistory: builder.mutation<
+      void,
+      {
+        vocabularyId: number;
+        easeFactor: number;
+        quality: number;
+        reviewDate: string;
+      }
+    >({
+      query: ({ vocabularyId, easeFactor, quality, reviewDate }) => {
+        return {
+          url: "create-reviews-history",
+          method: "POST",
+          body: { vocabularyId, easeFactor, quality, reviewDate },
+        };
+      },
+      invalidatesTags: ["vocabulary"],
+    }),
+
+    getReviewsHistory: builder.query<
+      ReviewsHistory[],
+      { vocabularyId: number | undefined }
+    >({
+      query: ({ vocabularyId }) => {
+        return {
+          url: "get-reviews-history",
+          method: "GET",
+          body: { vocabularyId },
+        };
+      },
+      providesTags: ["vocabulary"],
+    }),
   }),
 });
 
@@ -196,6 +210,7 @@ export const {
   useDeleteVocabularyMutation,
   useGetVocabularyToReviewQuery,
   useUpdateReviewMutation,
-  useGetDeckByIdQuery,
   useUpdateDeckImgMutation,
+  useCreateReviewsHistoryMutation,
+  useGetReviewsHistoryQuery,
 } = learningAppApi;

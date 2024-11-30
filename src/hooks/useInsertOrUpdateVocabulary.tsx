@@ -12,7 +12,7 @@ import useSwalPopupBoxes from "./useSwalPopupBoxes";
 
 export default function useInsertOrUpdateVocabulary(
   editorsList: Editor[],
-  selectedDeck: VocabularyType | null,
+  selectedVocabulary: VocabularyType | null,
   currentDeckId: string,
   deckList: GetDecksType[] | undefined,
   setEditorsList: React.Dispatch<React.SetStateAction<Editor[]>>,
@@ -50,7 +50,7 @@ export default function useInsertOrUpdateVocabulary(
       return;
     }
 
-    if (!selectedDeck && id && deckList) {
+    if (!selectedVocabulary && id && deckList) {
       const deckId =
         id === "0"
           ? currentDeckId === "0"
@@ -77,7 +77,7 @@ export default function useInsertOrUpdateVocabulary(
       });
 
       setEditorsList([]);
-    } else if (selectedDeck) {
+    } else if (selectedVocabulary) {
       await updateVocabulary({
         front_word: editorsList[0].getText().trim(),
         back_word: editorsList[1].getText().trim(),
@@ -86,7 +86,7 @@ export default function useInsertOrUpdateVocabulary(
         back_word_html: modifyHTMLAndCopyFiles(editorsList[1].getHTML()),
         front_desc_html: modifyHTMLAndCopyFiles(editorsList[3].getHTML()),
         back_desc_html: modifyHTMLAndCopyFiles(editorsList[4].getHTML()),
-        vocabulary_id: Number(selectedDeck.vocabulary_id),
+        vocabulary_id: Number(selectedVocabulary.vocabulary_id),
       });
     }
   }

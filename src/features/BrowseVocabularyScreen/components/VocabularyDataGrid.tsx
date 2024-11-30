@@ -8,13 +8,17 @@ import { VocabularyType } from "../../../types/APITypes";
 type Props = {
   data: VocabularyType[];
   handleScroll: (event: React.UIEvent<HTMLDivElement, UIEvent>) => void;
-  handleChangeVocabulary: (vocabularyId: number) => void;
-  removeVocabulary: (
+  handleChangeVocabulary: (vocabularyId: number) => void | undefined;
+  removeVocabulary?: (
     vocabularyId: number,
     data: VocabularyType[],
-    setSelectedDeck: any,
+    setSelectedDeck: React.Dispatch<
+      React.SetStateAction<VocabularyType | null>
+    >,
   ) => void;
-  setSelectedDeck: React.Dispatch<React.SetStateAction<VocabularyType | null>>;
+  setSelectedVocabulary: React.Dispatch<
+    React.SetStateAction<VocabularyType | null>
+  >;
   isLoading: boolean;
 };
 
@@ -23,30 +27,59 @@ export default function VocabularyDataGrid({
   handleScroll,
   handleChangeVocabulary,
   removeVocabulary,
-  setSelectedDeck,
+  setSelectedVocabulary,
   isLoading,
 }: Props) {
-  const columns = [
-    {
-      key: "remove_vocabulary_key",
-      name: "",
-      width: "0%",
-    },
-    {
-      key: "front_word",
-      name: "Front word",
-      resizable: true,
-      width: "40%",
-    },
-    { key: "back_word", name: "Back word", resizable: true, width: "40%" },
-    { key: "deck_name", name: "Deck name", resizable: true },
-  ];
+  const isRemoveVocabularyEnabled = removeVocabulary ? true : false;
+
+  const columns = isRemoveVocabularyEnabled
+    ? [
+        {
+          key: "remove_vocabulary_key",
+          name: "",
+          width: "5%",
+        },
+        {
+          key: "front_word",
+          name: "Front word",
+          resizable: true,
+          width: "auto",
+        },
+        { key: "back_word", name: "Back word", resizable: true, width: "auto" },
+        {
+          key: "deck_name",
+          name: "Deck name",
+          resizable: true,
+          window: "auto",
+        },
+      ]
+    : [
+        {
+          key: "front_word",
+          name: "Front word",
+          resizable: true,
+          width: "40%",
+        },
+        { key: "back_word", name: "Back word", resizable: true, width: "40%" },
+        { key: "deck_name", name: "Deck name", resizable: true },
+      ];
 
   const rows = data.map((vocabulary) => ({
     id: vocabulary.vocabulary_id,
-    remove_vocabulary_key: (
-      <MdDeleteForever className="h-[60%] w-full cursor-pointer text-red-600 transition-transform hover:rotate-45" />
-    ),
+    remove_vocabulary_key: isRemoveVocabularyEnabled ? (
+      <MdDeleteForever
+        className="h-[60%] w-full cursor-pointer text-red-600 transition-transform hover:rotate-45"
+        onClick={() => {
+          if (removeVocabulary) {
+            removeVocabulary(
+              vocabulary.vocabulary_id,
+              data,
+              setSelectedVocabulary,
+            );
+          }
+        }}
+      />
+    ) : null,
     front_word: vocabulary.front_word,
     back_word: vocabulary.back_word,
     deck_name: vocabulary.deck_name,
@@ -57,7 +90,7 @@ export default function VocabularyDataGrid({
   }
 
   return (
-    <div className="overflow-y-auto h-full">
+    <div className="h-full overflow-y-auto">
       <DataGrid
         style={{
           width: "100%",
@@ -66,9 +99,16 @@ export default function VocabularyDataGrid({
         }}
         onScroll={handleScroll}
         onCellClick={(e) => {
-          handleChangeVocabulary(e.row.id);
-          if (e.column.key === "remove_vocabulary_key") {
-            removeVocabulary(e.row.id, data, setSelectedDeck);
+          if (handleChangeVocabulary) {
+            handleChangeVocabulary(e.row.id);
+            if (
+              isRemoveVocabularyEnabled &&
+              e.column.key === "remove_vocabulary_key"
+            ) {
+              if (removeVocabulary) {
+                removeVocabulary(e.row.id, data, setSelectedVocabulary);
+              }
+            }
           }
         }}
         columns={columns}

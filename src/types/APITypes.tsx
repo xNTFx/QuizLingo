@@ -138,6 +138,22 @@ interface GetVocabularyToReview {
   back_desc_html: string | null;
 }
 
+interface ReviewsHistory {
+  review_history_id: number;
+  vocabulary_id: number;
+  ease_factor: number;
+  quality: number;
+  review_date: string;
+}
+
+interface ReviewType {
+  review_id: number;
+  vocabulary_id: number;
+  review_date: string;
+  ease_factor: number;
+  repetition: number;
+}
+
 export type {
   Statement,
   ElectronBaseQueryArgs,
@@ -156,4 +172,6 @@ export type {
   GetVocabularyToReview,
   GetDeckWithCountType,
   UpdateDeckImgProps,
+  ReviewsHistory,
+  ReviewType,
 };

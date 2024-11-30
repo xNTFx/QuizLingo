@@ -91,4 +91,26 @@ export default function sqLitePostRequests() {
       });
     });
   });
+
+  ipcMain.handle("create-reviews-history", async (_event, data) => {
+    return new Promise((resolve, reject) => {
+      const { vocabularyId, easeFactor, quality, reviewDate } = data;
+
+      const sql = `INSERT INTO reviews_history (
+        vocabulary_id, ease_factor, quality, review_date
+      ) VALUES (?, ?, ?, ?)`;
+
+      db.run(
+        sql,
+        [vocabularyId, easeFactor, quality, reviewDate],
+        function (this: Statement, err: Error) {
+          if (err) {
+            reject(new Error("Database error: " + err.message));
+          } else {
+            resolve({ vocabularyId: this.lastID });
+          }
+        },
+      );
+    });
+  });
 }

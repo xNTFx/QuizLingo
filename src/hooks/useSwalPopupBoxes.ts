@@ -95,6 +95,9 @@ export default function useSwalPopupBoxes() {
       React.SetStateAction<VocabularyType | null>
     >,
   ) {
+    if (data.length === 0) {
+      return;
+    }
     Swal.fire({
       title: "Are you sure you want to delete the vocabulary?",
       icon: "question",

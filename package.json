@@ -72,6 +72,7 @@
     "react-split": "^2.0.14",
     "react-table": "^7.8.0",
     "react-window": "^1.8.10",
+    "recharts": "^2.13.3",
     "sqlite3": "^5.1.7",
     "sweetalert2": "^11.6.13",
     "ts-jest": "^29.2.5"

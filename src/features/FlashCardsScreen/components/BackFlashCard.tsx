@@ -86,7 +86,7 @@ export default function BackFlashCard({
               Good
             </button>
             <button
-              onClick={() => handleButtonClick("hard", 3)}
+              onClick={() => handleButtonClick("hard", 2)}
               className="flex w-20 items-center justify-center rounded-lg border-2 border-solid border-orange-600 px-2 py-1 font-bold hover:bg-red-600"
             >
               Hard
