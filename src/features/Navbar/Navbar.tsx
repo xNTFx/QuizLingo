@@ -10,7 +10,7 @@ export default function Navbar() {
     { label: "Decks", path: "/" },
     { label: "Add", path: `${deckId}/add-vocabulary` },
     { label: "Browse", path: `${deckId}/browse-vocabulary` },
-    { label: "Statistics", path: `${deckId}/statistics` },
+    { label: "Statistics", path: `${deckId}/statistics/review-statistics-graph` },
   ];
 
   return (

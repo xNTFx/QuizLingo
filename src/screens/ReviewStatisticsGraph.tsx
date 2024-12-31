@@ -12,11 +12,11 @@ import LoadingPageComponent from "../components/LoadingComponents/LoadingPageCom
 import NoDecksScreen from "../features/BrowseVocabularyScreen/components/NoDecksScreen";
 import VocabularyDataGrid from "../features/BrowseVocabularyScreen/components/VocabularyDataGrid";
 import VocabularySearchBar from "../features/BrowseVocabularyScreen/components/VocabularySearchBar";
-import StatisticsComponent from "../features/StatisticsScreen/components/StatisticsComponent";
+import ReviewStatisticsGraphComponenta from "../features/StatisticsScreen/components/ReviewStatisticsGraphComponenta";
 import { VocabularyType } from "../types/APITypes";
 import { extractSingleAudioAndImageSrc } from "../utils/extractAudioAndImageSrc";
 
-export default function BrowseVocabularyScreen() {
+export default function ReviewStatisticsGraph() {
   const { id } = useParams();
   const [inputSearchValue, setInputSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
@@ -172,7 +172,7 @@ export default function BrowseVocabularyScreen() {
         </section>
         {data.length > 0 ? (
           <section>
-            <StatisticsComponent
+            <ReviewStatisticsGraphComponenta
               vocabularyName={{
                 frontWord: selectedVocabulary?.front_word,
                 backWord: selectedVocabulary?.back_word,

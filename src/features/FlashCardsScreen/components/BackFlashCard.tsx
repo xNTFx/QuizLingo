@@ -46,7 +46,7 @@ export default function BackFlashCard({
       <div className="flex h-full w-full flex-col items-center justify-center gap-2">
         <div className="h-full w-11/12 overflow-auto rounded-lg bg-[#2C2C2C] p-6">
           <div className="flex h-full flex-col justify-center gap-4 text-center">
-            <div className="h-1/2 overflow-auto">
+            <div className="flex h-1/2 flex-col gap-1 overflow-auto">
               <div
                 dangerouslySetInnerHTML={{
                   __html: sanitizedFrontHtml,
@@ -62,7 +62,7 @@ export default function BackFlashCard({
               />
             </div>
             <hr />
-            <div className="h-1/2 overflow-auto">
+            <div className="flex h-1/2 flex-col gap-1 overflow-auto">
               <div
                 dangerouslySetInnerHTML={{
                   __html: sanitizedBack,

@@ -170,14 +170,21 @@ export const learningAppApi = createApi({
         vocabularyId: number;
         easeFactor: number;
         quality: number;
+        repetition: number;
         reviewDate: string;
       }
     >({
-      query: ({ vocabularyId, easeFactor, quality, reviewDate }) => {
+      query: ({
+        vocabularyId,
+        easeFactor,
+        quality,
+        repetition,
+        reviewDate,
+      }) => {
         return {
           url: "create-reviews-history",
           method: "POST",
-          body: { vocabularyId, easeFactor, quality, reviewDate },
+          body: { vocabularyId, easeFactor, quality, repetition, reviewDate },
         };
       },
       invalidatesTags: ["vocabulary"],
@@ -192,6 +199,19 @@ export const learningAppApi = createApi({
           url: "get-reviews-history",
           method: "GET",
           body: { vocabularyId },
+        };
+      },
+      providesTags: ["vocabulary"],
+    }),
+
+    getReviewAndNewCountPerDate: builder.query<
+      { review_date: string; new_count: string; review_count: string }[],
+      {}
+    >({
+      query: () => {
+        return {
+          url: "get-revies-and-new-count-per-date",
+          method: "GET",
         };
       },
       providesTags: ["vocabulary"],
@@ -213,4 +233,5 @@ export const {
   useUpdateDeckImgMutation,
   useCreateReviewsHistoryMutation,
   useGetReviewsHistoryQuery,
+  useGetReviewAndNewCountPerDateQuery,
 } = learningAppApi;

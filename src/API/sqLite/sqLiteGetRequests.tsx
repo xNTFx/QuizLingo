@@ -172,4 +172,26 @@ export default function sqLiteGetRequests() {
       );
     });
   });
+
+  ipcMain.handle("get-revies-and-new-count-per-date", async (_event) => {
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT
+          date(review_date) AS review_date,
+          COUNT(CASE WHEN repetition = 1 THEN 1 END) AS new_count,
+          COUNT(CASE WHEN repetition > 1 THEN 1 END) AS review_count
+          FROM REVIEWS_HISTORY
+          GROUP BY date(review_date)
+          ORDER BY date(review_date);`,
+        [],
+        (err: Error, rows: ReviewsHistory) => {
+          if (err) {
+            reject(new Error("Database error: " + err.message));
+          } else {
+            resolve(rows);
+          }
+        },
+      );
+    });
+  });
 }

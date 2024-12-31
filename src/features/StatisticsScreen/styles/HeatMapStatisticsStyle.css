@@ -1,0 +1,3 @@
+.react-calendar-heatmap .react-calendar-heatmap-weekday-label {
+    transform: translateX(-10px); /* Move labels upwards */
+  }

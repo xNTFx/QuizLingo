@@ -60,6 +60,7 @@ db.serialize(function () {
       vocabulary_id INTEGER REFERENCES vocabulary (vocabulary_id) NOT NULL,
       ease_factor NUMERIC NOT NULL,
       quality INTEGER NOT NULL,
+      repetition INTEGER NOT NULL DEFAULT 1,
       review_date TEXT NOT NULL
   );`);
 

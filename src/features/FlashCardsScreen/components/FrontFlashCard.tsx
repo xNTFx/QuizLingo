@@ -24,8 +24,8 @@ export default function FrontFlashCard({
   return (
     <article className="h-[80vh] w-full">
       <div className="flex h-full flex-col items-center justify-center gap-2">
-        <div className="h-full w-11/12 overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
-          <div className="flex w-full flex-col justify-center text-center">
+        <div className="flex h-full w-11/12 flex-col overflow-auto break-all rounded-lg bg-[#2C2C2C] p-6">
+          <div className="flex w-full flex-col gap-1 justify-center text-center">
             <div dangerouslySetInnerHTML={{ __html: sanitizedFrontHtml }} />
             <AudioButton
               audioSrc={extractSingleAudioAndImageSrc(vocabulary.audio_name)}

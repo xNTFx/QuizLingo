@@ -48,7 +48,12 @@ export function ReviewHistoryGraph({
               fill: "white",
             }}
             stroke="white"
-            domain={[graphFilter.filterId === 1 ? 1.3 : 0, "dataMax"]}
+            domain={[
+              graphFilter.filterId === 1 ? 1.3 : 0,
+              graphFilter.filterId === 1
+                ? Math.max(...reviewHistoryData.map((d) => d.easeFactor))
+                : 5,
+            ]}
           />
           <Tooltip
             content={({ payload }) => {
@@ -56,7 +61,7 @@ export function ReviewHistoryGraph({
                 const { easeFactor, quality, reviewDate } = payload[0].payload;
                 return (
                   <div className="rounded-md p-1 backdrop-blur-md">
-                    <p>Ease Factor: {easeFactor}</p>
+                    <p>Ease Factor: {easeFactor.toFixed(1)}</p>
                     <p>Quality: {quality}</p>
                     <p>Date: {reviewDate}</p>
                   </div>

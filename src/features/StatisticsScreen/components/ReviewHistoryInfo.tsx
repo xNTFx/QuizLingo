@@ -33,7 +33,7 @@ export function ReviewHistoryInfo({
         <div className="flex flex-row items-center justify-center gap-4">
           <p className="flex flex-col items-center justify-center">
             <span>Ease Factor: </span>
-            <span>{currentReviewHistory.ease_factor}</span>
+            <span>{currentReviewHistory.ease_factor.toFixed(1)}</span>
           </p>
           <p className="flex flex-col items-center justify-center">
             <span>Quality: </span>

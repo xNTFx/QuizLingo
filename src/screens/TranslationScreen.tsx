@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { useGetVocabularyToReviewQuery } from "../API/Redux/reduxQueryFetch";
 import BackTranslationCard from "../features/TranslationScreen/components/BackTranslationCard";
 import DefaultEndScreen from "../features/TranslationScreen/components/DefaultEndScreen";
@@ -23,19 +22,15 @@ export default function TranslationScreen() {
   const [answerType, setAnswerType] = useState({ wrong: 0, correct: 0 });
   const [isEnd, setIsEnd] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [correctVocabulary, setCorrectVocabulary] = useState<string | null>(
-    null,
-  );
+  const [correctVocabulary, setCorrectVocabulary] = useState<string | null>(null);
   const [isInputErrorMessage, setIsInputErrorMessage] = useState(false);
+  const [firstEncounter] = useState(new Set<number>());
 
   const superMemo2Implementation = useSuperMemo2Implementation();
 
-  const [vocabularyList, setVocabularyList] = useState<
-    GetVocabularyToReviewType[]
-  >([]);
+  const [vocabularyList, setVocabularyList] = useState<GetVocabularyToReviewType[]>([]);
   const initialize = useRef(true);
 
-  //Get static data
   useEffect(() => {
     if (data && initialize.current) {
       setVocabularyList(data);
@@ -50,21 +45,14 @@ export default function TranslationScreen() {
     const isAnswerCorrect = inputValue.trim() === vocabulary.back_word;
 
     if (inputValue.trim().length > 0) {
-      if (isAnswerCorrect) {
+      if (!firstEncounter.has(vocabulary.vocabulary_id)) {
+        firstEncounter.add(vocabulary.vocabulary_id);
         superMemo2Implementation(
           vocabulary.review_id,
           vocabulary.vocabulary_id,
           vocabulary.ease_factor,
           vocabulary.repetition,
-          5,
-        );
-      } else {
-        superMemo2Implementation(
-          vocabulary.review_id,
-          vocabulary.vocabulary_id,
-          vocabulary.ease_factor,
-          vocabulary.repetition,
-          2,
+          isAnswerCorrect ? 5 : 2,
         );
       }
 
@@ -86,21 +74,27 @@ export default function TranslationScreen() {
       ...prev,
       [difficulty]: prev[difficulty as keyof typeof prev] + 1,
     }));
-    if (reviewIndex < vocabularyList?.length - 1) {
-      setReviewIndex((prev) => (prev += 1));
+
+    if (!isAnswerCorrect) {
+      const currentCard = vocabularyList[reviewIndex];
+      const newList = vocabularyList.filter((_, index) => index !== reviewIndex);
+      setVocabularyList([...newList, currentCard]);
       setIsFrontPage(true);
       setInputValue("");
+      return;
     }
+
     if (reviewIndex === vocabularyList?.length - 1) {
       setIsEnd(true);
+    } else {
+      setReviewIndex((prev) => prev + 1);
+      setIsFrontPage(true);
+      setInputValue("");
     }
   }
 
   if (vocabularyList.length === 0) return <NoVocabularyScreen />;
-
-  if (error) {
-    console.error(error);
-  }
+  if (error) console.error(error);
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -114,11 +108,9 @@ export default function TranslationScreen() {
               inputValue={inputValue}
             />
           )}
-          <div
-            className={`relative flex h-full w-8/12 flex-col items-center rounded-xl text-white transition-all duration-500 [transform-style:preserve-3d] ${
-              isFrontPage ? "" : "[transform:rotateY(180deg)]"
-            }`}
-          >
+          <div className={`relative flex h-full w-8/12 flex-col items-center rounded-xl text-white transition-all duration-500 [transform-style:preserve-3d] ${
+            isFrontPage ? "" : "[transform:rotateY(180deg)]"
+          }`}>
             <div className="absolute inset-0 [backface-visibility:hidden]">
               {isFrontPage ? (
                 <FrontTranslationCard

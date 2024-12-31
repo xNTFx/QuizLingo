@@ -34,7 +34,33 @@ const darkTheme = createTheme({
 
 const defaultFontSize = "16";
 
-export default function EdiitorButtonList({
+interface EditorStyle {
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  superscript: boolean;
+  subscript: boolean;
+  strike: boolean;
+  textColor: string;
+  backgroundColor: string;
+  fontType: string;
+  fontSize: string;
+}
+
+const defaultEditorStyle: EditorStyle = {
+  bold: false,
+  italic: false,
+  underline: false,
+  superscript: false,
+  subscript: false,
+  strike: false,
+  textColor: "#ffffff",
+  backgroundColor: "#00000000",
+  fontType: "",
+  fontSize: defaultFontSize,
+};
+
+export default function EditorButtonList({
   editorsList,
   activeEditor,
 }: EditorButtonListType) {
@@ -50,28 +76,37 @@ export default function EdiitorButtonList({
     openRef: bgColorMenuRef,
   } = useIsOpen(false);
 
-  const [oneRender, setOneRender] = useState({
-    bold: false,
-    italic: false,
-    underline: false,
-    superscript: false,
-    subscript: false,
-    strike: false,
+  // Track styles for each editor individually
+  const [editorStyles, setEditorStyles] = useState<EditorStyle[]>(() => {
+    // Initialize with styles for each editor
+    return Array(editorsList?.length || 0).fill(null).map(() => ({
+      ...defaultEditorStyle
+    }));
   });
 
-  const [toggleStyleValue, setToggleStyleValue] = useState({
-    textColor: "#ffffff",
-    backgroundColor: "#00000000",
-    fontType: "",
-    fontSize: "",
-  });
+  const [tempFontSize, setTempFontSize] = useState(defaultFontSize);
 
-  const [tempFontSize, setTempFontSize] = useState(
-    toggleStyleValue.fontSize === ""
-      ? defaultFontSize
-      : toggleStyleValue.fontSize,
-  );
+  // Update editor styles when editorsList changes
+  useEffect(() => {    
+    setEditorStyles(prev => {
+      const newStyles = [...prev];
+      // Ensure we have enough styles for all editors
+      while (newStyles.length < editorsList.length) {
+        newStyles.push({ ...defaultEditorStyle });
+      }
+      // Remove extra styles if editors were removed
+      while (newStyles.length > editorsList.length) {
+        newStyles.pop();
+      }
+      return newStyles;
+    });
+  }, [editorsList]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const activeEditorIndex = activeEditor ? editorsList.findIndex(editor => editor === activeEditor) : -1;
+  const currentStyle = activeEditorIndex >= 0 && editorStyles?.[activeEditorIndex] 
+    ? editorStyles[activeEditorIndex] 
+    : defaultEditorStyle;
 
   const numbersList = useMemo(() => {
     const numbers = [];
@@ -97,10 +132,19 @@ export default function EdiitorButtonList({
     _event: React.SyntheticEvent<Element, Event>,
     value: string | null,
   ) => {
-    if (value !== null) {
-      setToggleStyleValue((prev) => ({ ...prev, fontSize: value }));
+    if (value !== null && activeEditor) {
       const modifiedFontSize = (Number(value) * (1 / 16)).toString();
-      tipTapEditorCommand("setFontSize", modifiedFontSize + "rem");
+      activeEditor.commands.setFontSize(modifiedFontSize + "rem");
+      
+      setEditorStyles(prev => {
+        const newStyles = [...prev];
+        newStyles[activeEditorIndex] = {
+          ...newStyles[activeEditorIndex],
+          fontSize: value,
+        };
+        return newStyles;
+      });
+      
       setTempFontSize(value);
     }
   };
@@ -108,57 +152,38 @@ export default function EdiitorButtonList({
   function handleOnBlur() {
     if (tempFontSize === "") {
       setTempFontSize(defaultFontSize);
-    } else {
-      setToggleStyleValue((prev) => ({ ...prev, fontSize: tempFontSize }));
+    } else if (activeEditor) {
+      setEditorStyles(prev => {
+        const newStyles = [...prev];
+        newStyles[activeEditorIndex] = {
+          ...newStyles[activeEditorIndex],
+          fontSize: tempFontSize,
+        };
+        return newStyles;
+      });
     }
   }
 
-  function tipTapEditorCommand(commandName: string, ...args: unknown[]) {
-    for (let i = 0; i < editorsList.length; i++) {
-      if (i !== 2) {
-        const command = (editorsList[i].commands as any)[commandName];
-        if (typeof command === "function") {
-          command(...args);
-        }
-      }
-    }
+  function updateEditorStyle(styleKey: keyof EditorStyle, value: any) {
+    if (!activeEditor) return;
+    
+    setEditorStyles(prev => {
+      const newStyles = [...prev];
+      newStyles[activeEditorIndex] = {
+        ...newStyles[activeEditorIndex],
+        [styleKey]: value,
+      };
+      return newStyles;
+    });
   }
 
   useEffect(() => {
-    if (editorsList && editorsList.length > 0) {
-      // Apply styles excluding alignment styles
-      tipTapEditorCommand("setColor", toggleStyleValue.textColor);
-      tipTapEditorCommand("setHighlight", {
-        color: toggleStyleValue.backgroundColor,
-      });
-      if (toggleStyleValue.fontSize) {
-        const modifiedFontSize = (
-          Number(toggleStyleValue.fontSize) *
-          (1 / 16)
-        ).toString();
-        tipTapEditorCommand("setFontSize", modifiedFontSize + "rem");
-      }
-
-      if (oneRender.bold) tipTapEditorCommand("toggleBold");
-      if (oneRender.italic) tipTapEditorCommand("toggleItalic");
-      if (oneRender.underline) tipTapEditorCommand("toggleUnderline");
-      if (oneRender.superscript) tipTapEditorCommand("toggleSuperscript");
-      if (oneRender.subscript) tipTapEditorCommand("toggleSubscript");
-      if (oneRender.strike) tipTapEditorCommand("toggleStrike");
+    if (activeEditor) {
+      setTempFontSize(currentStyle.fontSize || defaultFontSize);
     }
-  }, [editorsList]);
+  }, [activeEditorIndex]);
 
-  if (
-    !editorsList ||
-    !editorsList[0] ||
-    !editorsList[1] ||
-    !editorsList[2] ||
-    !editorsList[3] ||
-    !editorsList[4]
-  )
-    return null;
-
-  if (!activeEditor) return;
+  if (!editorsList || !activeEditor) return null;
 
   return (
     <div className="flex flex-row flex-wrap items-center justify-center gap-1 border-b bg-[#2C2C2C] p-1 pt-6">
@@ -174,8 +199,8 @@ export default function EdiitorButtonList({
           clearIcon={null}
           id="combo-box-demo"
           filterOptions={
-            toggleStyleValue.fontSize !== "" &&
-            tempFontSize !== toggleStyleValue.fontSize
+            currentStyle.fontSize !== "" &&
+            tempFontSize !== currentStyle.fontSize
               ? undefined
               : (options: string[]) => options
           }
@@ -201,14 +226,11 @@ export default function EdiitorButtonList({
         />
       </ThemeProvider>
 
-      <div
-        className="relative flex cursor-pointer rounded"
-        ref={txColorMenuRef}
-      >
+      <div className="relative flex cursor-pointer rounded" ref={txColorMenuRef}>
         <EditorButton
           onClick={() => setIsTxColorPickerOpen((prev) => !prev)}
           title="Text color"
-          style={{ color: toggleStyleValue.textColor }}
+          style={{ color: currentStyle.textColor }}
         >
           <RxText />
         </EditorButton>
@@ -217,31 +239,23 @@ export default function EdiitorButtonList({
           <div className="absolute top-[100%] z-10">
             <div className="rounded bg-white p-2 text-black shadow-lg">
               <SketchPicker
-                color={toggleStyleValue.textColor}
+                color={currentStyle.textColor}
                 onChangeComplete={(color) => {
-                  tipTapEditorCommand("setColor", color.hex);
-                  setToggleStyleValue((prev) => ({
-                    ...prev,
-                    textColor: color.hex,
-                  }));
+                  activeEditor.commands.setColor(color.hex);
+                  updateEditorStyle("textColor", color.hex);
                 }}
               />
               <button
                 onClick={() => {
-                  tipTapEditorCommand("setColor", "#ffffff");
-                  setToggleStyleValue((prev) => ({
-                    ...prev,
-                    textColor: "#ffffff",
-                  }));
+                  activeEditor.commands.setColor("#ffffff");
+                  updateEditorStyle("textColor", "#ffffff");
                 }}
                 className="mt-2 w-full border bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Default Color
               </button>
               <button
-                onClick={() => {
-                  setIsTxColorPickerOpen(false);
-                }}
+                onClick={() => setIsTxColorPickerOpen(false)}
                 className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Ok
@@ -251,20 +265,17 @@ export default function EdiitorButtonList({
         ) : null}
       </div>
 
-      <div
-        className="relative flex cursor-pointer rounded"
-        ref={bgColorMenuRef}
-      >
+      <div className="relative flex cursor-pointer rounded" ref={bgColorMenuRef}>
         <EditorButton
           onClick={() => setIsBgColorPickerOpen((prev) => !prev)}
           title="Background color"
           className={`hover:text-blue-400 ${
-            toggleStyleValue.backgroundColor === "#00000000" ? "bg-black" : ""
+            currentStyle.backgroundColor === "#00000000" ? "bg-black" : ""
           }`}
           style={{
             backgroundColor:
-              toggleStyleValue.backgroundColor !== "#00000000"
-                ? toggleStyleValue.backgroundColor
+              currentStyle.backgroundColor !== "#00000000"
+                ? currentStyle.backgroundColor
                 : undefined,
           }}
         >
@@ -275,31 +286,23 @@ export default function EdiitorButtonList({
           <div className="absolute top-[100%] z-10">
             <div className="rounded bg-white p-2 text-black shadow-lg">
               <SketchPicker
-                color={toggleStyleValue.backgroundColor}
+                color={currentStyle.backgroundColor}
                 onChangeComplete={(color) => {
-                  tipTapEditorCommand("setHighlight", { color: color.hex });
-                  setToggleStyleValue((prev) => ({
-                    ...prev,
-                    backgroundColor: color.hex,
-                  }));
+                  activeEditor.commands.setHighlight({ color: color.hex });
+                  updateEditorStyle("backgroundColor", color.hex);
                 }}
               />
               <button
                 onClick={() => {
-                  tipTapEditorCommand("setHighlight", { color: "transparent" });
-                  setToggleStyleValue((prev) => ({
-                    ...prev,
-                    backgroundColor: "transparent",
-                  }));
+                  activeEditor.commands.setHighlight({ color: "transparent" });
+                  updateEditorStyle("backgroundColor", "transparent");
                 }}
                 className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Default Color
               </button>
               <button
-                onClick={() => {
-                  setIsBgColorPickerOpen(false);
-                }}
+                onClick={() => setIsBgColorPickerOpen(false)}
                 className="mt-2 w-full bg-gray-300 p-1 text-black hover:bg-gray-400"
               >
                 Ok
@@ -342,84 +345,73 @@ export default function EdiitorButtonList({
           </div>
         ) : null}
       </div>
+
       <EditorButton
-        isActive={oneRender.bold}
+        isActive={currentStyle.bold}
         onClick={() => {
-          tipTapEditorCommand("toggleBold");
-          setOneRender((prev) => ({
-            ...prev,
-            bold: !prev.bold,
-          }));
+          activeEditor.commands.toggleBold();
+          updateEditorStyle("bold", !currentStyle.bold);
         }}
         title="Bold text"
       >
         <FaBold />
       </EditorButton>
+
       <EditorButton
-        isActive={oneRender.underline}
+        isActive={currentStyle.underline}
         onClick={() => {
-          tipTapEditorCommand("toggleUnderline");
-          setOneRender((prev) => ({
-            ...prev,
-            underline: !prev.underline,
-          }));
+          activeEditor.commands.toggleUnderline();
+          updateEditorStyle("underline", !currentStyle.underline);
         }}
         title="Underline text"
       >
         <FaUnderline />
       </EditorButton>
+
       <EditorButton
-        isActive={oneRender.superscript}
+        isActive={currentStyle.superscript}
         onClick={() => {
-          tipTapEditorCommand("toggleSuperscript");
-          setOneRender((prev) => ({
-            ...prev,
-            superscript: !prev.superscript,
-          }));
+          activeEditor.commands.toggleSuperscript();
+          updateEditorStyle("superscript", !currentStyle.superscript);
         }}
         title="Superscript text"
       >
         <FaSuperscript />
       </EditorButton>
+
       <EditorButton
-        isActive={oneRender.subscript}
+        isActive={currentStyle.subscript}
         onClick={() => {
-          tipTapEditorCommand("toggleSubscript");
-          setOneRender((prev) => ({
-            ...prev,
-            subscript: !prev.subscript,
-          }));
+          activeEditor.commands.toggleSubscript();
+          updateEditorStyle("subscript", !currentStyle.subscript);
         }}
         title="Subscript text"
       >
         <FaSubscript />
       </EditorButton>
+
       <EditorButton
-        isActive={oneRender.italic}
+        isActive={currentStyle.italic}
         onClick={() => {
-          tipTapEditorCommand("toggleItalic");
-          setOneRender((prev) => ({
-            ...prev,
-            italic: !prev.italic,
-          }));
+          activeEditor.commands.toggleItalic();
+          updateEditorStyle("italic", !currentStyle.italic);
         }}
         title="Italic text"
       >
         <FaItalic />
       </EditorButton>
+
       <EditorButton
-        isActive={oneRender.strike}
+        isActive={currentStyle.strike}
         onClick={() => {
-          tipTapEditorCommand("toggleStrike");
-          setOneRender((prev) => ({
-            ...prev,
-            strike: !prev.strike,
-          }));
+          activeEditor.commands.toggleStrike();
+          updateEditorStyle("strike", !currentStyle.strike);
         }}
         title="Strike text"
       >
         <FaStrikethrough />
       </EditorButton>
+
       <EditorButton
         onClick={() => activeEditor.commands.setHorizontalRule()}
         title="Horizontal rule"
@@ -428,7 +420,14 @@ export default function EdiitorButtonList({
       </EditorButton>
 
       <EditorButton
-        onClick={() => activeEditor.commands.unsetAllMarks()}
+        onClick={() => {
+          activeEditor.commands.unsetAllMarks();
+          setEditorStyles(prev => {
+            const newStyles = [...prev];
+            newStyles[activeEditorIndex] = { ...defaultEditorStyle };
+            return newStyles;
+          });
+        }}
         title="Remove all styles from selected text"
       >
         <FaEraser />

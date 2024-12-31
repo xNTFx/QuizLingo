@@ -12,7 +12,7 @@ interface GraphFilterType {
   filterName: string;
 }
 
-export default function StatisticsComponent({
+export default function ReviewStatisticsGraphComponenta({
   vocabularyName,
   selectedVocabulary,
 }: {
@@ -70,7 +70,7 @@ export default function StatisticsComponent({
           />
         </div>
       ) : (
-        <div className="mt-4">
+        <div className="mt-4 p-2">
           To see Review History Graph you need to have at least 2 Review
           Histories
         </div>
