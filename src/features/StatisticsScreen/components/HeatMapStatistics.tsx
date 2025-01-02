@@ -98,18 +98,14 @@ export default function HeatMapStatistics() {
     return null;
   }
 
-  const currentDate = new Date();
   const startDate = new Date(Number(selectedYear) - 1, 11, 31);
-  const endDate =
-    selectedYear === currentDate.getFullYear().toString()
-      ? currentDate
-      : new Date(`${selectedYear}-12-31`);
+  const endDate = new Date(`${selectedYear}-12-31`);
 
   const processedData = processData(data || [], viewType);
   const filledValues = fillMissingDates(processedData, startDate, endDate);
 
   return (
-    <div className="p-10 flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-10">
       <h1 className="text-center text-xl font-bold">Heat Map</h1>
       <div className="mb-4 flex gap-4">
         <ThemeProvider theme={darkTheme}>
@@ -139,9 +135,9 @@ export default function HeatMapStatistics() {
               value={viewType}
               onChange={(e) => setViewType(e.target.value as ViewType)}
             >
-              <MenuItem value="combined">All Words</MenuItem>
-              <MenuItem value="new">New Words</MenuItem>
-              <MenuItem value="review">Reviewed Words</MenuItem>
+              <MenuItem value="combined">All</MenuItem>
+              <MenuItem value="new">New</MenuItem>
+              <MenuItem value="review">Reviewed</MenuItem>
             </Select>
           </FormControl>
         </ThemeProvider>
@@ -171,10 +167,10 @@ export default function HeatMapStatistics() {
             "data-tooltip-html": `
               <div style="text-align: left;">
                 <div><strong>Date:</strong> ${value.date}</div>
-                <div><strong>New Words:</strong> ${
+                <div><strong>New:</strong> ${
                   matchingData?.new_count || 0
                 }</div>
-                <div><strong>Reviewed Words:</strong> ${
+                <div><strong>Reviewed:</strong> ${
                   matchingData?.review_count || 0
                 }</div>
                 <div><strong>Total:</strong> ${

@@ -26,6 +26,7 @@ if (!fs.existsSync(path.join(targetPath, "database/database.db"))) {
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(function () {
+  // Create tables
   db.run(`CREATE TABLE if not exists decks (
         deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
         deck_name TEXT NOT NULL,
@@ -64,6 +65,7 @@ db.serialize(function () {
       review_date TEXT NOT NULL
   );`);
 
+  // Create triggers
   db.run(`CREATE TRIGGER if not exists after_vocabulary_delete
   AFTER DELETE ON vocabulary
   FOR EACH ROW
@@ -85,6 +87,43 @@ db.serialize(function () {
     INSERT INTO reviews (vocabulary_id, review_date, ease_factor, repetition)
     VALUES (NEW.vocabulary_id, datetime('now'), 2.5, 1);
   END;`,
+  );
+
+  // Create indexes
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_deck_position ON decks(deck_position DESC)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_deck_id ON vocabulary(deck_id)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_front_word ON vocabulary(front_word)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_audio_content ON vocabulary(audio_name, front_desc_html, back_desc_html)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_vocabulary_id ON reviews(vocabulary_id)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_date_repetition ON reviews(review_date, repetition)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_ease_repetition ON reviews(ease_factor, repetition)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_history_vocabulary ON reviews_history(vocabulary_id)`,
+  );
+
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_history_date ON reviews_history(review_date)`,
   );
 });
 
