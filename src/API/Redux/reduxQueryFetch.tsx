@@ -21,14 +21,11 @@ const electronBaseQuery: BaseQueryFn<
   unknown,
   unknown
 > = async ({ url, body }) => {
-  //console.log(`Making IPC call to ${url} with body:`, body);
   try {
     const result = await window.electronAPI.invoke(url, body);
-    //console.log(`IPC call successful:`, result);
-    return { data: result };
+    return { data: result === undefined ? null : result };
   } catch (error) {
-    console.error(`IPC call failed:`, error);
-    return { error };
+    return { error: error || 'Unknown error occurred' };
   }
 };
 
