@@ -1,38 +1,37 @@
 import { ipcMain } from "electron";
 
-import { Statement } from "../../types/APITypes";
-import db from "./sqLite";
+import { getDb, saveDatabase } from "./sqLite";
 
 export default function sqLiteDeleteRequests() {
   ipcMain.handle("delete-deck", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const { deckId } = data;
 
-      const sql = `DELETE FROM decks WHERE deck_id = ?`;
+      db.run(`DELETE FROM decks WHERE deck_id = ?`, [deckId]);
 
-      db.run(sql, [deckId], function (this: Statement, err: Error) {
-        if (err) {
-          reject(new Error("Database error: " + err.message));
-        } else {
-          resolve({ deckId: this.lastID });
-        }
-      });
-    });
+      saveDatabase();
+      const changesRes = db.exec("SELECT changes() AS changes");
+      const changes = (changesRes[0]?.values[0]?.[0] as number) || 0;
+      return { deckId, changes };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 
   ipcMain.handle("delete-vocabulary", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const { vocabularyId } = data;
 
-      const sql = `DELETE FROM vocabulary WHERE vocabulary_id = ?`;
+      db.run(`DELETE FROM vocabulary WHERE vocabulary_id = ?`, [vocabularyId]);
 
-      db.run(sql, [vocabularyId], function (this: Statement, err: Error) {
-        if (err) {
-          reject(new Error("Database error: " + err.message));
-        } else {
-          resolve({ vocabularyId: this.lastID });
-        }
-      });
-    });
+      saveDatabase();
+      const changesRes = db.exec("SELECT changes() AS changes");
+      const changes = (changesRes[0]?.values[0]?.[0] as number) || 0;
+      return { vocabularyId, changes };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 }

@@ -1,11 +1,11 @@
 import { ipcMain } from "electron";
 
-import { Statement } from "../../types/APITypes";
-import db from "./sqLite";
+import { getDb, saveDatabase } from "./sqLite";
 
 export default function sqLitePostRequests() {
   ipcMain.handle("add-flashcard", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const {
         deckId,
         frontWord,
@@ -17,7 +17,7 @@ export default function sqLitePostRequests() {
         backDescHTML,
       } = data;
 
-      const sql = `INSERT INTO vocabulary (
+      db.run(`INSERT INTO vocabulary (
         deck_id,
         front_word, 
         back_word,
@@ -26,92 +26,88 @@ export default function sqLitePostRequests() {
         back_word_html, 
         front_desc_html, 
         back_desc_html
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [
+        deckId,
+        frontWord,
+        backWord,
+        audioName,
+        frontWordHTML,
+        backWordHTML,
+        frontDescHTML,
+        backDescHTML,
+      ]);
 
-      db.run(
-        sql,
-        [
-          deckId,
-          frontWord,
-          backWord,
-          audioName,
-          frontWordHTML,
-          backWordHTML,
-          frontDescHTML,
-          backDescHTML,
-        ],
-        function (this: Statement, err: Error) {
-          if (err) {
-            reject(new Error("Database error: " + err.message));
-          } else {
-            //Get id of inserted item
-            resolve({ flashcardId: this.lastID });
-          }
-        },
-      );
-    });
+      const result = db.exec("SELECT last_insert_rowid() as id");
+      const lastId = result[0]?.values[0]?.[0] as number;
+      
+      saveDatabase();
+      return { flashcardId: lastId };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 
   ipcMain.handle("create-deck", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const { deck_name, deck_img, deck_position } = data;
 
-      const sql = `INSERT INTO decks (
+      db.run(`INSERT INTO decks (
         deck_name, deck_img, deck_position
-      ) VALUES (?, ?, ?)`;
+      ) VALUES (?, ?, ?)`, [deck_name, deck_img, deck_position]);
 
-      db.run(
-        sql,
-        [deck_name, deck_img, deck_position],
-        function (this: Statement, err: Error) {
-          if (err) {
-            reject(new Error("Database error: " + err.message));
-          } else {
-            resolve({ deck_id: this.lastID, deck_name });
-          }
-        },
-      );
-    });
+      const result = db.exec("SELECT last_insert_rowid() as id");
+      const lastId = result[0]?.values[0]?.[0] as number;
+
+      saveDatabase();
+      return { deck_id: lastId, deck_name };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 
   ipcMain.handle("create-review", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const { vocabularyId } = data;
 
-      const sql = `INSERT INTO reviews (
+      db.run(`INSERT INTO reviews (
         vocabulary_id, review_date
-      ) VALUES (?)`;
+      ) VALUES (?, datetime('now'))`, [vocabularyId]);
 
-      db.run(sql, [vocabularyId], function (this: Statement, err: Error) {
-        if (err) {
-          reject(new Error("Database error: " + err.message));
-        } else {
-          resolve({ vocabularyId: this.lastID });
-        }
-      });
-    });
+      const result = db.exec("SELECT last_insert_rowid() as id");
+      const lastId = result[0]?.values[0]?.[0] as number;
+
+      saveDatabase();
+      return { vocabularyId: lastId };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 
   ipcMain.handle("create-reviews-history", async (_event, data) => {
-    return new Promise((resolve, reject) => {
+    try {
+      const db = await getDb();
       const { vocabularyId, easeFactor, quality, repetition, reviewDate } =
         data;
 
-      const sql = `INSERT INTO reviews_history (
+      db.run(`INSERT INTO reviews_history (
         vocabulary_id, ease_factor, quality, repetition, review_date
-      ) VALUES (?, ?, ?, ?, ?)`;
+      ) VALUES (?, ?, ?, ?, ?)`, [
+        vocabularyId,
+        easeFactor,
+        quality,
+        repetition,
+        reviewDate,
+      ]);
 
-      db.run(
-        sql,
-        [vocabularyId, easeFactor, quality, repetition, reviewDate],
-        function (this: Statement, err: Error) {
-          if (err) {
-            reject(new Error("Database error: " + err.message));
-          } else {
-            resolve({ vocabularyId: this.lastID });
-          }
-        },
-      );
-    });
+      const result = db.exec("SELECT last_insert_rowid() as id");
+      const lastId = result[0]?.values[0]?.[0] as number;
+
+      saveDatabase();
+      return { vocabularyId: lastId };
+    } catch (err) {
+      throw new Error("Database error: " + (err as Error).message);
+    }
   });
 }
