@@ -54,7 +54,7 @@ async function initDatabase(): Promise<Database> {
     console.error("Failed to initialize sql.js:", e);
     throw e;
   }
-  
+
   let existingData: Buffer | null = null;
   if (fs.existsSync(dbPath)) {
     const fileContent = fs.readFileSync(dbPath);
@@ -62,7 +62,7 @@ async function initDatabase(): Promise<Database> {
       existingData = fileContent;
     }
   }
-  
+
   if (existingData) {
     db = new SQL.Database(new Uint8Array(existingData));
   } else {
@@ -131,15 +131,33 @@ async function initDatabase(): Promise<Database> {
   END`);
 
   // Create indexes
-  db.run(`CREATE INDEX IF NOT EXISTS idx_deck_position ON decks(deck_position DESC)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_vocabulary_deck_id ON vocabulary(deck_id)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_vocabulary_front_word ON vocabulary(front_word)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_vocabulary_audio_content ON vocabulary(audio_name, front_desc_html, back_desc_html)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_vocabulary_id ON reviews(vocabulary_id)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_date_repetition ON reviews(review_date, repetition)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_ease_repetition ON reviews(ease_factor, repetition)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_history_vocabulary ON reviews_history(vocabulary_id)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_history_date ON reviews_history(review_date)`);
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_deck_position ON decks(deck_position DESC)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_deck_id ON vocabulary(deck_id)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_front_word ON vocabulary(front_word)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_vocabulary_audio_content ON vocabulary(audio_name, front_desc_html, back_desc_html)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_vocabulary_id ON reviews(vocabulary_id)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_date_repetition ON reviews(review_date, repetition)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_ease_repetition ON reviews(ease_factor, repetition)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_history_vocabulary ON reviews_history(vocabulary_id)`,
+  );
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_reviews_history_date ON reviews_history(review_date)`,
+  );
 
   // Save initial database
   saveDatabase();

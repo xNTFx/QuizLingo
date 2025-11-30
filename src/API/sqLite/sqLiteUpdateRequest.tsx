@@ -8,9 +8,12 @@ export default function sqLiteUpdateRequests() {
       const db = await getDb();
       const { deckId, deckName, deckPosition } = data;
 
-      db.run(`UPDATE decks
+      db.run(
+        `UPDATE decks
         SET deck_name = ?, deck_position = ?
-        WHERE deck_id = ?`, [deckName, deckPosition, deckId]);
+        WHERE deck_id = ?`,
+        [deckName, deckPosition, deckId],
+      );
 
       saveDatabase();
       const changesRes = db.exec("SELECT changes() AS changes");
@@ -35,7 +38,8 @@ export default function sqLiteUpdateRequests() {
         vocabulary_id,
       } = data;
 
-      db.run(`UPDATE vocabulary SET 
+      db.run(
+        `UPDATE vocabulary SET 
         front_word = ?,
         back_word = ?,
         audio_name = ?,
@@ -43,16 +47,18 @@ export default function sqLiteUpdateRequests() {
         back_word_html = ?,
         front_desc_html = ?,
         back_desc_html = ? 
-        WHERE vocabulary_id = ?`, [
-        front_word,
-        back_word,
-        audio_name,
-        front_word_html,
-        back_word_html,
-        front_desc_html,
-        back_desc_html,
-        vocabulary_id,
-      ]);
+        WHERE vocabulary_id = ?`,
+        [
+          front_word,
+          back_word,
+          audio_name,
+          front_word_html,
+          back_word_html,
+          front_desc_html,
+          back_desc_html,
+          vocabulary_id,
+        ],
+      );
 
       saveDatabase();
       return {
@@ -76,15 +82,12 @@ export default function sqLiteUpdateRequests() {
       const { reviewId, vocabularyId, reviewDate, easeFactor, repetition } =
         data;
 
-      db.run(`UPDATE reviews
+      db.run(
+        `UPDATE reviews
         SET vocabulary_id = ?, review_date = ?, ease_factor = ?, repetition = ?
-        WHERE review_id = ?`, [
-        vocabularyId,
-        reviewDate,
-        easeFactor,
-        repetition,
-        reviewId,
-      ]);
+        WHERE review_id = ?`,
+        [vocabularyId, reviewDate, easeFactor, repetition, reviewId],
+      );
 
       saveDatabase();
       const changesRes = db.exec("SELECT changes() AS changes");
@@ -100,9 +103,12 @@ export default function sqLiteUpdateRequests() {
       const db = await getDb();
       const { deck_id, deck_img } = data;
 
-      db.run(`UPDATE decks
+      db.run(
+        `UPDATE decks
         SET deck_img = ?
-        WHERE deck_id = ?`, [deck_img, deck_id]);
+        WHERE deck_id = ?`,
+        [deck_img, deck_id],
+      );
 
       saveDatabase();
       const changesRes = db.exec("SELECT changes() AS changes");

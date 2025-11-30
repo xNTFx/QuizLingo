@@ -9,7 +9,9 @@ import {
 import { getDb } from "./sqLite";
 
 // Helper function to convert sql.js result to array of objects
-function resultToObjects<T>(result: { columns: string[]; values: unknown[][] }[]): T[] {
+function resultToObjects<T>(
+  result: { columns: string[]; values: unknown[][] }[],
+): T[] {
   if (!result || result.length === 0) return [];
   const { columns, values } = result[0];
   return values.map((row) => {
@@ -71,7 +73,8 @@ export default function sqLiteGetRequests() {
     try {
       const db = await getDb();
       const { deckId, limit, offset, search } = data;
-      const stmt = db.prepare(`SELECT vocabulary.*, decks.deck_name FROM vocabulary
+      const stmt =
+        db.prepare(`SELECT vocabulary.*, decks.deck_name FROM vocabulary
         JOIN decks ON decks.deck_id = vocabulary.deck_id
         WHERE (vocabulary.deck_id = ? OR ? = 0) AND (vocabulary.front_word LIKE ?)
         LIMIT ? OFFSET ?`);
@@ -110,7 +113,8 @@ export default function sqLiteGetRequests() {
     try {
       const db = await getDb();
       const { vocabularyId, html } = data;
-      const stmt = db.prepare(`SELECT IIF(COUNT(vocabulary.vocabulary_id) > 0, 1, 0) AS count FROM vocabulary 
+      const stmt =
+        db.prepare(`SELECT IIF(COUNT(vocabulary.vocabulary_id) > 0, 1, 0) AS count FROM vocabulary 
         WHERE vocabulary.vocabulary_id != ? AND (
         vocabulary.audio_name LIKE ? OR 
         vocabulary.front_desc_html LIKE ? OR 

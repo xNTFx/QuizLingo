@@ -17,7 +17,8 @@ export default function sqLitePostRequests() {
         backDescHTML,
       } = data;
 
-      db.run(`INSERT INTO vocabulary (
+      db.run(
+        `INSERT INTO vocabulary (
         deck_id,
         front_word, 
         back_word,
@@ -26,20 +27,22 @@ export default function sqLitePostRequests() {
         back_word_html, 
         front_desc_html, 
         back_desc_html
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [
-        deckId,
-        frontWord,
-        backWord,
-        audioName,
-        frontWordHTML,
-        backWordHTML,
-        frontDescHTML,
-        backDescHTML,
-      ]);
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          deckId,
+          frontWord,
+          backWord,
+          audioName,
+          frontWordHTML,
+          backWordHTML,
+          frontDescHTML,
+          backDescHTML,
+        ],
+      );
 
       const result = db.exec("SELECT last_insert_rowid() as id");
       const lastId = result[0]?.values[0]?.[0] as number;
-      
+
       saveDatabase();
       return { flashcardId: lastId };
     } catch (err) {
@@ -52,9 +55,12 @@ export default function sqLitePostRequests() {
       const db = await getDb();
       const { deck_name, deck_img, deck_position } = data;
 
-      db.run(`INSERT INTO decks (
+      db.run(
+        `INSERT INTO decks (
         deck_name, deck_img, deck_position
-      ) VALUES (?, ?, ?)`, [deck_name, deck_img, deck_position]);
+      ) VALUES (?, ?, ?)`,
+        [deck_name, deck_img, deck_position],
+      );
 
       const result = db.exec("SELECT last_insert_rowid() as id");
       const lastId = result[0]?.values[0]?.[0] as number;
@@ -71,9 +77,12 @@ export default function sqLitePostRequests() {
       const db = await getDb();
       const { vocabularyId } = data;
 
-      db.run(`INSERT INTO reviews (
+      db.run(
+        `INSERT INTO reviews (
         vocabulary_id, review_date
-      ) VALUES (?, datetime('now'))`, [vocabularyId]);
+      ) VALUES (?, datetime('now'))`,
+        [vocabularyId],
+      );
 
       const result = db.exec("SELECT last_insert_rowid() as id");
       const lastId = result[0]?.values[0]?.[0] as number;
@@ -91,15 +100,12 @@ export default function sqLitePostRequests() {
       const { vocabularyId, easeFactor, quality, repetition, reviewDate } =
         data;
 
-      db.run(`INSERT INTO reviews_history (
+      db.run(
+        `INSERT INTO reviews_history (
         vocabulary_id, ease_factor, quality, repetition, review_date
-      ) VALUES (?, ?, ?, ?, ?)`, [
-        vocabularyId,
-        easeFactor,
-        quality,
-        repetition,
-        reviewDate,
-      ]);
+      ) VALUES (?, ?, ?, ?, ?)`,
+        [vocabularyId, easeFactor, quality, repetition, reviewDate],
+      );
 
       const result = db.exec("SELECT last_insert_rowid() as id");
       const lastId = result[0]?.values[0]?.[0] as number;
