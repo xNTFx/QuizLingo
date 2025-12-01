@@ -73,7 +73,7 @@ export default function EditorTipTap({
       Italic,
       TextAlign.configure({
         types: ["heading", "paragraph"],
-        defaultAlignment: "justify",
+        defaultAlignment: "left",
       }),
     ],
     content: null,
