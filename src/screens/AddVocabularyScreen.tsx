@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/core";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useGetDecksQuery } from "../API/Redux/reduxQueryFetch";
@@ -29,6 +29,12 @@ export default function AddVocabularyScreen({
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const [hiddenInputs, setHiddenInputs] = useState<number[]>([]);
   const [isInspected, setIsInspected] = useState(false);
+
+  // Reset editorsList when selectedVocabulary changes
+  useEffect(() => {
+    setEditorsList([]);
+    setActiveEditor(null);
+  }, [selectedVocabulary?.vocabulary_id]);
 
   const handleVocabularyButton = useInsertOrUpdateVocabulary(
     editorsList,
@@ -82,6 +88,7 @@ export default function AddVocabularyScreen({
           </div>
           <div>
             <VocabularyEditor
+              key={selectedVocabulary?.vocabulary_id ?? "new"}
               hiddenInputs={hiddenInputs}
               setHiddenInputs={setHiddenInputs}
               inputNames={[

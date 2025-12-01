@@ -98,16 +98,16 @@ export default function VocabularyDataGrid({
           overflow: "auto",
         }}
         onScroll={handleScroll}
+        onRowClick={(row) => {
+          handleChangeVocabulary(row.id);
+        }}
         onCellClick={(e) => {
-          if (handleChangeVocabulary) {
-            handleChangeVocabulary(e.row.id);
-            if (
-              isRemoveVocabularyEnabled &&
-              e.column.key === "remove_vocabulary_key"
-            ) {
-              if (removeVocabulary) {
-                removeVocabulary(e.row.id, data, setSelectedVocabulary);
-              }
+          if (
+            isRemoveVocabularyEnabled &&
+            e.column.key === "remove_vocabulary_key"
+          ) {
+            if (removeVocabulary) {
+              removeVocabulary(e.row.id, data, setSelectedVocabulary);
             }
           }
         }}

@@ -28,17 +28,33 @@ export default function useSwalPopupBoxes() {
       preConfirm: async (input: string) => {
         const randomColor = getRandomBg();
 
-        const positionsArray = data.reduce<(number | null)[]>((acc, cur) => {
-          acc.push(cur.deck_position ?? null);
-          return acc;
-        }, []);
+        const positionsArray = data
+          .map((d) => d.deck_position)
+          .filter((pos): pos is number => pos !== null && pos !== undefined)
+          .sort((a, b) => a - b);
 
-        const newPosition =
-          positionsArray.length > 0
-            ? Math.max(
-                ...positionsArray.filter((pos): pos is number => pos !== null),
-              ) + 1
-            : 1;
+        let newPosition: number;
+        if (positionsArray.length === 0) {
+          // No decks yet, start at 1000 (middle value for future insertions)
+          newPosition = 1000;
+        } else if (positionsArray.length === 1) {
+          // One deck exists, place new one in the middle (half of existing)
+          newPosition = Math.floor(positionsArray[0] / 2);
+          if (newPosition === positionsArray[0]) {
+            newPosition = positionsArray[0] + 1000;
+          }
+        } else {
+          // Multiple decks - find middle position
+          const middleIndex = Math.floor(positionsArray.length / 2);
+          const lowerPos = positionsArray[middleIndex - 1];
+          const upperPos = positionsArray[middleIndex];
+          newPosition = Math.floor((lowerPos + upperPos) / 2);
+
+          // If no space between positions, add above middle
+          if (newPosition === lowerPos || newPosition === upperPos) {
+            newPosition = Math.max(...positionsArray) + 1000;
+          }
+        }
 
         try {
           createDeck({

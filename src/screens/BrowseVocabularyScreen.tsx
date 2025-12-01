@@ -83,9 +83,9 @@ export default function BrowseVocabularyScreen() {
 
     if (
       selectedVocabularyById &&
-      selectedVocabulary &&
-      selectedVocabularyById.vocabulary_id !==
-        Number(selectedVocabulary.vocabulary_id)
+      (!selectedVocabulary ||
+        selectedVocabularyById.vocabulary_id !==
+          Number(selectedVocabulary.vocabulary_id))
     ) {
       const audioSrc =
         extractSingleAudioAndImageSrc(selectedVocabularyById.audio_name) ||
@@ -176,7 +176,9 @@ export default function BrowseVocabularyScreen() {
         {data.length > 0 ? (
           <section>
             <AddVocabularyScreen
-              selectedVocabulary={selectedVocabulary ? selectedVocabulary : null}
+              selectedVocabulary={
+                selectedVocabulary ? selectedVocabulary : null
+              }
             />
           </section>
         ) : null}
